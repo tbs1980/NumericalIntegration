@@ -8,15 +8,15 @@
 #include <cstdlib>
 #include <iostream>
 
-
 using namespace Eigen;
 using namespace std;
 
 namespace Kronrod
 {
     void kronrod(
-        unsigned int n, Array<double, Dynamic, 1> &xGK,
-        Array<double, Dynamic, 1> &wGK, Array<double, Dynamic, 1> &wG);
+        unsigned int n, Array<double, Dynamic, 1> &abscGaussKronrod,
+        Array<double, Dynamic, 1> &weightGaussKronrod, Array<double,
+        Dynamic, 1> &weightGauss);
 
     void abscWeightKronrod(
         unsigned int n, unsigned int m, double chebCoeff, bool even,
@@ -31,9 +31,8 @@ namespace Kronrod
     double machineEpsilon();
 }
 
-
 /**
-* @brief kronrod adds n+1 points to an n-point Gaussian rule.
+* \brief kronrod adds n+1 points to an n-point Gaussian rule.
 *
 *    This function is a C++ implementation of original work by R. Piessens, et.al,
 *    published in the journal Mathematics of Computation, Volume 28, Number 125,
@@ -51,23 +50,23 @@ namespace Kronrod
 *
 *    Because the quadrature formula is symmetric with respect to the origin,
 *    only the positive abscissas are calculated.  Weights corresponding to the
-*    symetric abscissae are equal.  Weights of wG are calculated as well.
+*    symetric abscissae are equal.  Weights of weightGauss are calculated as well.
 *
 *    Work by Dr. John Burkhardt made note that the code published in Mathematics of
 *    Computation omitted the definition of the second Chebyshev coefficient (chebCoeff2),
-*    and Dr. Burkhardt's contribution is reflected here under permission.
+*    and Dr. Burkhardt's contributions are reflected here with permission.
 *
-*    The arrays xGK, wGK and wG contain the positive abscissae in decreasing
-*    order, and the weights of each abscissa in the Gauss-Kronrod and
-*    Gauss rules, respectively.
+*    The arrays abcsGaussKronrod, weightGaussKronrod and weightGauss contain the
+*    positive abscissae in decreasing order, and the weights of each abscissa in
+*    the Gauss-Kronrod and Gauss rules, respectively.
 *
 * Input Parameters:
 * @param n, the order of the Gauss rule.
 *
 * Return Parameters:
-* @return abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
-* @return weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
-* @return weightGauss[n+1] The weights for the Gauss rule.
+* \return abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
+* \return weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
+* \return weightGauss[n+1] The weights for the Gauss rule.
 */
 void Kronrod::kronrod(
     unsigned int n, Array<double, Dynamic, 1> &abscGaussKronrod,
@@ -99,7 +98,6 @@ void Kronrod::kronrod(
 
     ArrayXd betaCoeffs(m + 1);
     betaCoeffs(m - 1) = tau(0) - 1.0;
-
 
     for (size_t k = 1; k < m; ++k)
     {
@@ -149,6 +147,7 @@ void Kronrod::kronrod(
     {
         abscWeightKronrod(n, m, chebCoeff2, even, betaCoeffs, xx, weightGaussKronrod(k));
         abscGaussKronrod(k) = xx;
+
         y = x;
         x = y * c - bb * s;
         bb = y * s + bb * c;
@@ -186,18 +185,18 @@ void Kronrod::kronrod(
 }
 
 /**
-* @brief abscWeightKronrod calculates a Kronrod abscissa and weight.
+* \brief abscWeightKronrod calculates a Kronrod abscissa and weight.
 *
 *  Input Parameters:
-* @param betaCoeffs[m+1] The Chebyshev coefficients.
-* @param chebCoeff A value needed to compute weights.
-* @param even A boolean variable that is TRUE if n is even.
-* @param n The order of the Gauss rule.
-* @param m The value of ( n + 1 ) / 2.
+* \param betaCoeffs[m+1] The Chebyshev coefficients.
+* \param chebCoeff A value needed to compute weights.
+* \param even A boolean variable that is TRUE if n is even.
+* \param n The order of the Gauss rule.
+* \param m The value of ( n + 1 ) / 2.
 *
 *  Input/output:
-* @param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
-* @param weightGaussKronrod The Gauss-Kronrod weight.
+* \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
+* \param weightGaussKronrod The Gauss-Kronrod weight.
 */
 
 void Kronrod::abscWeightKronrod(
@@ -320,19 +319,19 @@ void Kronrod::abscWeightKronrod(
 
 
 /**
-* @brief abscWeightGauss calculates a Gaussian abscissa and two weights.
+* \brief abscWeightGauss calculates a Gaussian abscissa and two weights.
 *
 *   Input Parameters
-* @param betaCoeffs[m+1] The Chebyshev coefficients.
-* @param chebCoeff A value needed to compute weights.
-* @param even A boolean variable that is TRUE if n is even.
-* @param n The order of the Gauss rule.
-* @param m The value of ( n + 1 ) / 2.
+* \param betaCoeffs[m+1] The Chebyshev coefficients.
+* \param chebCoeff A value needed to compute weights.
+* \param even A boolean variable that is TRUE if n is even.
+* \param n The order of the Gauss rule.
+* \param m The value of ( n + 1 ) / 2.
 *
 *   Input/Output
-* @param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
-* @param weightGaussKronrod The Gauss-Kronrod weight.
-* @param weightGauss The Gauss weight.
+* \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
+* \param weightGaussKronrod The Gauss-Kronrod weight.
+* \param weightGauss The Gauss weight.
 */
 void Kronrod::abscWeightGauss(
     unsigned int n, unsigned int m, double chebCoeff, bool even,
@@ -441,8 +440,8 @@ void Kronrod::abscWeightGauss(
 }
 
 /**
-* @brief machineEpsilon returns the machine precision roundoff error.
-* @returns Returns the machine precision round-off error for double precision
+* \brief machineEpsilon returns the machine precision roundoff error.
+* \returns Returns the machine precision round-off error for double precision
 */
 double Kronrod::machineEpsilon()
 {
