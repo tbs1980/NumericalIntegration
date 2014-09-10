@@ -19,12 +19,12 @@ namespace Kronrod
         Dynamic, 1> &weightGauss);
 
     void abscWeightKronrod(
-        unsigned int n, unsigned int m, double chebCoeff, bool even,
+        unsigned int n, unsigned int m, bool even, double chebCoeff,
         Array<double, Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
         double &weightGaussKronrod);
 
     void abscWeightGauss(
-        unsigned int n, unsigned int m, double chebCoeff, bool even,
+        unsigned int n, unsigned int m, bool even, double chebCoeff,
         Array<double,Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
         double &weightGaussKronrod, double &weightGauss);
 
@@ -118,21 +118,17 @@ void Kronrod::kronrod(
     betaCoeffs(m) = 1.;
 
     // Calculation of approximate values for the abscissae as inital values
-    // for the Newton-Raphson iterative solution.
-    double bb = sin ((M_PI / 2) / (2. * aN + 1.0));
+    // for the Newton-Raphson iterative solution.  These values are derived
+    // from Pythagorean identities to the original code to more closely follow
+    // the mathematics of the 1974 CoM paper.
+    double s1 = sin((M_PI / 2) / (2. * aN + 1.0));
+    double c1 = cos((M_PI / 2) / (2. * aN + 1.0));
 
-    double x = sqrt (1.0 - bb * bb);
+    double s2 = sin((M_PI) / (2. * aN + 1.0));
+    double c2 = cos((M_PI) / (2. * aN + 1.0));
 
-    double s = 2.0 * bb * x;
-
-    double c = sqrt (1.0 - s * s);
-
-    // Coefficient for Gauss abscissae and weights
-    double chebCoeff1 = 1.0 - (1.0 - 1.0 / aN) / (8.0 * aN * aN);
-
-    double xx = chebCoeff1 * x;
-
-    // Coefficient for Kronrod abscissae and weights from Burkhardt's work.
+    // Coefficient for Gauss and Kronrod abscissae and weights
+    double chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
     double chebCoeff2 = 2.0 / (2. * n + 1);
 
     for (size_t i = 1; i <= n; ++i)
@@ -140,47 +136,41 @@ void Kronrod::kronrod(
         chebCoeff2 =  4.0 * chebCoeff2 * i / (n + i);
     }
 
-    double y = 0.;
+    double abscK = chebCoeff1 * c1;
+    double temp = 0.;
 
     // Calculation of the K-th (Kronrod) abscissa and the corresponding weight.
     for (size_t k = 0; k < n; ++k)
     {
-        abscWeightKronrod(n, m, chebCoeff2, even, betaCoeffs, xx, weightGaussKronrod(k));
-        abscGaussKronrod(k) = xx;
-
-        y = x;
-        x = y * c - bb * s;
-        bb = y * s + bb * c;
-
-        if (k == n - 1)
-        {
-            xx = 0.0;
-        }
-        else
-        {
-            xx = chebCoeff1 * x;
-        }
-
+        abscWeightKronrod(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k));
+        abscGaussKronrod(k) = abscK;
         ++k;
-        // Calculation of the k+1 (Gauss) abscissa and the corresponding weights.
-        abscWeightGauss(n, m, chebCoeff2, even, betaCoeffs, xx,
-                        weightGaussKronrod(k), weightGauss(k/2));
 
-        abscGaussKronrod(k) = xx;
-        y = x;
-        x = y * c - bb * s;
-        bb = y * s + bb * c;
-        xx = chebCoeff1 * x;
+        temp = c1;
+        c1 = temp * c2 - s1 * s2;
+        s1 = temp * s2 + s1 * c2;
+        abscK = chebCoeff1 * c1;
+
+        // Calculation of the k+1 (Gauss) abscissa and the corresponding weights.
+        abscWeightGauss(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k),
+                        weightGauss(k/2));
+        abscGaussKronrod(k) = abscK;
+
+        temp = c1;
+        c1 = temp * c2 - s1 * s2;
+        s1 = temp * s2 + s1 * c2;
+        abscK = chebCoeff1 * c1;
     }
 
     // Add a Kronrod abscissa at the origin if n is even.
     if (even)
     {
-        abscWeightKronrod(n, m, chebCoeff2, even, betaCoeffs, xx, weightGaussKronrod(n));
+        abscWeightKronrod(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(n));
         weightGauss(n) = 0.0;
-        abscGaussKronrod(n) = 0.0;
     }
 
+    // Set the abscissa value at the origin to zero and exit the function.
+    abscGaussKronrod(n) = 0.0;
     return;
 }
 
@@ -198,10 +188,10 @@ void Kronrod::kronrod(
 * \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
 * \param weightGaussKronrod The Gauss-Kronrod weight.
 */
-
 void Kronrod::abscWeightKronrod(
-    unsigned int n, unsigned int m, double chebCoeff, bool even,
-    Array<double, Dynamic, 1> betaCoeffs, double &abscGaussKronrod, double &weightGaussKronrod)
+    unsigned int n, unsigned int m, bool even, double chebCoeff,
+    Array<double, Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
+    double &weightGaussKronrod)
 {
     double ai;
 
@@ -334,7 +324,7 @@ void Kronrod::abscWeightKronrod(
 * \param weightGauss The Gauss weight.
 */
 void Kronrod::abscWeightGauss(
-    unsigned int n, unsigned int m, double chebCoeff, bool even,
+    unsigned int n, unsigned int m, bool even, double chebCoeff,
     Array<double,Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
     double &weightGaussKronrod, double &weightGauss)
 {
