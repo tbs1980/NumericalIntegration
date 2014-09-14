@@ -1,14 +1,5 @@
 #pragma once
 
-#include <math.h>
-
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-#include <Eigen/Eigenvalues>
-
-
-#include <iostream>
-
 using namespace Eigen;
 using namespace std;
 

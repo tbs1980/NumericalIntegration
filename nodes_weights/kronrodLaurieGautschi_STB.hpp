@@ -1,6 +1,29 @@
-#pragma once
+#ifndef NI_KRONRADLAURIEGAUTSCHI_STB_HPP
+#define NI_KRONRADLAURIEGAUTSCHI_STB_HPP
 
 namespace Kronrod {
+
+    // Need to switch between gamma() from mpfrc++ and tgamma() from c++
+    template<typename T>
+    T Gamma(T x)
+    {
+        return gamma(x);
+    }
+
+    double Gamma(double x)
+    {
+        return tgamma(x);
+    }
+
+    float Gamma(float x)
+    {
+        return tgamma(x);
+    }
+
+    long double Gamma(long double x)
+    {
+        return tgamma(x);
+    }
 
     template<typename _RealType>
     class LaurieGautschi
@@ -23,7 +46,7 @@ namespace Kronrod {
             assert(N<=a_out.rows());
 
             a_out(0) = (b-a)/(a+b+2.);
-            b_out(0) = pow(2.,(a+b+1.))*gamma(a+1.)*gamma(b+1.)/gamma(a+b+2.);
+            b_out(0) = pow(2.,(a+b+1.))*Gamma(a+1.)*Gamma(b+1.)/Gamma(a+b+2.);
 
             for(IndexType n=1;n<N;++n)
             {
@@ -189,8 +212,8 @@ namespace Kronrod {
             assert(w.rows() ==  2*N+1);
             assert(N>0);
 
-            VectorType a(2*N);
-            VectorType b(2*N);
+            VectorType a=VectorType::Zero(2*N);
+            VectorType b=VectorType::Zero(2*N);
 
             r_jacobi_01( 2*N, RealType(0), RealType(0), a, b);
 
@@ -204,3 +227,5 @@ namespace Kronrod {
         }
     };
 }
+
+#endif //NI_KRONRADLAURIEGAUTSCHI_STB_HPP

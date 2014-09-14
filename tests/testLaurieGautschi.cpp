@@ -2,10 +2,24 @@
 #include <iostream>
 #include <iomanip>
 
-int main(void)
+int compare_codes(void)
 {
+    std::cout<<"MS"<<std::endl;
+    Eigen::Array<double,Dynamic,2> ans;
+    int n = 10;
+    ans = Kronrod::multiPrecisionKronrod(n);
+
+    std::cout<<std::fixed;
+    for(int i=0;i<ans.rows();++i)
+    {
+        std::cout<<std::setprecision(15)<<ans(i,0)<<"\t"<<ans(i,1)<<std::endl;
+    }
+
+    std::cout<<"\nSTB"<<std::endl;
+
+    //typedef double RealType;
     typedef mpfr::mpreal RealType;
-    RealType::set_default_prec(256);
+    //RealType::set_default_prec(256);
 
     typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
@@ -17,11 +31,17 @@ int main(void)
 
     LaurieGautschiPolicy::mpkonrad(N,x,w);
 
-    std::cout<<std::fixed;
     for(IndexType i=0;i<x.rows();++i)
     {
-        std::cout<<std::setprecision(25)<<x(i)<<"\t"<<w(i)<<std::endl;
+        std::cout<<std::setprecision(15)<<x(i)<<"\t"<<w(i)<<std::endl;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
+}
+
+int main(void)
+{
+    int ret=compare_codes();
+
+    return ret;
 }
