@@ -17,8 +17,8 @@ int compare_codes(void)
 
     std::cout<<"\nSTB"<<std::endl;
 
-    //typedef double RealType;
-    typedef mpfr::mpreal RealType;
+    typedef double RealType;
+    //typedef mpfr::mpreal RealType;
     //RealType::set_default_prec(256);
 
     typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;

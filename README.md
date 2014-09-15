@@ -11,12 +11,12 @@ Comparison of Piessens' method to Laurie-Gautschi approach
 
 ## Compilation
 
-  The following compilation flags must be passed
+The following compilation flags must be passed
 
-* -DEIGEN3_INCLUDE_DIR
-* -DGMP_ROOT
-* -DMPFR_ROOT
-* -DMPFRCPP_ROOT
+	* -DEIGEN3_INCLUDE_DIR
+	* -DGMP_ROOT
+	* -DMPFR_ROOT
+	* -DMPFRCPP_ROOT
 
 	$ mkdir build
 	$ cd build
@@ -25,5 +25,5 @@ Comparison of Piessens' method to Laurie-Gautschi approach
 
 For example,
 
-	$ cmake -DEIGEN3_INCLUDE_DIR=/Users/sbalan/Library/gcc/eigen-3.2.1/include/eigen3/ -DGMP_ROOT=/Users/sbalan/Library/gcc/gmp-6.0.0/ -DMPFR_ROOT=/Users/sbalan/Library/gcc/mpfr-3.1.2/ -DMPFRCPP_ROOT=/Users/sbalan/Library/gcc/mpfrc++-3.5.9/ ../
+	$ cmake ../ -DEIGEN3_INCLUDE_DIR=/arxiv/libraries/ubuntu/gcc/eigen-3.2.1/include/eigen3 -DGMP_ROOT=/arxiv/libraries/ubuntu/gcc/gmp-6.0.0 -DMPFR_ROOT=/arxiv/libraries/ubuntu/gcc/mpfr-3.1.2 -DMPFRCPP_ROOT=/arxiv/libraries/ubuntu/gcc/mpfrc++-3.5.9
 	$ make
