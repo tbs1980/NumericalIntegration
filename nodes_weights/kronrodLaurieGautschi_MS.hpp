@@ -129,7 +129,7 @@ Array<double,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<double
         }
     }
 
-    ArrayXcd tempVec = V.col(V.cols() - 1);
+    ArrayXd tempVec = V.real().row(0);
 
     VectorXcd e = ab0(0,1) * (tempVec * tempVec);
 
