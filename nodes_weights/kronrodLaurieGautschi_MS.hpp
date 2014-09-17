@@ -131,11 +131,11 @@ Array<double,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<double
 
     ArrayXd tempVec = V.real().row(0);
 
-    VectorXcd e = ab0(0,1) * (tempVec * tempVec);
+    ArrayXd e = ab0(0,1) * (tempVec * tempVec);
 
     Array<double,Dynamic,2> xwGK = ArrayX2d::Zero(2*nNodes + 1, 2);
     xwGK.col(0) = d.real();
-    xwGK.col(1) = e.real();
+    xwGK.col(1) = e;
 
 
     return xwGK;
