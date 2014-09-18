@@ -1,4 +1,4 @@
-#include "kronrodLaurieGautschi.h"
+#include "kronrodLaurieGautschi_MS.h"
 #include "kronrodPiessens.h"
 
 #include <iostream>
