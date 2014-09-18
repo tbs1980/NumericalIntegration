@@ -30,15 +30,13 @@ A Subroutine Package for Automatic Integration Springer-Verlag.
 
 8. F. Calio, W. Gautschi, E. Marchetti (1986). On Computing Gauss-Kronrod Quadrature Formulae. Mathematics of Computation 47(176), 639-650.
 
-9. D.P. Laurie, (1997). Calculation of Gauss-Kronrod Quadrature Rules. Mathematics of Computation 66(219), 1133-1145.
+9. S. Elhay, J. Kautsky, (1992). Generalized Kronrod Patterson Type Imbedded Quadratures. Applications of Mathematics, 37(2), 81-103.
 
-10. S. Elhay, J. Kautsky, (1992). Generalized Kronrod Patterson Type Imbedded Quadratures. Applications of Mathematics, 37(2), 81-103.
+10. G. H. Golub, J. H. Welsch (1969). Calculation of Gauss Quadrature Rules. Mathematics of Computation, 23(106), 221-230 +s1-s10
 
-11. G. H. Golub, J. H. Welsch (1969). Calculation of Gauss Quadrature Rules. Mathematics of Computation, 23(106), 221-230 +s1-s10
+11. W. Gautschi, (1970), On the Construction of Gaussian Quadrature Rules from Modified Moments. Mathematics of Computation, 24(110), 245-260
 
-12. W. Gautschi, (1970), On the Construction of Gaussian Quadrature Rules from Modified Moments. Mathematics of Computation, 24(110), 245-260
-
-13. F. Calió, W. Gautschi, E. Marchetti (1986). On Computing Gauss-Kronrod Quadrature Formulae. Mathematics of Computation, 47 (176), 639-650
+12. F. Calió, W. Gautschi, E. Marchetti (1986). On Computing Gauss-Kronrod Quadrature Formulae. Mathematics of Computation, 47 (176), 639-650
 
 
 
