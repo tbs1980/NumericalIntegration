@@ -1,5 +1,5 @@
-#include "kronrodLaurieGautschi.h"
-#include "kronrodPiessensBurkardt.h"
+#include "kronrodLaurieGautschi_MS.h"
+#include "kronrodPiessens.h"
 
 #include <iostream>
 #include <iomanip>
@@ -19,7 +19,7 @@ int main()
     cout << ans << endl;
     cout << endl << endl;
 
-    cout << "PiessensBurkardt" << endl;
+    cout << "Piessens" << endl;
 
     Array<double, Dynamic, 1> xGK;
     Array<double, Dynamic, 1> wGK;

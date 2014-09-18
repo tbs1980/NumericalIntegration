@@ -4,7 +4,7 @@
 
 int compare_codes(void)
 {
-    std::cout<<"MS"<<std::endl;
+    std::cout<<std::endl<<"MS"<<std::endl;
     Eigen::Array<double,Dynamic,2> ans;
     int n = 10;
     ans = Kronrod::multiPrecisionKronrod(n);
@@ -36,6 +36,8 @@ int compare_codes(void)
         std::cout<<std::setprecision(15)<<x(i)<<"\t"<<w(i)<<std::endl;
     }
 
+    std::cout<<std::endl;
+
     return EXIT_SUCCESS;
 }
 
@@ -45,3 +47,4 @@ int main(void)
 
     return ret;
 }
+
