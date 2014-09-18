@@ -34,8 +34,12 @@ Array<double,Dynamic,2> kronrodRecurrenceCoeff(const unsigned int nNodes, Array<
 */
 Array<double,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes)
 {
+    std::cout<<"MPKronrod"<<std::endl;
     Array<double,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne(2 * nNodes);
+    std::cout<<"jacobiRecurrenceCoeffZeroToOne"<<std::endl;
+
     Array<double,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
+    std::cout<<"Kronrod"<<std::endl;
 
     Array<double,Dynamic,2> xGK = ArrayX2d::Zero(2 * nNodes + 1, 2);
     xGK.col(0) = 2. * xwGK.col(0) - 1.;
@@ -62,6 +66,8 @@ Array<double,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
 Array<double,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<double,Dynamic,2> alphaBeta)
 {
     Array<double,Dynamic,2> ab0 = kronrodRecurrenceCoeff(nNodes, alphaBeta);
+    std::cout<<"kronrodRecurrenceCoeff"<<std::endl;
+
     MatrixXd J = MatrixXd::Zero(2*nNodes + 1, 2*nNodes + 1);
 
     for(size_t k = 0; k < 2 * nNodes; ++k)
@@ -70,12 +76,15 @@ Array<double,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<double
         J(k,k + 1) = sqrt(ab0(k + 1, 1));
         J(k + 1, k) = J(k, k + 1);
     }
+    std::cout<<"Here 1"<<std::endl;
 
     J(2 * nNodes, 2 * nNodes) = ab0(2 * nNodes, 0);
 
     EigenSolver<MatrixXd> eigenSol(J);
     VectorXcd d = eigenSol.eigenvalues();
     MatrixXcd V = eigenSol.eigenvectors();
+
+    std::cout<<"Here 2"<<std::endl;
 
     //Insertion sort
     bool sorted = false;
@@ -105,8 +114,15 @@ Array<double,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<double
         }
     }
 
+    std::cout<<"Here 3"<<std::endl;
+
     ArrayXd tempV = V.real().row(0);
+
+    std::cout<<"Here 4"<<std::endl;
+
     ArrayXd e = ab0(0,1) * tempV * tempV;
+
+    std::cout<<"Here 5"<<std::endl;
 
     Array<double,Dynamic,2> xwGK = ArrayX2d::Zero(2*nNodes + 1, 2);
     xwGK.col(0) = d.real();
