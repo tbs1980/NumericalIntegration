@@ -4,13 +4,10 @@
 
 int compare_codes(void)
 {
-    std::cout<<"MS"<<std::endl;
+    std::cout<<std::endl<<"MS"<<std::endl;
     Eigen::Array<double,Dynamic,2> ans;
     int n = 10;
-
-    std::cout<<"Before"<<std::endl;
     ans = Kronrod::multiPrecisionKronrod(n);
-    std::cout<<"After"<<std::endl;
 
     std::cout<<std::fixed;
     for(int i=0;i<ans.rows();++i)
@@ -36,7 +33,7 @@ int compare_codes(void)
 
     for(IndexType i=0;i<x.rows();++i)
     {
-        std::cout<<std::setprecision(15)<<x(i)<<"\t"<<w(i)<<std::endl;
+        std::cout<<std::setprecision(15)<<x(i)<<"\t"<<w(i)<<std::endl<<std::endl;
     }
 
     return EXIT_SUCCESS;
