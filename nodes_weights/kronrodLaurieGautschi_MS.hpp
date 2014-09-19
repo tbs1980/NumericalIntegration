@@ -9,40 +9,42 @@
 using namespace Eigen;
 using namespace std;
 
-template <typename Scalar_>
+/*
+template <typename Scalar>
 class Kronrod
 {
 public:
-  typedef Scalar_ Scalar;
+  typedef Scalar Scalar;
 }
+*/
 
 namespace Kronrod
 {
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> multiPrecisionKronrod(const unsigned int nNodes);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeff(const unsigned int nNodes);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeff(const unsigned int nNodes,Scalar alpha);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeff(const unsigned int nNodes, Scalar alpha, Scalar beta);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes,Scalar alpha);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes, Scalar alpha, Scalar beta);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> kronrod(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab);
 
-    template <typename Scalar_>
+    template <typename Scalar>
     Array<Scalar,Dynamic,2> kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab0);
 
 }
@@ -56,13 +58,13 @@ namespace Kronrod
 *   Created by Pavel Holoborodko, November 7, 2011.
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes)
 {
-    Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne(2 * nNodes);
+    Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
 
-    Array<Scalar,Dynamic,2> xGK = ArrayX2d::Zero(2 * nNodes + 1, 2);
+    Array<Scalar,Dynamic,2> xGK = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
     xGK.col(0) = 2. * xwGK.col(0) - 1.;
     xGK.col(1) = 2. * xwGK.col(1);
     return xGK;
@@ -84,11 +86,16 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
 *   Edited by Pavel Holoborodko, November 7, 2011:
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta)
 {
+    typedef Array<Scalar,Dynamic,1> ArrayXdType;
+    typedef Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
+    typedef Matrix< std::complex< Scalar >, Dynamic, 1 > ComplexVectorType;
+    typedef Matrix< std::complex< Scalar >, Dynamic, Dynamic > 	ComplexMatrixType;
+
     Array<Scalar,Dynamic,2> ab0 = kronrodRecurrenceCoeff(nNodes, alphaBeta);
-    MatrixXd J = MatrixXd::Zero(2*nNodes + 1, 2*nNodes + 1);
+    MatrixType J = MatrixType::Zero(2*nNodes + 1, 2*nNodes + 1);
 
     for(size_t k = 0; k < 2 * nNodes; ++k)
     {
@@ -99,9 +106,9 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
 
     J(2 * nNodes, 2 * nNodes) = ab0(2 * nNodes, 0);
 
-    EigenSolver<MatrixXd> eigenSol(J);
-    VectorXcd d = eigenSol.eigenvalues();
-    MatrixXcd V = eigenSol.eigenvectors();
+    EigenSolver<MatrixType> eigenSol(J);
+    ComplexVectorType d = eigenSol.eigenvalues();
+    ComplexMatrixType V = eigenSol.eigenvectors();
 
     //Insertion sort
     bool sorted = false;
@@ -115,7 +122,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
             complex<Scalar> tmpD = d(i);
             d(i) = d(i+1);
             d(i+1) = tmpD;
-            VectorXcd tmpV = V.col(i);
+            ComplexVectorType tmpV = V.col(i);
             V.col(i) = V.col(i+1);
             V.col(i+1) = tmpV;
             i = max(i-1, 0);
@@ -131,10 +138,10 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
         }
     }
 
-    ArrayXd tempV = V.real().row(0),array();
-    ArrayXd e = ab0(0,1) * tempV * tempV;
+    ArrayXdType tempV = V.real().row(0),array();
+    ArrayXdType e = ab0(0,1) * tempV * tempV;
 
-    Array<Scalar,Dynamic,2> xwGK = ArrayX2d::Zero(2*nNodes + 1, 2);
+    Array<Scalar,Dynamic,2> xwGK = Array<Scalar,Dynamic,2>::Zero(2*nNodes + 1, 2);
     xwGK.col(0) = d.real();
     xwGK.col(1) = e;
 
@@ -156,37 +163,37 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
 *   Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes)
 {
-    return jacobiRecurrenceCoeff(nNodes, 0, 0);
+    return jacobiRecurrenceCoeff(nNodes,(Scalar) 0,(Scalar) 0);
 }
 
-template <typename Scalar_>
-template <typename FunctionType>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes, Scalar alpha)
 {
     return jacobiRecurrenceCoeff(nNodes, alpha, alpha);
 }
 
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes, Scalar alpha, Scalar beta)
 {
+    typedef Array<Scalar,Dynamic,1> ArrayXdType;
     Scalar nu = (beta - alpha) / (alpha + beta + 2.);
-    Scalar mu = pow(2, alpha + beta + 1) * tgamma(alpha + 1) * tgamma(beta + 1)
-                / tgamma(alpha + beta + 2);
+    Scalar mu = pow(2, alpha + beta + 1) * Gamma(alpha + 1) * Gamma(beta + 1)
+                / Gamma(alpha + beta + 2);
 
     if (nNodes == 1)
     {
-        Array<Scalar,Dynamic,2> alphaBeta = ArrayXXd::Zero(1,2);
+        Array<Scalar,Dynamic,2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(1,2);
         alphaBeta(0,0) = nu;
         alphaBeta(0,1) = mu;
         return alphaBeta;
     }
 
     Scalar  nAlphaBeta;
-    ArrayXd A(nNodes);
-    ArrayXd B(nNodes);
+    ArrayXdType A(nNodes);
+    ArrayXdType B(nNodes);
 
     for(size_t n = 1; n < nNodes; ++n)
     {
@@ -200,7 +207,7 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes
     B(0) = mu;
     B(1) = 4. * (alpha + 1) * (beta + 1) / (pow(alpha + beta + 2, 2) * (alpha + beta + 3));
 
-    Array<Scalar,Dynamic,2> alphaBeta = ArrayXXd::Zero(nNodes,2);
+    Array<Scalar,Dynamic,2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(nNodes,2);
     alphaBeta.col(0) = A;
     alphaBeta.col(1) = B;
 
@@ -224,24 +231,23 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes
 *   Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes)
 {
-    return jacobiRecurrenceCoeffZeroToOne(nNodes,0,0);
+    return jacobiRecurrenceCoeffZeroToOne(nNodes,(Scalar)0,(Scalar)0);
 }
 
-template <typename Scalar_>
-template <typename FunctionType>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes, Scalar alpha)
 {
     return jacobiRecurrenceCoeffZeroToOne(nNodes, alpha, alpha);
 }
 
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes, Scalar alpha, Scalar beta)
 {
     Array<Scalar,Dynamic,2> coeffs = jacobiRecurrenceCoeff(nNodes, alpha, beta);
-    Array<Scalar,Dynamic,2> alphaBeta = ArrayXXd::Zero(nNodes, 2);
+    Array<Scalar,Dynamic,2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(nNodes, 2);
 
     for (size_t i = 0; i < nNodes; ++i)
     {
@@ -274,11 +280,12 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned i
 *   Edited by Pavel Holoborodko, November 7, 2011:
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
-template <typename Scalar_>
+template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab0)
 {
-    ArrayXd alpha = ArrayXd::Zero(2 * nNodes + 1);
-    ArrayXd beta = ArrayXd::Zero(2 * nNodes + 1);
+    typedef Array<Scalar,Dynamic,1> ArrayXdType;
+    ArrayXdType alpha = ArrayXdType::Zero(2 * nNodes + 1);
+    ArrayXdType beta = ArrayXdType::Zero(2 * nNodes + 1);
 
     Scalar temp = 0.;
 
@@ -297,8 +304,8 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
         beta(k) = ab0(k, 1);
     }
 
-    ArrayXd sig = ArrayXd::Zero(floor(nNodes / 2) + 2);
-    ArrayXd sigT = ArrayXd::Zero(floor(nNodes / 2) + 2);
+    ArrayXdType sig = ArrayXdType::Zero(floor(nNodes / 2) + 2);
+    ArrayXdType sigT = ArrayXdType::Zero(floor(nNodes / 2) + 2);
 
     sigT(1) = beta(nNodes + 1);
 
@@ -313,7 +320,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
             sig(k+1) = temp;
         }
 
-        ArrayXd tempArray = sig;
+        ArrayXdType tempArray = sig;
         sig = sigT;
         sigT = tempArray;
     }
@@ -346,17 +353,16 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
             beta(k + nNodes + 1) = sig(j) / sig(j+1);
         }
 
-        ArrayXd tempArray = sig;
+        ArrayXdType tempArray = sig;
         sig = sigT;
         sigT = tempArray;
     }
 
     alpha(2 * nNodes) = alpha(nNodes - 1) - beta(2 * nNodes) * sig(1) / sigT(1);
 
-    Array<Scalar,Dynamic, 2> alphaBeta = ArrayX2d::Zero(2 * nNodes + 1, 2);
+    Array<Scalar,Dynamic, 2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
     alphaBeta.col(0) = alpha.array();
     alphaBeta.col(1) = beta.array();
 
     return alphaBeta;
 }
-
