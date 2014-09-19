@@ -13,22 +13,26 @@ using namespace std;
 
 namespace Kronrod
 {
+    template <typename Scalar_>
     void kronrod(
-        unsigned int n, Array<double, Dynamic, 1> &abscGaussKronrod,
-        Array<double, Dynamic, 1> &weightGaussKronrod, Array<double,
+        unsigned int n, Array<Scalar_, Dynamic, 1> &abscGaussKronrod,
+        Array<Scalar_, Dynamic, 1> &weightGaussKronrod, Array<Scalar_,
         Dynamic, 1> &weightGauss);
 
+    template <typename Scalar_>
     void abscWeightKronrod(
-        unsigned int n, unsigned int m, bool even, double chebCoeff,
-        Array<double, Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
-        double &weightGaussKronrod);
+        unsigned int n, unsigned int m, bool even, Scalar_ chebCoeff,
+        Array<Scalar_, Dynamic, 1> betaCoeffs, Scalar_ &abscGaussKronrod,
+        Scalar_ &weightGaussKronrod);
 
+    template <typename Scalar_>
     void abscWeightGauss(
-        unsigned int n, unsigned int m, bool even, double chebCoeff,
-        Array<double,Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
-        double &weightGaussKronrod, double &weightGauss);
+        unsigned int n, unsigned int m, bool even, Scalar_ chebCoeff,
+        Array<Scalar_,Dynamic, 1> betaCoeffs, Scalar_ &abscGaussKronrod,
+        Scalar_ &weightGaussKronrod, Scalar_ &weightGauss);
 
-    double machineEpsilon();
+    template <typename Scalar_>
+    Scalar_ machineEpsilon();
 }
 
 /**
@@ -68,17 +72,18 @@ namespace Kronrod
 * \return weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
 * \return weightGauss[n+1] The weights for the Gauss rule.
 */
+template <typename Scalar_>
 void Kronrod::kronrod(
-    unsigned int n, Array<double, Dynamic, 1> &abscGaussKronrod,
-    Array<double, Dynamic, 1> &weightGaussKronrod, Array<double, Dynamic, 1> &weightGauss)
+    unsigned int n, Array<Scalar_, Dynamic, 1> &abscGaussKronrod,
+    Array<Scalar_, Dynamic, 1> &weightGaussKronrod, Array<Scalar_, Dynamic, 1> &weightGauss)
 {
     unsigned int arraySize = n + 1;
     abscGaussKronrod = ArrayXd::Zero(arraySize);
     weightGaussKronrod = ArrayXd::Zero(arraySize);
     weightGauss = ArrayXd::Zero(arraySize / 2);
 
-    double aN = 0.0;
-    double d = 2.0;
+    Scalar_ aN = 0.0;
+    Scalar_ d = 2.0;
 
     for (size_t i = 0; i < n; ++i)
     {
@@ -121,23 +126,23 @@ void Kronrod::kronrod(
     // for the Newton-Raphson iterative solution.  These values are derived
     // from Pythagorean identities to the original code to more closely follow
     // the mathematics of the 1974 CoM paper.
-    double s1 = sin((M_PI / 2) / (2. * aN + 1.0));
-    double c1 = cos((M_PI / 2) / (2. * aN + 1.0));
+    Scalar_ s1 = sin((M_PI / 2) / (2. * aN + 1.0));
+    Scalar_ c1 = cos((M_PI / 2) / (2. * aN + 1.0));
 
-    double s2 = sin((M_PI) / (2. * aN + 1.0));
-    double c2 = cos((M_PI) / (2. * aN + 1.0));
+    Scalar_ s2 = sin((M_PI) / (2. * aN + 1.0));
+    Scalar_ c2 = cos((M_PI) / (2. * aN + 1.0));
 
     // Coefficient for Gauss and Kronrod abscissae and weights
-    double chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
-    double chebCoeff2 = 2.0 / (2. * n + 1);
+    Scalar_ chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
+    Scalar_ chebCoeff2 = 2.0 / (2. * n + 1);
 
     for (size_t i = 1; i <= n; ++i)
     {
         chebCoeff2 =  4.0 * chebCoeff2 * i / (n + i);
     }
 
-    double abscK = chebCoeff1 * c1;
-    double temp = 0.;
+    Scalar_ abscK = chebCoeff1 * c1;
+    Scalar_ temp = 0.;
 
     // Calculation of the K-th (Kronrod) abscissa and the corresponding weight.
     for (size_t k = 0; k < n; ++k)
@@ -188,28 +193,29 @@ void Kronrod::kronrod(
 * \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
 * \param weightGaussKronrod The Gauss-Kronrod weight.
 */
+template <typename Scalar_>
 void Kronrod::abscWeightKronrod(
-    unsigned int n, unsigned int m, bool even, double chebCoeff,
-    Array<double, Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
-    double &weightGaussKronrod)
+    unsigned int n, unsigned int m, bool even, Scalar_ chebCoeff,
+    Array<Scalar_, Dynamic, 1> betaCoeffs, Scalar_ &abscGaussKronrod,
+    Scalar_ &weightGaussKronrod)
 {
-    double ai;
+    Scalar_ ai;
 
-    double b0 = 0.;
-    double b1 = 0.;
-    double b2 = 0.;
+    Scalar_ b0 = 0.;
+    Scalar_ b1 = 0.;
+    Scalar_ b2 = 0.;
 
-    double d0 = 0.;
-    double d1 = 0.;
-    double d2 = 0.;
+    Scalar_ d0 = 0.;
+    Scalar_ d1 = 0.;
+    Scalar_ d2 = 0.;
 
-    double delta = 1.;
-    double dif = 0.;
+    Scalar_ delta = 1.;
+    Scalar_ dif = 0.;
 
-    double f = 0.;
-    double fd = 0.;
+    Scalar_ f = 0.;
+    Scalar_ fd = 0.;
 
-    double yy = 0.;
+    Scalar_ yy = 0.;
 
     int i = 0;
 
@@ -307,7 +313,6 @@ void Kronrod::abscWeightKronrod(
     return;
 }
 
-
 /**
 * \brief abscWeightGauss calculates a Gaussian abscissa and two weights.
 *
@@ -323,23 +328,24 @@ void Kronrod::abscWeightKronrod(
 * \param weightGaussKronrod The Gauss-Kronrod weight.
 * \param weightGauss The Gauss weight.
 */
+template <typename Scalar_>
 void Kronrod::abscWeightGauss(
-    unsigned int n, unsigned int m, bool even, double chebCoeff,
-    Array<double,Dynamic, 1> betaCoeffs, double &abscGaussKronrod,
-    double &weightGaussKronrod, double &weightGauss)
+    unsigned int n, unsigned int m, bool even, Scalar_ chebCoeff,
+    Array<Scalar_,Dynamic, 1> betaCoeffs, Scalar_ &abscGaussKronrod,
+    Scalar_ &weightGaussKronrod, Scalar_ &weightGauss)
 {
-    double ai = 0.;
-    double delta = 1.;
+    Scalar_ ai = 0.;
+    Scalar_ delta = 1.;
 
-    double p0 = 0.;
-    double p1 = 0.;
-    double p2 = 0.;
+    Scalar_ p0 = 0.;
+    Scalar_ p1 = 0.;
+    Scalar_ p2 = 0.;
 
-    double pd0 = 0.;
-    double pd1 = 0.;
-    double pd2 = 0.;
+    Scalar_ pd0 = 0.;
+    Scalar_ pd1 = 0.;
+    Scalar_ pd2 = 0.;
 
-    double yy = 0.;
+    Scalar_ yy = 0.;
 
     size_t iter = 0;
     size_t iterationLimit = 50;
@@ -402,7 +408,7 @@ void Kronrod::abscWeightGauss(
     }
 
     //  Computation of the Gauss weight.
-    double aN = n;
+    Scalar_ aN = n;
 
     weightGauss = 2.0 / (aN * pd2 * p0);
 
@@ -433,7 +439,8 @@ void Kronrod::abscWeightGauss(
 * \brief machineEpsilon returns the machine precision roundoff error.
 * \returns Returns the machine precision round-off error for double precision
 */
-double Kronrod::machineEpsilon()
+template <typename Scalar_>
+Scalar_ Kronrod::machineEpsilon()
 {
     // ISO standard machine precision values
     // half precision: 		2^-10	(9.76563e-04)
