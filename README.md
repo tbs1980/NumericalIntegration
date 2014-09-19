@@ -10,7 +10,7 @@ Comparison of Piessens' method to Laurie-Gautschi approach
 	* [MPFR C++](http://www.holoborodko.com/pavel/mpfr/ )
 
 ## Compilation
-A compile script has been added, from the Numerical Integration Top level directory, simply run: ./compile.sh
+A compile script has been added to the top level directory, simply run: ./compile.sh
 
 The following compilation flags must be passed
 
