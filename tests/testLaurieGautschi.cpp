@@ -35,7 +35,19 @@ int compare_codes(void)
     {
         std::cout<<std::setprecision(15)<<x(i)<<"\t"<<w(i)<<std::endl;
     }
+/*
+    std::cout << std::endl << std::endl;
+    std::cout << "MS Piessens" << std::endl;
 
+    Eigen::Array<RealType, Dynamic, 1> xGK;
+    Eigen::Array<RealType, Dynamic, 1> wGK;
+    Eigen::Array<RealType, Dynamic, 1> wG;
+
+    Kronrod::kronrod<RealType>(n, xGK,  wGK, wG);
+
+    cout << xGK << "\t" << wGK << std::endl << std::endl;
+    cout << wG << std::endl;
+*/
     std::cout<<std::endl;
 
     return EXIT_SUCCESS;

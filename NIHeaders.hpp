@@ -13,5 +13,6 @@
 
 #include "nodes_weights/kronrodLaurieGautschi_STB.hpp"
 #include "nodes_weights/kronrodLaurieGautschi_MS.hpp"
+#include "nodes_weights/kronrodPiessens.hpp"
 
 #endif //NI_NIHEADERS_HPP
