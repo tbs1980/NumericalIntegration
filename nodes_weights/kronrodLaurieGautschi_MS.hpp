@@ -138,7 +138,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
         }
     }
 
-    ArrayXdType tempV = V.real().row(0),array();
+    ArrayXdType tempV = V.real().row(0).array();
     ArrayXdType e = ab0(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwGK = Array<Scalar,Dynamic,2>::Zero(2*nNodes + 1, 2);
