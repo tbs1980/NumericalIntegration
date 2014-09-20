@@ -24,19 +24,19 @@ namespace Kronrod
 {
     template <typename Scalar>
     void kronrod(
-        unsigned int n, Array<Scalar, Dynamic, 1>& abscGaussKronrod,
+        unsigned int nNodes, Array<Scalar, Dynamic, 1>& abscGaussKronrod,
         Array<Scalar, Dynamic, 1>& weightGaussKronrod, Array<Scalar,
         Dynamic, 1>& weightGauss);
 
     template <typename Scalar>
     void abscWeightKronrod(
-        unsigned int n, unsigned int m, bool even, Scalar chebCoeff,
+        unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
         Array<Scalar, Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
         Scalar& weightGaussKronrod);
 
     template <typename Scalar>
     void abscWeightGauss(
-        unsigned int n, unsigned int m, bool even, Scalar chebCoeff,
+        unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
         Array<Scalar,Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
         Scalar& weightGaussKronrod, Scalar& weightGauss);
 
@@ -83,11 +83,11 @@ namespace Kronrod
 */
 template <typename Scalar>
 void Kronrod::kronrod(
-    unsigned int n, Array<Scalar, Dynamic, 1> &abscGaussKronrod,
+    unsigned int nNodes, Array<Scalar, Dynamic, 1> &abscGaussKronrod,
     Array<Scalar, Dynamic, 1> &weightGaussKronrod, Array<Scalar, Dynamic, 1> &weightGauss)
 {
     typedef Array<Scalar,Dynamic,1> ArrayXdType;
-    unsigned int arraySize = n + 1;
+    unsigned int arraySize = nNodes + 1;
     abscGaussKronrod = ArrayXdType::Zero(arraySize);
     weightGaussKronrod = ArrayXdType::Zero(arraySize);
     weightGauss = ArrayXdType::Zero(arraySize / 2);
@@ -95,14 +95,14 @@ void Kronrod::kronrod(
     Scalar aN = 0.0;
     Scalar d = 2.0;
 
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < nNodes; ++i)
     {
         aN += 1.0;
         d *= aN / (aN + 0.5);
     }
 
-    unsigned int m = (n + 1) / 2;
-    bool even = (n == 2 * m);
+    unsigned int m = (nNodes + 1) / 2;
+    bool even = (nNodes == 2 * m);
 
     // aK is an index variable to account for only calculating positive abscissae
     Scalar aK = aN;
@@ -144,20 +144,20 @@ void Kronrod::kronrod(
 
     // Coefficient for Gauss and Kronrod abscissae and weights
     Scalar chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
-    Scalar chebCoeff2 = 2.0 / (2. * n + 1);
+    Scalar chebCoeff2 = 2.0 / (2. * nNodes + 1);
 
-    for (size_t i = 1; i <= n; ++i)
+    for (size_t i = 1; i <= nNodes; ++i)
     {
-        chebCoeff2 =  4.0 * chebCoeff2 * i / (n + i);
+        chebCoeff2 =  4.0 * chebCoeff2 * i / (nNodes + i);
     }
 
     Scalar abscK = chebCoeff1 * c1;
     Scalar temp = 0.;
 
     // Calculation of the K-th (Kronrod) abscissa and the corresponding weight.
-    for (size_t k = 0; k < n; ++k)
+    for (size_t k = 0; k < nNodes; ++k)
     {
-        abscWeightKronrod(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k));
+        abscWeightKronrod(nNodes, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k));
         abscGaussKronrod(k) = abscK;
         ++k;
 
@@ -167,7 +167,7 @@ void Kronrod::kronrod(
         abscK = chebCoeff1 * c1;
 
         // Calculation of the k+1 (Gauss) abscissa and the corresponding weights.
-        abscWeightGauss(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k),
+        abscWeightGauss(nNodes, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(k),
                         weightGauss(k/2));
         abscGaussKronrod(k) = abscK;
 
@@ -180,12 +180,12 @@ void Kronrod::kronrod(
     // Add a Kronrod abscissa at the origin if n is even.
     if (even)
     {
-        abscWeightKronrod(n, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(n));
-        weightGauss(n) = 0.0;
+        abscWeightKronrod(nNodes, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(nNodes));
+        //weightGauss(arraySize / 2) = 0.0;
     }
 
     // Set the abscissa value at the origin to zero and exit the function.
-    abscGaussKronrod(n) = 0.0;
+    abscGaussKronrod(nNodes) = 0.0;
     return;
 }
 
@@ -205,7 +205,7 @@ void Kronrod::kronrod(
 */
 template <typename Scalar>
 void Kronrod::abscWeightKronrod(
-    unsigned int n, unsigned int m, bool even, Scalar chebCoeff,
+    unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
     Array<Scalar, Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
     Scalar& weightGaussKronrod)
 {
@@ -311,7 +311,7 @@ void Kronrod::abscWeightKronrod(
     d1 = abscGaussKronrod;
     ai = 0.0;
 
-    for (size_t i = 0; i < n - 1; ++i)
+    for (size_t i = 0; i < nNodes - 1; ++i)
     {
         ai = ai + 1.0;
         d2 = ((2.* ai + 1.0) * abscGaussKronrod * d1 - ai * d0) / (ai + 1.0);
@@ -330,8 +330,8 @@ void Kronrod::abscWeightKronrod(
 * \param betaCoeffs[m+1] The Chebyshev coefficients.
 * \param chebCoeff A value needed to compute weights.
 * \param even A boolean variable that is TRUE if n is even.
-* \param n The order of the Gauss rule.
-* \param m The value of ( n + 1 ) / 2.
+* \param nNodes The order of the Gauss rule.
+* \param m The value of ( nNodes + 1 ) / 2.
 *
 *   Input/Output
 * \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
@@ -340,7 +340,7 @@ void Kronrod::abscWeightKronrod(
 */
 template <typename Scalar>
 void Kronrod::abscWeightGauss(
-    unsigned int n, unsigned int m, bool even, Scalar chebCoeff,
+    unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
     Array<Scalar,Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
     Scalar& weightGaussKronrod, Scalar& weightGauss)
 {
@@ -369,8 +369,8 @@ void Kronrod::abscWeightGauss(
         pd0 = 0.0;
         pd1 = 1.0;
 
-        // If n <= 1, initialize p2 and pd2 to avoid problems calculating delta.
-        if (n <= 1)
+        // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
+        if (nNodes <= 1)
         {
             if (Kronrod::machineEpsilon() < abs(abscGaussKronrod))
             {
@@ -385,7 +385,7 @@ void Kronrod::abscWeightGauss(
 
         ai = 0.0;
 
-        for (size_t k = 0; k < n - 1; ++k)
+        for (size_t k = 0; k < nNodes - 1; ++k)
         {
             ai = ai + 1.0;
             p2 = ((2. * ai + 1.0) * (abscGaussKronrod) * p1 - ai * p0) / (ai + 1.0);
@@ -418,7 +418,7 @@ void Kronrod::abscWeightGauss(
     }
 
     //  Computation of the Gauss weight.
-    Scalar aN = n;
+    Scalar aN = nNodes;
 
     weightGauss = 2.0 / (aN * pd2 * p0);
 
@@ -442,6 +442,7 @@ void Kronrod::abscWeightGauss(
     {
         weightGaussKronrod = weightGauss + 2.0 * chebCoeff / (pd2 * (p2 - p0));
     }
+
     return;
 }
 
