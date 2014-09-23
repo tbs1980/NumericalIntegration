@@ -325,7 +325,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
         sigT = tempArray;
     }
 
-    for(j = nNodes / 2; j >= 0; --j)
+    for(j = floor(nNodes / 2); j >= 0; --j)
     {
         sig(j + 1) = sig(j);
     }

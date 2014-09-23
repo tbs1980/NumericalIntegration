@@ -9,31 +9,29 @@ int compare_codes(void)
     //RealType::set_default_prec(128);
     RealType::set_default_prec(256);
 
-    std::cout<<std::endl<<"MS Laurie Gautschi"<<std::endl;
+    typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
+    typedef LaurieGautschiPolicy::IndexType IndexType;
+    typedef LaurieGautschiPolicy::VectorType VectorType;
+
+    const IndexType N=15;
+    const int outputIntegers = 33;
+
     Eigen::Array<RealType,Dynamic,2> ans;
-    int n = 10;
-    int outputIntegers = 35;
-    ans = Kronrod::multiPrecisionKronrod<RealType>(n);
+    ans = Kronrod::multiPrecisionKronrod<RealType>(N);
 
     std::cout<<std::fixed;
+    std::cout<<std::endl<<"MS Laurie Gautschi"<<std::endl;
     for(int i=0;i<ans.rows();++i)
     {
         std::cout << std::setprecision(outputIntegers) << ans(i,0)
 		  << "\t" << ans(i,1) << std::endl;
     }
 
-    std::cout<<"\nSTB Laurie Gautschi"<<std::endl;
-
-    typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
-    typedef LaurieGautschiPolicy::IndexType IndexType;
-    typedef LaurieGautschiPolicy::VectorType VectorType;
-
-    const IndexType N=10;
     VectorType x=VectorType::Zero(2*N+1);
     VectorType w=VectorType::Zero(2*N+1);
-
     LaurieGautschiPolicy::mpkonrad(N,x,w);
 
+    std::cout<<"\nSTB Laurie Gautschi"<<std::endl;
     for(IndexType i=0;i<x.rows();++i)
     {
         std::cout << std::setprecision(outputIntegers) << x(i) 
@@ -42,15 +40,14 @@ int compare_codes(void)
 
     Eigen::Array<RealType, Dynamic, 1> xGKPosAndNeg 
 	= Eigen::Array<RealType, Dynamic, 1>::Zero(x.rows());
-    
     Eigen::Array<RealType, Dynamic, 1> wGKPosAndNeg 
-	= Eigen::Array<RealType, Dynamic, 1>::Zero(x.rows());;
+	= Eigen::Array<RealType, Dynamic, 1>::Zero(x.rows());
     
     Eigen::Array<RealType, Dynamic, 1> xGK;
     Eigen::Array<RealType, Dynamic, 1> wGK;
     Eigen::Array<RealType, Dynamic, 1> wG;
 
-    Kronrod::kronrod(n, xGK,  wGK, wG);
+    Kronrod::kronrod(N, xGK,  wGK, wG);
 
     for(IndexType i=0; i<xGK.rows(); ++i)
     {
@@ -70,6 +67,15 @@ int compare_codes(void)
         std::cout << std::setprecision(outputIntegers) << xGKPosAndNeg(i) 
 		  << "\t"<<wGKPosAndNeg(i) << std::endl;
     }
+
+    std::cout << std::endl;
+
+    for(IndexType i=0;i<wG.rows();++i)
+    {
+        std::cout << std::setprecision(outputIntegers) << wG(i) << std::endl;
+    }
+
+
 
     std::cout<<std::endl;
 
