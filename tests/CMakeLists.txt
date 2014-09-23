@@ -41,4 +41,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 set(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
 add_executable(testLaurieGautschi testLaurieGautschi.cpp)
+add_executable(outputPiessens outputPiessens.cpp)
+
 target_link_libraries(testLaurieGautschi ${ALL_LIBS})
+target_link_libraries(outputPiessens ${ALL_LIBS})
