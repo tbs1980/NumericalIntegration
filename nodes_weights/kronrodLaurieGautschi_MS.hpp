@@ -84,9 +84,8 @@ template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta)
 {
     typedef Array<Scalar,Dynamic,1> ArrayXdType;
-    typedef Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
-    typedef Matrix< std::complex< Scalar >, Dynamic, 1 > ComplexVectorType;
-    typedef Matrix< std::complex< Scalar >, Dynamic, Dynamic > 	ComplexMatrixType;
+    typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatrixType;
+    typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> VectorType;
 
     MatrixType jacobi = MatrixType::Zero(nNodes, nNodes);
 
@@ -102,22 +101,26 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
     }
 
     EigenSolver<MatrixType> eigenSol(jacobi);
-    ComplexVectorType d = eigenSol.eigenvalues();
-    ComplexMatrixType V = eigenSol.eigenvectors();
+    VectorType d = eigenSol.eigenvalues().real();
+    MatrixType V = eigenSol.eigenvectors().real();
+
+    // @TODO Is there a way to use std::sort()?
+    //std::sort(d, d+d.size());
+    //std::sort(V, V+V.size());
 
     //Insertion sort
     bool sorted = false;
     int i = 0;
     while(!sorted)
     {
-        Scalar di = d(i).real();
-        Scalar di1 = d(i+1).real();
+        Scalar di = d(i);
+        Scalar di1 = d(i+1);
         if(di1 < di)
         {
-            complex<Scalar> tmpD = d(i);
+            Scalar tmpD = d(i);
             d(i) = d(i+1);
             d(i+1) = tmpD;
-            ComplexVectorType tmpV = V.col(i);
+            VectorType tmpV = V.col(i);
             V.col(i) = V.col(i+1);
             V.col(i+1) = tmpV;
             i = max(i-1, 0);
@@ -133,11 +136,11 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
         }
     }
 
-    ArrayXdType tempV = V.real().row(0).array();
+    ArrayXdType tempV = V.row(0).array();
     ArrayXdType e = alphaBeta(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwG = Array<Scalar,Dynamic,2>::Zero(nNodes,2);
-    xwG.col(0) = d.real();
+    xwG.col(0) = d;
     xwG.col(1) = e;
 
     return xwG;
@@ -163,9 +166,8 @@ template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta)
 {
     typedef Array<Scalar,Dynamic,1> ArrayXdType;
-    typedef Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
-    typedef Matrix< std::complex< Scalar >, Dynamic, 1 > ComplexVectorType;
-    typedef Matrix< std::complex< Scalar >, Dynamic, Dynamic > 	ComplexMatrixType;
+    typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatrixType;
+    typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> VectorType;
 
     Array<Scalar,Dynamic,2> alphaBeta0 = kronrodRecurrenceCoeff(nNodes, alphaBeta);
     MatrixType jacobi = MatrixType::Zero(2*nNodes + 1, 2*nNodes + 1);
@@ -180,22 +182,26 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
     jacobi(2 * nNodes, 2 * nNodes) = alphaBeta0(2 * nNodes, 0);
 
     EigenSolver<MatrixType> eigenSol(jacobi);
-    ComplexVectorType d = eigenSol.eigenvalues();
-    ComplexMatrixType V = eigenSol.eigenvectors();
+    VectorType d = eigenSol.eigenvalues().real();
+    MatrixType V = eigenSol.eigenvectors().real();
+
+    // @TODO Is there a way to use std::sort()?
+    //std::sort(d, d+d.size());
+    //std::sort(V, V+V.size());
 
     //Insertion sort
     bool sorted = false;
     int i = 0;
     while(!sorted)
     {
-        Scalar di = d(i).real();
-        Scalar di1 = d(i+1).real();
+        Scalar di = d(i);
+        Scalar di1 = d(i+1);
         if(di1 < di)
         {
-            complex<Scalar> tmpD = d(i);
+            Scalar tmpD = d(i);
             d(i) = d(i+1);
             d(i+1) = tmpD;
-            ComplexVectorType tmpV = V.col(i);
+            VectorType tmpV = V.col(i);
             V.col(i) = V.col(i+1);
             V.col(i+1) = tmpV;
             i = max(i-1, 0);
@@ -211,7 +217,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
         }
     }
 
-    ArrayXdType tempV = V.real().row(0).array();
+    ArrayXdType tempV = V.row(0).array();
     ArrayXdType e = alphaBeta0(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwGK = Array<Scalar,Dynamic,2>::Zero(2*nNodes + 1, 2);
