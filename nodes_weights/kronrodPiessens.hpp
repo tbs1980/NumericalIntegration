@@ -40,8 +40,8 @@ namespace Kronrod
         Array<Scalar,Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
         Scalar& weightGaussKronrod, Scalar& weightGauss);
 
-    //template <typename Scalar>
-    double machineEpsilon();
+    template <typename Scalar>
+    Scalar machineEpsilon();
 }
 
 /**
@@ -233,7 +233,7 @@ void Kronrod::abscWeightKronrod(
     size_t iterationLimit = 50;
 
     // Iterative process for the computation of a Kronrod abscissa.
-    while (abs(delta) > machineEpsilon())
+    while (abs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
 
@@ -361,7 +361,7 @@ void Kronrod::abscWeightGauss(
     size_t iterationLimit = 50;
 
     //  Iterative process for the computation of a Gaussian abscissa.
-    while (abs(delta) > machineEpsilon())
+    while (abs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
         p0 = 1.0;
@@ -372,7 +372,7 @@ void Kronrod::abscWeightGauss(
         // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
         if (nNodes <= 1)
         {
-            if (Kronrod::machineEpsilon() < abs(abscGaussKronrod))
+            if (Kronrod::machineEpsilon<Scalar>() < abs(abscGaussKronrod))
             {
                 p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
                 pd2 = 3.0 * (abscGaussKronrod);
@@ -450,7 +450,8 @@ void Kronrod::abscWeightGauss(
 * \brief machineEpsilon returns the machine precision roundoff error.
 * \returns Returns the machine precision round-off error for double precision
 */
-double Kronrod::machineEpsilon()
+template <typename Scalar>
+Scalar Kronrod::machineEpsilon()
 {
     // ISO standard machine precision values
     // half precision: 		2^-10	(9.76563e-04)
@@ -459,6 +460,7 @@ double Kronrod::machineEpsilon()
     // extended precision: 	2^-63	(1.08420217248550443e-19)
     // quad precision: 		2^-112	(1.9259299e-34)
 
-    static double epsilon = 2.220446049250313e-016;
-    return epsilon;
+    //static double epsilon = 2.220446049250313e-016;
+    //return epsilon;
+    return Eigen::NumTraits<Scalar>::epsilon();
 }

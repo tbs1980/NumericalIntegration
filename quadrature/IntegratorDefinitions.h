@@ -302,7 +302,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
     // Maintain the descending ordering in the list of error estimates and select the subinterval
     // with the largest error estimate, (the next subinterval to be bisected).
     std::cout << "maxErrorIndex" << maxErrorIndex << "  :  ";
-    quadratureSort(maxErrorIndex, errorMax);
+    quadratureSort(maxErrorIndex, errorMax,nrMax);
     std::cout << maxErrorIndex << std::endl;
     //errorMax = m_errorList.maxCoeff(&maxErrorIndex);
 
