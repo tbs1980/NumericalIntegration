@@ -105,6 +105,34 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
     ComplexVectorType d = eigenSol.eigenvalues();
     ComplexMatrixType V = eigenSol.eigenvectors();
 
+    //Insertion sort
+    bool sorted = false;
+    int i = 0;
+    while(!sorted)
+    {
+        Scalar di = d(i).real();
+        Scalar di1 = d(i+1).real();
+        if(di1 < di)
+        {
+            complex<Scalar> tmpD = d(i);
+            d(i) = d(i+1);
+            d(i+1) = tmpD;
+            ComplexVectorType tmpV = V.col(i);
+            V.col(i) = V.col(i+1);
+            V.col(i+1) = tmpV;
+            i = max(i-1, 0);
+            continue;
+        }
+        else
+        {
+            ++i;
+            if(i == d.size() - 1)
+            {
+                sorted = true;
+            }
+        }
+    }
+
     ArrayXdType tempV = V.real().row(0).array();
     ArrayXdType e = alphaBeta(0,1) * tempV * tempV;
 
