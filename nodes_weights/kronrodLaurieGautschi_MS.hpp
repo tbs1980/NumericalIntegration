@@ -63,18 +63,19 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
     //return xwG;
 }
 
-/** gaussWeights The Gaussian quadrature weights.
+/** gaussWeights Gauss quadrature formula.
 *
-*    Given a weight function w encoded by the nx2 array alphaBeta of the
+*    Given a weight function w encoded by the nNodesx2 array alphaBeta of the
 *    first nNodes recurrence coefficients for the associated orthogonal
 *    polynomials, the first column of alphaBeta containing the n alpha-
 *    coefficients and the second column the n beta-coefficients,
-*    the call gaussWeights(nNodes,alphaBeta) generates the nodes and weights xw of
+*    the call gaussWeights(nNodes,alphaBeta) generates the nodes and weights xwG of
 *    the n-point Gauss quadrature rule for the weight function w.
 *    The nodes, in increasing order, are stored in the first
 *    column, the n corresponding weights in the second column, of
 *    the nx2 array wG.
 *
+*   Based on work of Dirk Laurie and Walter Gautschi.
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
 template <typename Scalar>
