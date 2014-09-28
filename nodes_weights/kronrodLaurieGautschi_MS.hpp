@@ -58,6 +58,12 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
     Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
     Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
+
+    xwGK.col(0) = 2. * xwGK.col(0) - 1.;
+    xwGK.col(1) = 2. * xwGK.col(1);
+
+    xwG.col(0) = 2. * xwG.col(0) - 1.;
+    xwG.col(1) = 2. * xwG.col(1);
     return xGK;
     //return xwG;
 }
@@ -136,8 +142,8 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
     ArrayXdType e = alphaBeta(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwG = Array<Scalar,Dynamic,2>::Zero(nNodes,2);
-    xwG.col(0) = 2. * d - 1.;
-    xwG.col(1) = 2. * e;
+    xwG.col(0) = d;
+    xwG.col(1) = e;
 
     return xwG;
 }
@@ -217,8 +223,8 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
     ArrayXdType e = alphaBeta0(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwGK = Array<Scalar,Dynamic,2>::Zero(2*nNodes + 1, 2);
-    xwGK.col(0) = 2. * d - 1.;
-    xwGK.col(1) = 2. * e;
+    xwGK.col(0) = d.real();
+    xwGK.col(1) = e;
 
     return xwGK;
 }
