@@ -59,9 +59,11 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
     Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
 
-    Array<Scalar,Dynamic,2> xGK = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
-    xGK.col(0) = 2. * xwGK.col(0) - 1.;
-    xGK.col(1) = 2. * xwGK.col(1);
+    xwGK.col(0) = 2. * xwGK.col(0) - 1.;
+    xwGK.col(1) = 2. * xwGK.col(1);
+
+    xwG.col(0) = 2. * xwG.col(0) - 1.;
+    xwG.col(1) = 2. * xwG.col(1);
     return xGK;
     //return xwG;
 }

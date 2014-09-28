@@ -255,7 +255,7 @@ int quad_interface_61(void)
 int main(void)
 {
     int ret = 0;
-    //ret += compare_codes();
+    ret += compare_codes();
     ret += quad_interface_15();
     ret += quad_interface_21();
     ret += quad_interface_31();
