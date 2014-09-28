@@ -9,15 +9,6 @@
 using namespace Eigen;
 using namespace std;
 
-/*
-template <typename Scalar>
-class Kronrod
-{
-public:
-  typedef Scalar Scalar;
-}
-*/
-
 namespace Kronrod
 {
     template <typename Scalar>
@@ -42,10 +33,13 @@ namespace Kronrod
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeffZeroToOne(const unsigned int nNodes, Scalar alpha, Scalar beta);
 
     template <typename Scalar>
-    Array<Scalar,Dynamic,2> kronrod(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab);
+    Array<Scalar,Dynamic,2> gaussWeights(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta);
 
     template <typename Scalar>
-    Array<Scalar,Dynamic,2> kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab0);
+    Array<Scalar,Dynamic,2> kronrod(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta);
+
+    template <typename Scalar>
+    Array<Scalar,Dynamic,2> kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta);
 
 }
 
@@ -63,11 +57,62 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
 {
     Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
+    Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
 
     Array<Scalar,Dynamic,2> xGK = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
     xGK.col(0) = 2. * xwGK.col(0) - 1.;
     xGK.col(1) = 2. * xwGK.col(1);
     return xGK;
+    //return xwG;
+}
+
+/** gaussWeights The Gaussian quadrature weights.
+*
+*    Given a weight function w encoded by the nx2 array alphaBeta of the
+*    first nNodes recurrence coefficients for the associated orthogonal
+*    polynomials, the first column of alphaBeta containing the n alpha-
+*    coefficients and the second column the n beta-coefficients,
+*    the call gaussWeights(nNodes,alphaBeta) generates the nodes and weights xw of
+*    the n-point Gauss quadrature rule for the weight function w.
+*    The nodes, in increasing order, are stored in the first
+*    column, the n corresponding weights in the second column, of
+*    the nx2 array wG.
+*
+*   Ported to C++/Eigen Grey Point Corporation September 2014
+*/
+template <typename Scalar>
+Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta)
+{
+    typedef Array<Scalar,Dynamic,1> ArrayXdType;
+    typedef Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
+    typedef Matrix< std::complex< Scalar >, Dynamic, 1 > ComplexVectorType;
+    typedef Matrix< std::complex< Scalar >, Dynamic, Dynamic > 	ComplexMatrixType;
+
+    MatrixType jacobi = MatrixType::Zero(nNodes, nNodes);
+
+    for (size_t n = 0; n < nNodes; ++n)
+    {
+        jacobi(n,n) = alphaBeta(n,0);
+    }
+
+    for (size_t n = 1; n < nNodes; ++n)
+    {
+      jacobi(n, n-1) = sqrt(alphaBeta(n,1));
+      jacobi(n-1, n) = jacobi(n, n-1);
+    }
+
+    EigenSolver<MatrixType> eigenSol(jacobi);
+    ComplexVectorType d = eigenSol.eigenvalues();
+    ComplexMatrixType V = eigenSol.eigenvectors();
+
+    ArrayXdType tempV = V.real().row(0).array();
+    ArrayXdType e = alphaBeta(0,1) * tempV * tempV;
+
+    Array<Scalar,Dynamic,2> xwG = Array<Scalar,Dynamic,2>::Zero(nNodes,2);
+    xwG.col(0) = d.real();
+    xwG.col(1) = e;
+
+    return xwG;
 }
 
 /**
@@ -94,19 +139,19 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
     typedef Matrix< std::complex< Scalar >, Dynamic, 1 > ComplexVectorType;
     typedef Matrix< std::complex< Scalar >, Dynamic, Dynamic > 	ComplexMatrixType;
 
-    Array<Scalar,Dynamic,2> ab0 = kronrodRecurrenceCoeff(nNodes, alphaBeta);
-    MatrixType J = MatrixType::Zero(2*nNodes + 1, 2*nNodes + 1);
+    Array<Scalar,Dynamic,2> alphaBeta0 = kronrodRecurrenceCoeff(nNodes, alphaBeta);
+    MatrixType jacobi = MatrixType::Zero(2*nNodes + 1, 2*nNodes + 1);
 
     for(size_t k = 0; k < 2 * nNodes; ++k)
     {
-        J(k,k) = ab0(k,0);
-        J(k,k + 1) = sqrt(ab0(k + 1, 1));
-        J(k + 1, k) = J(k, k + 1);
+        jacobi(k,k) = alphaBeta0(k,0);
+        jacobi(k,k + 1) = sqrt(alphaBeta0(k + 1, 1));
+        jacobi(k + 1, k) = jacobi(k, k + 1);
     }
 
-    J(2 * nNodes, 2 * nNodes) = ab0(2 * nNodes, 0);
+    jacobi(2 * nNodes, 2 * nNodes) = alphaBeta0(2 * nNodes, 0);
 
-    EigenSolver<MatrixType> eigenSol(J);
+    EigenSolver<MatrixType> eigenSol(jacobi);
     ComplexVectorType d = eigenSol.eigenvalues();
     ComplexMatrixType V = eigenSol.eigenvectors();
 
@@ -139,7 +184,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
     }
 
     ArrayXdType tempV = V.real().row(0).array();
-    ArrayXdType e = ab0(0,1) * tempV * tempV;
+    ArrayXdType e = alphaBeta0(0,1) * tempV * tempV;
 
     Array<Scalar,Dynamic,2> xwGK = Array<Scalar,Dynamic,2>::Zero(2*nNodes + 1, 2);
     xwGK.col(0) = d.real();
@@ -281,7 +326,7 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned i
 *   Ported to C++/Eigen Grey Point Corporation September 2014
 */
 template <typename Scalar>
-Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> ab0)
+Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNodes, Array<Scalar,Dynamic,2> alphaBeta)
 {
     typedef Array<Scalar,Dynamic,1> ArrayXdType;
     ArrayXdType alpha = ArrayXdType::Zero(2 * nNodes + 1);
@@ -296,12 +341,12 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
 
     for (k = 0; k <= floor(3 * nNodes / 2 + 1); ++k)
     {
-        alpha(k) = ab0(k, 0);
+        alpha(k) = alphaBeta(k, 0);
     }
 
     for (k = 0; k <= ceil(3 * nNodes / 2 + 1); ++k)
     {
-        beta(k) = ab0(k, 1);
+        beta(k) = alphaBeta(k, 1);
     }
 
     ArrayXdType sig = ArrayXdType::Zero(floor(nNodes / 2) + 2);
@@ -360,9 +405,9 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
 
     alpha(2 * nNodes) = alpha(nNodes - 1) - beta(2 * nNodes) * sig(1) / sigT(1);
 
-    Array<Scalar,Dynamic, 2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
-    alphaBeta.col(0) = alpha.array();
-    alphaBeta.col(1) = beta.array();
+    Array<Scalar,Dynamic, 2> alphaBeta0 = Array<Scalar,Dynamic,2>::Zero(2 * nNodes + 1, 2);
+    alphaBeta0.col(0) = alpha.array();
+    alphaBeta0.col(1) = beta.array();
 
-    return alphaBeta;
+    return alphaBeta0;
 }
