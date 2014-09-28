@@ -294,12 +294,12 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
 
     unsigned int m = 0;
 
-    for (k = 0; k < floor(3 * nNodes / 2 + 1); ++k)
+    for (k = 0; k <= floor(3 * nNodes / 2 + 1); ++k)
     {
         alpha(k) = ab0(k, 0);
     }
 
-    for (k = 0; k < ceil(3 * nNodes / 2 + 1); ++k)
+    for (k = 0; k <= ceil(3 * nNodes / 2 + 1); ++k)
     {
         beta(k) = ab0(k, 1);
     }
