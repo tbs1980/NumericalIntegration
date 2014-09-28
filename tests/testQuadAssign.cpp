@@ -7,21 +7,14 @@ template <typename RealType>
 class QuadratureKronrod
 {
 public:
-    typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
-    typedef typename LaurieGautschiPolicy::IndexType IndexType;
-    QuadratureKronrod()
-    {
-        LaurieGautschiPolicy::mpkonrad15(abscissaeGaussKronrod15,weightsGaussKronrod15);
-        LaurieGautschiPolicy::mpkonrad21(abscissaeGaussKronrod21,weightsGaussKronrod21);
-        LaurieGautschiPolicy::mpkonrad31(abscissaeGaussKronrod31,weightsGaussKronrod31);
-        LaurieGautschiPolicy::mpkonrad41(abscissaeGaussKronrod41,weightsGaussKronrod41);
-        LaurieGautschiPolicy::mpkonrad51(abscissaeGaussKronrod51,weightsGaussKronrod51);
-        LaurieGautschiPolicy::mpkonrad61(abscissaeGaussKronrod61,weightsGaussKronrod61);
-    }
-  Array<RealType, 8, 1> abscissaeGaussKronrod15;
-  Array<RealType, 8, 1> weightsGaussKronrod15;
-  Array<RealType, 4, 1> weightsGauss15;
 
+    //typedef typename LaurieGautschiPolicy::IndexType IndexType;
+    typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
+  static const Array<RealType, 8, 1> abscissaeGaussKronrod15;
+  static const Array<RealType, 8, 1> weightsGaussKronrod15;
+  static const Array<RealType, 4, 1> weightsGauss15;
+
+    /*
   Array<RealType, 11, 1> abscissaeGaussKronrod21;
   Array<RealType, 11, 1> weightsGaussKronrod21;
   Array<RealType, 5, 1> weightsGauss21;
@@ -41,27 +34,63 @@ public:
   Array<RealType, 31, 1> abscissaeGaussKronrod61;
   Array<RealType, 31, 1> weightsGaussKronrod61;
   Array<RealType, 15, 1> weightsGauss61;
-
+  */
 };
 
+template <typename RealType>
+const Array<RealType, 8, 1> QuadratureKronrod<RealType>::abscissaeGaussKronrod15 =
+    QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15abscissae();
 
+template <typename RealType>
+const Array<RealType, 8, 1> QuadratureKronrod<RealType>::weightsGaussKronrod15 =
+    QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15weights();
 
 int main(void)
 {
     typedef mpfr::mpreal RealType;
     RealType::set_default_prec(256);
+    //typedef double RealType;
 
     typedef QuadratureKronrod<RealType> QuadratureKronrodType;
-    typedef QuadratureKronrodType::IndexType IndexType;
+    typedef QuadratureKronrodType::LaurieGautschiPolicy LaurieGautschiPolicy;
+    //typedef QuadratureKronrodType::IndexType IndexType;
 
-    QuadratureKronrodType qr;
 
     std::cout<<"\n GaussKronrod15\n"<<std::endl;
     std::cout<<std::fixed;
-    for(IndexType i=0;i<8;++i)
+    for(int i=0;i<8;++i)
     {
-        std::cout << std::setprecision(33) <<qr.abscissaeGaussKronrod15(i)<<"\t"<<qr.weightsGaussKronrod15(i)<<std::endl;
+        std::cout << std::setprecision(33) <<QuadratureKronrodType::abscissaeGaussKronrod15(i)<<"\t"
+            <<QuadratureKronrodType::weightsGaussKronrod15(i)<<std::endl;
     }
+
+    /*
+    std::cout<<"\n try 2 GaussKronrod15\n"<<std::endl;
+    Array<RealType, 8, 1> xout;
+    Array<RealType, 8, 1> wout;
+    xout = LaurieGautschiPolicy::mpkonrad15abscissae();
+    wout = LaurieGautschiPolicy::mpkonrad15weights();
+
+    for(int i=0;i<8;++i)
+    {
+        std::cout << std::setprecision(33) <<xout(i)<<"\t"
+            <<wout(i)<<std::endl;
+    }
+
+    std::cout<<"\n try 3 GaussKronrod15\n"<<std::endl;
+    Array<RealType, 8, 1> xout1;
+    Array<RealType, 8, 1> wout1;
+    //xout = LaurieGautschiPolicy::mpkonrad15abscissae();
+    //wout = LaurieGautschiPolicy::mpkonrad15weights();
+    LaurieGautschiPolicy::mpkonrad15(xout1,wout1);
+
+    for(int i=0;i<8;++i)
+    {
+        std::cout << std::setprecision(33) <<xout1(i)<<"\t"
+            <<wout1(i)<<std::endl;
+    }
+    */
+
 
     return EXIT_SUCCESS;
 }

@@ -250,6 +250,46 @@ namespace Kronrod {
             weightsGaussKronrod15 = wout;
         }
 
+static Eigen::Array<RealType, 8, 1> mpkonrad15abscissae()
+{
+    const IndexType N = 7;
+    VectorType x=VectorType::Zero(2*N+1);
+    VectorType w=VectorType::Zero(2*N+1);
+
+    mpkonrad(N,x,w);
+
+    Eigen::Array<RealType, 8, 1> xout;
+
+    IndexType ind=0;
+    for(IndexType i=2*N;i>=N;--i)
+    {
+        xout(ind) = x(i);
+        ++ind;
+    }
+
+    return xout;
+}
+
+static Eigen::Array<RealType, 8, 1> mpkonrad15weights()
+{
+    const IndexType N = 7;
+    VectorType x=VectorType::Zero(2*N+1);
+    VectorType w=VectorType::Zero(2*N+1);
+
+    mpkonrad(N,x,w);
+
+    Eigen::Array<RealType, 8, 1> wout;
+
+    IndexType ind=0;
+    for(IndexType i=2*N;i>=N;--i)
+    {
+        wout(ind) = w(i);
+        ++ind;
+    }
+
+    return wout;
+}
+
         static void mpkonrad21(Eigen::Array<RealType, 11, 1> & abscissaeGaussKronrod21,
             Eigen::Array<RealType, 11, 1> & weightsGaussKronrod21)
         {
