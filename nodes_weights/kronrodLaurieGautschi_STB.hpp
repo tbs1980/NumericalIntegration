@@ -25,6 +25,24 @@ namespace Kronrod {
         return tgamma(x);
     }
 
+    template<typename T>
+    void PrintType(T x)
+    {
+        std::cout<<"mp real"<<std::endl;
+    }
+
+    void PrintType(double x)
+    {
+        std::cout<<"double"<<std::endl;
+    }
+
+    void PrintType(float x)
+    {
+        std::cout<<"float"<<std::endl;
+    }
+
+
+
     template<typename _RealType>
     class LaurieGautschi
     {
@@ -211,6 +229,11 @@ namespace Kronrod {
             assert(x.rows() ==  2*N+1);
             assert(w.rows() ==  2*N+1);
             assert(N>0);
+
+            RealType myx=RealType(0);
+            PrintType(myx);
+
+            std::cout<<"precision= "<<RealType::get_default_prec()<<std::endl;
 
             VectorType a=VectorType::Zero(2*N);
             VectorType b=VectorType::Zero(2*N);
