@@ -9,17 +9,17 @@ public:
 
     typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
 
-    static Array<RealType, 8, 1> abscissaeGaussKronrod15 ;
-    static Array<RealType, 8, 1> weightsGaussKronrod15;
-    static Array<RealType, 4, 1> weightsGauss15;
+    static const Array<RealType, 8, 1> abscissaeGaussKronrod15 ;
+    static const Array<RealType, 8, 1> weightsGaussKronrod15;
+    static const Array<RealType, 4, 1> weightsGauss15;
 };
 
 template <typename RealType>
-Array<RealType, 8, 1> QuadratureKronrod<RealType>::abscissaeGaussKronrod15 =
+const Array<RealType, 8, 1> QuadratureKronrod<RealType>::abscissaeGaussKronrod15 =
     QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15abscissae();
 
 template <typename RealType>
-Array<RealType, 8, 1> QuadratureKronrod<RealType>::weightsGaussKronrod15 =
+const Array<RealType, 8, 1> QuadratureKronrod<RealType>::weightsGaussKronrod15 =
     QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15weights();
 
 int main(void)
