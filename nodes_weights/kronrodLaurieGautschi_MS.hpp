@@ -46,7 +46,7 @@ namespace Kronrod
 /**
 *   multiPrecisionKronrod Arbitrary precision Kronrod abscissae & weights.
 *
-*   xGK = multiPrecisionKronrod(N) computes Kronrod points for (-1,1) with any required precision
+*   xGK = multiPrecisionKronrod(N) computes Kronrod points for (-1,1) of any required precision
 *
 *   Based on work of Dirk Laurie and Walter Gautschi.
 *   Created by Pavel Holoborodko, November 7, 2011.
@@ -63,17 +63,18 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
     //return xwG;
 }
 
-/** gaussWeights Gauss quadrature formula.
+/** 
+*   gaussWeights Gauss quadrature formula.
 *
-*    Given a weight function w encoded by the nNodesx2 array alphaBeta of the
-*    first nNodes recurrence coefficients for the associated orthogonal
-*    polynomials, the first column of alphaBeta containing the n alpha-
-*    coefficients and the second column the n beta-coefficients,
-*    the call gaussWeights(nNodes,alphaBeta) generates the nodes and weights xwG of
-*    the n-point Gauss quadrature rule for the weight function w.
-*    The nodes, in increasing order, are stored in the first
-*    column, the n corresponding weights in the second column, of
-*    the nx2 array wG.
+*   Given a weight function w encoded by the nNodesx2 array alphaBeta of
+*   the first nNodes recurrence coefficients for the associated orthogonal
+*   polynomials, the first column of alphaBeta containing the n alpha-
+*   coefficients and the second column the n beta-coefficients, the call
+*   gaussWeights(nNodes,alphaBeta) generates the nodes and weights xwG
+*   of the n-point Gauss quadrature rule for the weight function w.
+*   The nodes, in increasing order, are stored in the first column, the
+*   n corresponding weights in the second column, of the nx2 array wG.
+*   This method is often reffered to as the Golub-Welsch algorithm.
 *
 *   Based on work of Dirk Laurie and Walter Gautschi.
 *   Ported to C++/Eigen Grey Point Corporation September 2014
@@ -141,6 +142,7 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
     xwG.col(0) = d;
     xwG.col(1) = e;
 
+    //Adjust the interval assumption of [0,1] to an interval of [-1, 1]
     xwG.col(0) = 2. * xwG.col(0) - 1.;
     xwG.col(1) = 2. * xwG.col(1);
 
@@ -225,6 +227,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
     xwGK.col(0) = d.real();
     xwGK.col(1) = e;
 
+    //Adjust the interval assumption of [0,1] to an interval of [-1, 1]
     xwGK.col(0) = 2. * xwGK.col(0) - 1.;
     xwGK.col(1) = 2. * xwGK.col(1);
 
