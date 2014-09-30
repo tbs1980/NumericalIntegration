@@ -3,10 +3,14 @@
 #include "gtest/gtest.h"
 #include <iostream>
 
+//typedef float Scalar; //does not work
+typedef double Scalar;
+//typedef long double Scalar;
+
 class IntegratorTest : public ::testing::Test
 {
 public:
-    typedef double Scalar;
+    //typedef double Scalar;
 protected:
   IntegratorTest() : integrator(200)
   {
@@ -71,7 +75,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t 
 
 TEST_F(IntegratorTest, qagPeak)
 {
-  typedef double Scalar;
+
   const size_t numKeys = 6;
 
   IntegrandPeakFunctor<Scalar> integrandPeakFunctor;

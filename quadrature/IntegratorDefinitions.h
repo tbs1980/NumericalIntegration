@@ -141,7 +141,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
   const QuadratureRule quadratureRule)
 {
   if ((desiredAbsoluteError <= 0.
-       && desiredRelativeError < (std::max)(std::numeric_limits<Scalar>::epsilon() * 50., 5.e-28))
+       && desiredRelativeError < (std::max)(Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.), Scalar(5.e-28) ))
       || m_maxSubintervals < 1)
   {
     m_errorCode = 6;
@@ -175,7 +175,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
   {
     m_errorCode = 1;
   }
-  else if (m_estimatedError <= std::numeric_limits<Scalar>::epsilon() * 50. * defAbs
+  else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * 50. * defAbs
       && m_estimatedError > errorBound)
   {
     m_errorCode = 2;
@@ -220,7 +220,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
     Scalar lower1 = m_lowerList[maxErrorIndex];
     Scalar upper2 = m_upperList[maxErrorIndex];
 
-    Scalar upper1 = (lower1 + upper2) * .5;
+    Scalar upper1 = (lower1 + upper2) * Scalar(.5);
     Scalar lower2 = upper1;
 
     Scalar error1;
@@ -242,8 +242,8 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
 
     if (defAb1 != error1 && defAb2 != error2)
     {
-        if (std::abs(m_integralList[maxErrorIndex] - area12) <= std::abs(area12) * 1.e-5
-          && error12 >= errorMax * .99)
+        if (std::abs(m_integralList[maxErrorIndex] - area12) <= std::abs(area12) * Scalar(1.e-5)
+          && error12 >= errorMax * Scalar(.99))
       {
         ++roundOff1;
       }
@@ -273,8 +273,8 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
       // Set m_error_code in the case of poor integrand behaviour within
       // the integration range.
       else if ((std::max)(std::abs(lower1), std::abs(upper2))
-          <= (std::numeric_limits<Scalar>::epsilon() * 100. + 1.)
-          * (std::abs(lower2) + (std::numeric_limits<Scalar>::min)() * 1.e3))
+          <= (Eigen::NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
+          * (std::abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
       {
         m_errorCode = 3;
       }
@@ -394,10 +394,10 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
   const QuadratureRule quadratureRule)
 {
   // Half-length of the interval.
-  const Scalar halfLength = (upperLimit - lowerLimit) * .5;
+  const Scalar halfLength = (upperLimit - lowerLimit) * Scalar(.5);
 
   // Midpoint of the interval.
-  const Scalar center = (lowerLimit + upperLimit) * .5;
+  const Scalar center = (lowerLimit + upperLimit) * Scalar(.5);
 
   const Scalar fCenter = f(center);
 
@@ -408,7 +408,7 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
   Scalar resultGauss;
   if (quadratureRule % 2 == 0)
   {
-    resultGauss = 0.;
+    resultGauss = Scalar(0.);
   }
   else
   {
@@ -457,7 +457,7 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
 
   // Approximation to the mean value of f over the interval (lowerLimit, upperLimit),
   // i.e. I / (upperLimit - lowerLimit)
-  Scalar resultMeanKronrod = resultKronrod * .5;
+  Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
   absDiffIntegral = weightsGaussKronrod[7] * (std::abs(fCenter - resultMeanKronrod));
 
@@ -472,17 +472,17 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
   absDiffIntegral *= std::abs(halfLength);
   estimatedError = std::abs((resultKronrod - resultGauss) * halfLength);
 
-  if (absDiffIntegral != 0. && estimatedError != 0.)
+  if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
   {
     estimatedError = absDiffIntegral
-      * (std::min)(1., std::pow((estimatedError * 200. / absDiffIntegral), 1.5));
+      * (std::min)(Scalar(1.), std::pow((estimatedError * Scalar(200.) / absDiffIntegral), Scalar(1.5) ));
   }
 
   if (absIntegral
-      > (std::numeric_limits<Scalar>::min)() / (std::numeric_limits<Scalar>::epsilon() * 50.))
+      > (std::numeric_limits<Scalar>::min)() / (Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.) ))
   {
     estimatedError = (std::max)(
-      std::numeric_limits<Scalar>::epsilon() * static_cast<Scalar>(50.) * absIntegral,
+      Eigen::NumTraits<Scalar>::epsilon() * static_cast<Scalar>(50.) * absIntegral,
       estimatedError);
   }
 
