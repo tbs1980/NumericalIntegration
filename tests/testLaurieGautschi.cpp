@@ -13,7 +13,7 @@ int compare_codes(void)
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
 
-    const IndexType N=7;
+    const IndexType N=15;
     const int outputIntegers = 33;
 
     Eigen::Array<RealType,Dynamic,2> ans;
@@ -23,8 +23,8 @@ int compare_codes(void)
     std::cout<<std::endl<<"MS Laurie Gautschi"<<std::endl;
     for(int i=0;i<ans.rows();++i)
     {
-        std::cout << std::setprecision(outputIntegers) << ans(i,0)
-		  << "\t" << ans(i,1) << std::endl;
+        std::cout << std::setprecision(outputIntegers) << ans.col(0)(i)
+		  << "\t" << ans.col(1)(i) << std::endl;
     }
 
     VectorType x=VectorType::Zero(2*N+1);

@@ -1,4 +1,7 @@
-#include <math.h>
+#ifndef EIGEN_QUADRATURE_KRONROD_MS_HPP
+#define EIGEN_QUADRATURE_KRONROD_MS_HPP
+
+#include <cmath> //STB changed this from math.h to cmath
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -7,12 +10,15 @@
 #include <iostream>
 
 using namespace Eigen;
-using namespace std;
+//using namespace std; //STB commented this line out this was creating a problem when running IntegratorTest
 
 namespace Kronrod
 {
     template <typename Scalar>
     Array<Scalar,Dynamic,2> multiPrecisionKronrod(const unsigned int nNodes);
+
+    template <typename Scalar>
+    Array<Scalar,Dynamic,2> multiPrecisionGauss(const unsigned int nNodes);
 
     template <typename Scalar>
     Array<Scalar,Dynamic,2> jacobiRecurrenceCoeff(const unsigned int nNodes);
@@ -57,13 +63,25 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
 {
     Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
-    Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
+    //Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
 
     return xwGK;
     //return xwG;
 }
 
-/** 
+template <typename Scalar>
+Array<Scalar,Dynamic,2> Kronrod::multiPrecisionGauss(const unsigned int nNodes)
+{
+    Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
+    //Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
+    Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
+
+    //return xwGK;
+    return xwG;
+}
+
+
+/**
 *   gaussWeights Gauss quadrature formula.
 *
 *   Given a weight function w encoded by the nNodesx2 array alphaBeta of
@@ -122,7 +140,7 @@ Array<Scalar,Dynamic,2> Kronrod::gaussWeights(const unsigned int nNodes, Array<S
             VectorType tmpV = V.col(i);
             V.col(i) = V.col(i+1);
             V.col(i+1) = tmpV;
-            i = max(i-1, 0);
+            i = std::max(i-1, 0);
             continue;
         }
         else
@@ -207,7 +225,7 @@ Array<Scalar,Dynamic,2> Kronrod::kronrod(const unsigned int nNodes, Array<Scalar
             VectorType tmpV = V.col(i);
             V.col(i) = V.col(i+1);
             V.col(i+1) = tmpV;
-            i = max(i-1, 0);
+            i = std::max(i-1, 0);
             continue;
         }
         else
@@ -452,3 +470,5 @@ Array<Scalar,Dynamic,2> Kronrod::kronrodRecurrenceCoeff(const unsigned int nNode
 
     return alphaBeta0;
 }
+
+#endif //EIGEN_QUADRATURE_KRONROD_MS_HPP

@@ -7,7 +7,8 @@
 #ifndef EIGEN_INTEGRATOR_DEFINITIONS_H
 #define EIGEN_INTEGRATOR_DEFINITIONS_H
 
-#include "QuadratureKronrod.h"
+//#include "QuadratureKronrod.h"
+#include "QuadratureKronrod_STB.hpp"
 #include <iostream>
 
 namespace Eigen

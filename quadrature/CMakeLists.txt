@@ -42,5 +42,7 @@ include_directories(${CMAKE_SOURCE_DIR}/gtest-1.7.0/include)
 set(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
 add_executable(IntegratorTest IntegratorTest.cpp)
+add_executable(IntegratorTest_STB IntegratorTest_STB.cpp)
 
 target_link_libraries(IntegratorTest ${ALL_LIBS} gtest gtest_main)
+target_link_libraries(IntegratorTest_STB ${ALL_LIBS} gtest gtest_main)
