@@ -5,8 +5,10 @@
 
 int test_values()
 {
-    typedef mpfr::mpreal RealType;
-    RealType::set_default_prec(256);
+    typedef float RealType;
+    //typedef double RealType;
+    //typedef mpfr::mpreal RealType;
+    //RealType::set_default_prec(256);
     typedef Eigen::QuadratureKronrod<RealType> QuadratureKronrodValuesType;
 
     //QuadratureKronrodValuesType qgk;

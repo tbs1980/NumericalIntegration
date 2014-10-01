@@ -3,27 +3,6 @@
 
 namespace Kronrod {
 
-    // Need to switch between gamma() from mpfrc++ and tgamma() from c++
-    template<typename T>
-    T Gamma(T x)
-    {
-        return gamma(x);
-    }
-
-    double Gamma(double x)
-    {
-        return tgamma(x);
-    }
-
-    float Gamma(float x)
-    {
-        return tgamma(x);
-    }
-
-    long double Gamma(long double x)
-    {
-        return tgamma(x);
-    }
 
     template<typename _RealType>
     class LaurieGautschi
