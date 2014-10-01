@@ -3,13 +3,13 @@
 #include <iomanip>
 
 template <typename RealType>
-class QuadratureKronrod
+class QuadratureKronrodTest
 {
 public:
 
     typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
 
-    QuadratureKronrod()
+    QuadratureKronrodTest()
     {
         if(s_ready==false)
         {
@@ -45,15 +45,15 @@ public:
 };
 
 template <typename RealType>
-bool QuadratureKronrod<RealType>::s_ready=false;
+bool QuadratureKronrodTest<RealType>::s_ready=false;
 
 template <typename RealType>
-Array<RealType, 8, 1> QuadratureKronrod<RealType>::s_abscissaeGaussKronrod15 =
-    QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15abscissae();
+Array<RealType, 8, 1> QuadratureKronrodTest<RealType>::s_abscissaeGaussKronrod15 =
+    QuadratureKronrodTest<RealType>::LaurieGautschiPolicy::mpkonrad15abscissae();
 
 template <typename RealType>
-Array<RealType, 8, 1> QuadratureKronrod<RealType>::s_weightsGaussKronrod15 =
-    QuadratureKronrod<RealType>::LaurieGautschiPolicy::mpkonrad15weights();
+Array<RealType, 8, 1> QuadratureKronrodTest<RealType>::s_weightsGaussKronrod15 =
+    QuadratureKronrodTest<RealType>::LaurieGautschiPolicy::mpkonrad15weights();
 
 
 int main(void)
@@ -63,7 +63,7 @@ int main(void)
 
 
 
-    typedef QuadratureKronrod<RealType> QuadratureKronrodType;
+    typedef QuadratureKronrodTest<RealType> QuadratureKronrodType;
     typedef QuadratureKronrodType::LaurieGautschiPolicy LaurieGautschiPolicy;
 
 

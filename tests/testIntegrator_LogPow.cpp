@@ -45,9 +45,9 @@ public:
 
     void setAlpha(const Scalar alpha) {m_alpha = alpha;}
 
-    Scalar exact_value_in_01(const Scalar alpha)
+    static Scalar exact_value_in_01(const Scalar alpha)
     {
-    Scalar a1=m_alpha+1.;
+    Scalar a1=alpha+1.;
     return 1./(a1*a1);
     }
 

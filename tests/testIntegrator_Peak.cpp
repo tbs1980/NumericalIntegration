@@ -3,6 +3,34 @@
 #include <iostream>
 #include <iomanip>
 
+#ifndef PI
+    #define PI 3.1415926535897932384626433832795028841971693993751
+#endif
+
+template <typename Scalar>
+Scalar desiredRelativeError()
+{
+  //return std::numeric_limits<Scalar>::epsilon() * 50.;
+  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+}
+
+template <typename Scalar>
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
+{
+  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[6] =
+    {
+      Eigen::Integrator<Scalar>::GaussKronrod15,
+      Eigen::Integrator<Scalar>::GaussKronrod21,
+      Eigen::Integrator<Scalar>::GaussKronrod31,
+      Eigen::Integrator<Scalar>::GaussKronrod41,
+      Eigen::Integrator<Scalar>::GaussKronrod51,
+      Eigen::Integrator<Scalar>::GaussKronrod61
+    };
+
+  return quadratureRules[i];
+}
+
+
 //////////////////////////// Mark's peak function test /////////////////////////
 /**
  * This integrand has a peak of height 4^alphaPeak at x = pi/4.
