@@ -418,7 +418,7 @@ private:
    * \param[out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
    *             upperLimit.
    * \param[out] absDiffIntegral The approximation to the integral of
-   *             afbs(f - I/(upperLimit - lowerLimit)).
+   *             fabs(f - I/(upperLimit - lowerLimit)).
    *
    * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
    *          41, 51, or 61-point kronrod rule obtained by optimal addition of abscissae to the 7,
