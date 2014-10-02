@@ -16,15 +16,25 @@ int compare_codes(void)
     const IndexType N = 15;
     const int outputIntegers = 33;
 
-    Eigen::Array<RealType,Dynamic,2> ans;
-    ans = Kronrod::multiPrecisionKronrod<RealType>(N);
+    Eigen::Array<RealType,Dynamic,2> xwGK;
+    Eigen::Array<RealType,Dynamic,2> xwG;
+
+    xwGK = Kronrod::multiPrecisionKronrod<RealType>(N);
+    xwG = Kronrod::multiPrecisionGauss<RealType>(N);
 
     std::cout<<std::fixed;
     std::cout<<std::endl<<"MS Laurie Gautschi"<<std::endl;
-    for(int i=0;i<ans.rows();++i)
+    for(int i = 0; i < xwGK.rows(); ++i)
     {
         std::cout << std::setprecision(outputIntegers);
-        std::cout << ans.col(0)(i) << "\t" << ans.col(1)(i) << std::endl;
+        std::cout << xwGK.col(0)(i) << "\t" << xwGK.col(1)(i) << std::endl;
+    }
+
+    std::cout<<std::endl;
+    for(int i = 0; i < xwG.rows(); ++i)
+    {
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << xwG.col(0)(i) << "\t" << xwG.col(1)(i) << std::endl;
     }
 
     VectorType xGK =VectorType::Zero(2*N+1);
@@ -78,6 +88,12 @@ int compare_codes(void)
     std::cout << std::endl;
 
     for(IndexType i = 0; i < wGPiessens.rows(); ++i)
+    {
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << wGPiessens(i) << std::endl;
+    }
+
+    for(IndexType i = wGPiessens.rows() - 1; i >= 0; --i)
     {
         std::cout << std::setprecision(outputIntegers);
         std::cout << wGPiessens(i) << std::endl;
