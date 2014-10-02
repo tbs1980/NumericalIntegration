@@ -166,7 +166,7 @@ TEST_F(IntegratorTest, qagPeak)
 
       double expected = integralPeak(alpha);
 
-      EXPECT_LE(abs(expected - actual), desiredRelativeError<double>() * abs(expected));
+      EXPECT_LE(fabs(expected - actual), desiredRelativeError<double>() * fabs(expected));
     }
   }
 }
@@ -189,7 +189,7 @@ TEST_F(IntegratorTest, qagOscillates)
 
       double expected = integralOscillates(alpha);
 
-      EXPECT_LE(abs(expected - actual), desiredRelativeError<double>() * abs(expected));
+      EXPECT_LE(fabs(expected - actual), desiredRelativeError<double>() * fabs(expected));
     }
   }
 }
@@ -215,7 +215,7 @@ TEST_F(IntegratorTest, qagInfinite)
 
       float expected = integralInfinite(alpha);
 
-      EXPECT_LE(abs(expected - actual), desiredRelativeError<float>() * abs(expected));
+      EXPECT_LE(fabs(expected - actual), desiredRelativeError<float>() * fabs(expected));
     }
   }
 }

@@ -86,10 +86,10 @@ int test_peak(void)
 
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
 
-            if(Abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * Abs(expected))
+            if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
             {
-                std::cout<<"rule "<<i<<"\t abs((Scalar)(expected - actual)) ="<<Abs((Scalar)(expected - actual))
-                <<"\t desiredRelativeError<Scalar>() * Abs(expected)= "<<desiredRelativeError<Scalar>() * Abs(expected)<<std::endl;
+                std::cout << "rule " << i << "\t fabs((Scalar)(expected - actual)) =" << fabs((Scalar)(expected - actual))
+                << "\t desiredRelativeError<Scalar>() * fabs(expected)= " << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                 return EXIT_FAILURE;
             }
         }

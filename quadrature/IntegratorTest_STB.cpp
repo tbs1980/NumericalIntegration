@@ -92,7 +92,7 @@ TEST_F(IntegratorTest, qagPeak)
 
       Scalar expected = integralPeak(alpha);
 
-      EXPECT_LE(abs(expected - actual), desiredRelativeError<Scalar>() * abs(expected));
+      EXPECT_LE(fabs(expected - actual), desiredRelativeError<Scalar>() * fabs(expected));
     }
   }
 }

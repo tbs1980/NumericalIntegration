@@ -1,7 +1,7 @@
 #ifndef EIGEN_QUADRATURE_KRONROD_MS_HPP
 #define EIGEN_QUADRATURE_KRONROD_MS_HPP
 
-#include <cmath> //STB changed this from math.h to cmath
+#include <cmath>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -10,7 +10,6 @@
 #include <iostream>
 
 using namespace Eigen;
-//using namespace std; //STB commented this line out this was creating a problem when running IntegratorTest
 
 namespace Kronrod
 {

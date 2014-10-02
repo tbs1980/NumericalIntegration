@@ -54,7 +54,7 @@ public:
   /**
    * \brief This function calculates an approximation I' to a given definite integral I, the
    *        integral of f from lowerLimit to upperLimit, hopefully satisfying
-   *        abs(I - I') <= max(desiredAbsoluteError, desiredRelativeError * abs(I)).
+   *        fabs(I - I') <= max(desiredAbsoluteError, desiredRelativeError * abs(I)).
    *
    * This function is best suited for integrands without singularities or discontinuities, which
    * are too difficult for non-adaptive quadrature, and, in particular, for integrands with
@@ -114,11 +114,11 @@ private:
    * \param[in] lowerLimit The lower limit of integration.
    * \param[in] upperLimit The upper limit of integration.
    * \param[out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
-   *             abs(I - I').
-   * \param[out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
+   *             fabs(I - I').
+   * \param[out] absIntegral The approximation to the integral of fabs(f) from lowerLimit to
    *             upperLimit.
    * \param[out] absDiffIntegral The approximation to the integral of
-   *             abs(f - I/(upperLimit - lowerLimit)).
+   *             fabs(f - I/(upperLimit - lowerLimit)).
    *
    * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
    *          41, 51, or 61-point kronrod rule obtained by optimal addition of abscissae to the 7,
@@ -194,7 +194,7 @@ private:
   int m_maxSubintervals;
 
   /**
-   * \brief Estimate of the modulus of the absolute error, which should equal or exceed abs(I - I').
+   * \brief Estimate of the modulus of the absolute error, which should equal or exceed fabs(I - I').
    */
   Scalar m_estimatedError;
 

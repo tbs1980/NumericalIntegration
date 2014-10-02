@@ -233,7 +233,7 @@ void Kronrod::abscWeightKronrod(
     size_t iterationLimit = 50;
 
     // Iterative process for the computation of a Kronrod abscissa.
-    while (abs(delta) > machineEpsilon<Scalar>())
+    while (fabs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
 
@@ -361,7 +361,7 @@ void Kronrod::abscWeightGauss(
     size_t iterationLimit = 50;
 
     //  Iterative process for the computation of a Gaussian abscissa.
-    while (abs(delta) > machineEpsilon<Scalar>())
+    while (fabs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
         p0 = 1.0;
@@ -372,7 +372,7 @@ void Kronrod::abscWeightGauss(
         // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
         if (nNodes <= 1)
         {
-            if (Kronrod::machineEpsilon<Scalar>() < abs(abscGaussKronrod))
+            if (Kronrod::machineEpsilon<Scalar>() < fabs(abscGaussKronrod))
             {
                 p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
                 pd2 = 3.0 * (abscGaussKronrod);

@@ -169,7 +169,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
   m_errorList[0] = m_estimatedError;
 
   // Test on accuracy.
-  Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * std::abs(integral));
+  Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * std::fabs(integral));
 
   if (m_maxSubintervals == 1)
   {
@@ -242,7 +242,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
 
     if (defAb1 != error1 && defAb2 != error2)
     {
-        if (std::abs(m_integralList[maxErrorIndex] - area12) <= std::abs(area12) * Scalar(1.e-5)
+        if (std::fabs(m_integralList[maxErrorIndex] - area12) <= std::fabs(area12) * Scalar(1.e-5)
           && error12 >= errorMax * Scalar(.99))
       {
         ++roundOff1;
@@ -256,7 +256,7 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
     m_integralList[maxErrorIndex] = area1;
     m_integralList[numSubintervalsIndex] = area2;
 
-    errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * std::abs(area));
+    errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * std::fabs(area));
 
     if (errorSum > errorBound)
     {
@@ -272,9 +272,9 @@ Scalar_ Integrator<Scalar_>::quadratureAdaptive(
       }
       // Set m_error_code in the case of poor integrand behaviour within
       // the integration range.
-      else if ((std::max)(std::abs(lower1), std::abs(upper2))
+      else if ((std::max)(std::fabs(lower1), std::fabs(upper2))
           <= (Eigen::NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
-          * (std::abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
+          * (std::fabs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
       {
         m_errorCode = 3;
       }
@@ -417,7 +417,7 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
 
   // The result of the Kronrod formula.
   Scalar resultKronrod = weightsGaussKronrod[weightsGaussKronrod.size() - 1] * fCenter;
-  absIntegral = std::abs(resultKronrod);
+  absIntegral = std::fabs(resultKronrod);
 
   for (DenseIndex j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
   {
@@ -434,7 +434,7 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
     resultGauss += weightsGauss[j - 1] * funcSum;
     resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-    absIntegral += weightsGaussKronrod[jj] * (std::abs(f1) + std::abs(f2));
+    absIntegral += weightsGaussKronrod[jj] * (std::fabs(f1) + std::fabs(f2));
   }
 
   for (DenseIndex j = 0; j < weightsGauss.size(); ++j)
@@ -452,14 +452,14 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
 
     resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-    absIntegral += weightsGaussKronrod[jj] * (std::abs(f1) + std::abs(f2));
+    absIntegral += weightsGaussKronrod[jj] * (std::fabs(f1) + std::fabs(f2));
   }
 
   // Approximation to the mean value of f over the interval (lowerLimit, upperLimit),
   // i.e. I / (upperLimit - lowerLimit)
   Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
-  absDiffIntegral = weightsGaussKronrod[7] * (std::abs(fCenter - resultMeanKronrod));
+  absDiffIntegral = weightsGaussKronrod[7] * (std::fabs(fCenter - resultMeanKronrod));
 
   DenseIndex size1 = weightsGaussKronrod.size() - 1;
 
@@ -468,9 +468,9 @@ Scalar_ Integrator<Scalar_>::quadratureKronrodHelper(
                       * weightsGaussKronrod.head(size1)).sum();
 
   Scalar result = resultKronrod * halfLength;
-  absIntegral *= std::abs(halfLength);
-  absDiffIntegral *= std::abs(halfLength);
-  estimatedError = std::abs((resultKronrod - resultGauss) * halfLength);
+  absIntegral *= std::fabs(halfLength);
+  absDiffIntegral *= std::fabs(halfLength);
+  estimatedError = std::fabs((resultKronrod - resultGauss) * halfLength);
 
   if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
   {

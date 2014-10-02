@@ -56,12 +56,12 @@ public:
             Array<Scalar, Dynamic, 2> xwG = Kronrod::multiPrecisionGauss<Scalar>(7);
             for(size_t i=0;i<8;++i)
             {
-                abscissaeGaussKronrod15(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod15(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod15(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod15(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<4;++i)
             {
-                weightsGauss15(i) = Abs( xwG(i,1) );
+                weightsGauss15(i) = fabs( xwG(i,1) );
             }
 
 
@@ -69,12 +69,12 @@ public:
             xwG = Kronrod::multiPrecisionGauss<Scalar>(10);
             for(size_t i=0;i<11;++i)
             {
-                abscissaeGaussKronrod21(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod21(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod21(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod21(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<5;++i)
             {
-                weightsGauss21(i) = Abs( xwG(i,1) );
+                weightsGauss21(i) = fabs( xwG(i,1) );
             }
 
 
@@ -82,12 +82,12 @@ public:
             xwG = Kronrod::multiPrecisionGauss<Scalar>(15);
             for(size_t i=0;i<16;++i)
             {
-                abscissaeGaussKronrod31(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod31(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod31(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod31(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<8;++i)
             {
-                weightsGauss31(i) = Abs( xwG(i,1) );
+                weightsGauss31(i) = fabs( xwG(i,1) );
             }
 
 
@@ -95,24 +95,24 @@ public:
             xwG = Kronrod::multiPrecisionGauss<Scalar>(20);
             for(size_t i=0;i<21;++i)
             {
-                abscissaeGaussKronrod41(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod41(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod41(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod41(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<10;++i)
             {
-                weightsGauss41(i) = Abs( xwG(i,1) );
+                weightsGauss41(i) = fabs( xwG(i,1) );
             }
 
             xwGK = Kronrod::multiPrecisionKronrod<Scalar>(25);
             xwG = Kronrod::multiPrecisionGauss<Scalar>(25);
             for(size_t i=0;i<26;++i)
             {
-                abscissaeGaussKronrod51(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod51(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod51(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod51(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<13;++i)
             {
-                weightsGauss51(i) = Abs( xwG(i,1) );
+                weightsGauss51(i) = fabs( xwG(i,1) );
             }
 
 
@@ -120,12 +120,12 @@ public:
             xwG = Kronrod::multiPrecisionGauss<Scalar>(30);
             for(size_t i=0;i<31;++i)
             {
-                abscissaeGaussKronrod61(i) = Abs( xwGK(i,0) );
-                weightsGaussKronrod61(i) =  Abs( xwGK(i,1) );
+                abscissaeGaussKronrod61(i) = fabs( xwGK(i,0) );
+                weightsGaussKronrod61(i) =  fabs( xwGK(i,1) );
             }
             for(size_t i=0;i<15;++i)
             {
-                weightsGauss61(i) = Abs( xwG(i,1) );
+                weightsGauss61(i) = fabs( xwG(i,1) );
             }
 
             //////////////////// PRINT VALUES ////////////////////////////////
