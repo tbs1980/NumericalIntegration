@@ -3,8 +3,10 @@
 #include <iostream>
 #include <iomanip>
 
+// PI must defined for use of quad precision, the GNU C preprocessor value of M_PI
+// is double/long double, which will result in reduced accuracy in multiprecision.
 #ifndef PI
-    #define PI 3.1415926535897932384626433832795028841971693993751
+    #define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899
 #endif
 
 template <typename Scalar>

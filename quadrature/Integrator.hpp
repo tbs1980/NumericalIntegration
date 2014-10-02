@@ -250,10 +250,7 @@ public:
 
       // Maintain the descending ordering in the list of error estimates and select the subinterval
       // with the largest error estimate, (the next subinterval to be bisected).
-      std::cout << "maxErrorIndex" << maxErrorIndex << "  :  ";
       quadratureSort(maxErrorIndex, errorMax,nrMax);
-      std::cout << maxErrorIndex << std::endl;
-      //errorMax = m_errorList.maxCoeff(&maxErrorIndex);
 
       if (m_errorCode != 0 || errorSum <= errorBound)
       {
@@ -675,7 +672,7 @@ private:
    *               from being achieved.
    * errorCode = 3 Extremely bad integrand behaviour occurs at points in the integration interval.
    * errorCode = 6 The input is invalid, because (desiredAbsoluteError <= 0 and
-   *               desiredRealtiveError < max(50*relativeMachineAccuracy, 0.5e-28)), or
+   *               desiredRealtiveError < 50 * relativeMachineAccuracy, or
    *               m_maxSubintervals < 1. \todo make relativeMachineAccuracy a member variable.
    */
   int m_errorCode;
