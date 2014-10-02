@@ -13,7 +13,7 @@ int compare_codes(void)
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
 
-    const IndexType N=15;
+    const IndexType N = 15;
     const int outputIntegers = 33;
 
     Eigen::Array<RealType,Dynamic,2> ans;
@@ -23,69 +23,65 @@ int compare_codes(void)
     std::cout<<std::endl<<"MS Laurie Gautschi"<<std::endl;
     for(int i=0;i<ans.rows();++i)
     {
-        std::cout << std::setprecision(outputIntegers) << ans.col(0)(i)
-          << "\t" << ans.col(1)(i) << std::endl;
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << ans.col(0)(i) << "\t" << ans.col(1)(i) << std::endl;
     }
 
-    VectorType x=VectorType::Zero(2*N+1);
-    VectorType w=VectorType::Zero(2*N+1);
-    LaurieGautschiPolicy::mpkonrad(N,x,w);
+    VectorType xGK =VectorType::Zero(2*N+1);
+    VectorType wGK =VectorType::Zero(2*N+1);
+    LaurieGautschiPolicy::mpkonrad(N,xGK,wGK);
 
     std::cout<<"\nSTB Laurie Gautschi"<<std::endl;
-    for(IndexType i=0;i<x.rows();++i)
+    for(IndexType i = 0; i < xGK.rows(); ++i)
     {
-        std::cout << std::setprecision(outputIntegers) << x(i)
-          << "\t" << w(i) << std::endl;
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << xGK(i) << "\t" << wGK(i) << std::endl;
     }
 
-    x=VectorType::Zero(N);
-    w=VectorType::Zero(N);
-    LaurieGautschiPolicy::mpgauss(N,x,w);
+    VectorType xG = VectorType::Zero(N);
+    VectorType wG = VectorType::Zero(N);
+
+    LaurieGautschiPolicy::mpgauss(N,xG,wG);
+
     std::cout<<std::endl;
-    for(IndexType i=0;i<x.rows();++i)
+    for(IndexType i = 0; i < xG.rows(); ++i)
     {
-        std::cout << std::setprecision(outputIntegers) << x(i)
-          << "\t" << w(i) << std::endl;
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << xG(i) << "\t" << wG(i) << std::endl;
     }
 
-    Eigen::Array<RealType, Dynamic, 1> xGKPosAndNeg
-    = Eigen::Array<RealType, Dynamic, 1>::Zero(x.rows());
-    Eigen::Array<RealType, Dynamic, 1> wGKPosAndNeg
-    = Eigen::Array<RealType, Dynamic, 1>::Zero(x.rows());
+    Eigen::Array<RealType, Dynamic, 1> xGKPiessens;
+    Eigen::Array<RealType, Dynamic, 1> wGKPiessens;
+    Eigen::Array<RealType, Dynamic, 1> wGPiessens;
 
-    Eigen::Array<RealType, Dynamic, 1> xGK;
-    Eigen::Array<RealType, Dynamic, 1> wGK;
-    Eigen::Array<RealType, Dynamic, 1> wG;
+    Kronrod::kronrod(N, xGKPiessens,  wGKPiessens, wGPiessens);
 
-    Kronrod::kronrod(N, xGK,  wGK, wG);
-
-    for(IndexType i=0; i<xGK.rows(); ++i)
+    for(IndexType i = 0; i < xGKPiessens.rows(); ++i)
     {
-        xGKPosAndNeg(i) = -xGK(i);
-        wGKPosAndNeg(i) = wGK(i);
+        xGK(i) = -xGKPiessens(i);
+        wGK(i) = wGKPiessens(i);
     }
 
-    for(IndexType i=0; i<xGK.rows(); ++i)
+    for(IndexType i=0; i<xGKPiessens.rows(); ++i)
     {
-        xGKPosAndNeg(xGKPosAndNeg.rows()-1-i) = xGK(i);
-        wGKPosAndNeg(wGKPosAndNeg.rows()-1-i) = wGK(i);
+        xGK(xGK.rows()-1-i) = xGKPiessens(i);
+        wGK(wGK.rows()-1-i) = wGKPiessens(i);
     }
 
     std::cout << "\nMS Piessens" << std::endl;
-    for(IndexType i=0;i<xGKPosAndNeg.rows();++i)
+    for(IndexType i = 0; i < xGK.rows(); ++i)
     {
-        std::cout << std::setprecision(outputIntegers) << xGKPosAndNeg(i)
-          << "\t"<<wGKPosAndNeg(i) << std::endl;
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << xGK(i) << "\t" << wGK(i) << std::endl;
     }
 
     std::cout << std::endl;
 
-    for(IndexType i=0;i<wG.rows();++i)
+    for(IndexType i = 0; i < wGPiessens.rows(); ++i)
     {
-        std::cout << std::setprecision(outputIntegers) << wG(i) << std::endl;
+        std::cout << std::setprecision(outputIntegers);
+        std::cout << wGPiessens(i) << std::endl;
     }
-
-
 
     std::cout<<std::endl;
 
