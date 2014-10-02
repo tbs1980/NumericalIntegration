@@ -140,15 +140,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(7,x,w);
             for(size_t i=0;i<8;++i)
             {
-                abscissaeGaussKronrod15(i) = Abs( x(i) );
-                weightsGaussKronrod15(i) =  Abs( w(i) );
+                abscissaeGaussKronrod15(i) = fabs( x(i) );
+                weightsGaussKronrod15(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(7);
             w=VectorType::Zero(7);
             LaurieGautschiPolicy::mpgauss(7,x,w);
             for(size_t i=0;i<4;++i)
             {
-                weightsGauss15(i) = Abs( w(i) );
+                weightsGauss15(i) = fabs( w(i) );
             }
 
 
@@ -158,15 +158,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(10,x,w);
             for(size_t i=0;i<11;++i)
             {
-                abscissaeGaussKronrod21(i) = Abs( x(i) );
-                weightsGaussKronrod21(i) =  Abs( w(i) );
+                abscissaeGaussKronrod21(i) = fabs( x(i) );
+                weightsGaussKronrod21(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(10);
             w=VectorType::Zero(10);
             LaurieGautschiPolicy::mpgauss(10,x,w);
             for(size_t i=0;i<5;++i)
             {
-                weightsGauss21(i) = Abs( w(i) );
+                weightsGauss21(i) = fabs( w(i) );
             }
 
 
@@ -176,15 +176,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(15,x,w);
             for(size_t i=0;i<16;++i)
             {
-                abscissaeGaussKronrod31(i) = Abs( x(i) );
-                weightsGaussKronrod31(i) =  Abs( w(i) );
+                abscissaeGaussKronrod31(i) = fabs( x(i) );
+                weightsGaussKronrod31(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(15);
             w=VectorType::Zero(15);
             LaurieGautschiPolicy::mpgauss(15,x,w);
             for(size_t i=0;i<8;++i)
             {
-                weightsGauss31(i) = Abs( w(i) );
+                weightsGauss31(i) = fabs( w(i) );
             }
 
 
@@ -194,15 +194,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(20,x,w);
             for(size_t i=0;i<21;++i)
             {
-                abscissaeGaussKronrod41(i) = Abs( x(i) );
-                weightsGaussKronrod41(i) =  Abs( w(i) );
+                abscissaeGaussKronrod41(i) = fabs( x(i) );
+                weightsGaussKronrod41(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(20);
             w=VectorType::Zero(20);
             LaurieGautschiPolicy::mpgauss(20,x,w);
             for(size_t i=0;i<10;++i)
             {
-                weightsGauss41(i) = Abs( w(i) );
+                weightsGauss41(i) = fabs( w(i) );
             }
 
 
@@ -212,15 +212,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(25,x,w);
             for(size_t i=0;i<26;++i)
             {
-                abscissaeGaussKronrod51(i) = Abs( x(i) );
-                weightsGaussKronrod51(i) =  Abs( w(i) );
+                abscissaeGaussKronrod51(i) = fabs( x(i) );
+                weightsGaussKronrod51(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(25);
             w=VectorType::Zero(25);
             LaurieGautschiPolicy::mpgauss(25,x,w);
             for(size_t i=0;i<13;++i)
             {
-                weightsGauss51(i) = Abs( w(i) );
+                weightsGauss51(i) = fabs( w(i) );
             }
 
 
@@ -230,15 +230,15 @@ public:
             LaurieGautschiPolicy::mpkonrad(30,x,w);
             for(size_t i=0;i<31;++i)
             {
-                abscissaeGaussKronrod61(i) = Abs( x(i) );
-                weightsGaussKronrod61(i) =  Abs( w(i) );
+                abscissaeGaussKronrod61(i) = fabs( x(i) );
+                weightsGaussKronrod61(i) =  fabs( w(i) );
             }
             x=VectorType::Zero(30);
             w=VectorType::Zero(30);
             LaurieGautschiPolicy::mpgauss(30,x,w);
             for(size_t i=0;i<15;++i)
             {
-                weightsGauss61(i) = Abs( w(i) );
+                weightsGauss61(i) = fabs( w(i) );
             }
 
             //////////////////// PRINT VALUES ////////////////////////////////

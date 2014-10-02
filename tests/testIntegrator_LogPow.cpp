@@ -85,7 +85,7 @@ int test_logpow(void)
             {
                 std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
+                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
                 std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
 
