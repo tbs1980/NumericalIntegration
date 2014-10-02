@@ -85,7 +85,6 @@ long double Gamma(long double x)
 
 #include "quadrature/QuadratureKronrod_STB.hpp"
 #include "quadrature/Integrator.hpp"
-//#include "quadrature/Integrator.h"
 
 
 #endif //NI_NIHEADERS_HPP

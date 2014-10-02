@@ -12,7 +12,6 @@
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  //return std::numeric_limits<Scalar>::epsilon() * 50.;
   return Eigen::NumTraits<Scalar>::epsilon() * 50.;
 }
 
@@ -63,12 +62,18 @@ private:
 
 int test_peak(void)
 {
+    std::cout<<"Testing Int [0->1] 4^-alpah/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
     //typedef float Scalar;
-    typedef double Scalar;
+    //typedef double Scalar;
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(53);
 
-    //typedef mpfr::mpreal Scalar;
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
+
+    //compute the nodes and weights on the fly
+    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
     IntegratorType eigenIntegrator(200);
     IntegrandPeakFunctorType integrandPeakFunctor;
@@ -88,8 +93,10 @@ int test_peak(void)
 
             if(Abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * Abs(expected))
             {
-                std::cout<<"rule "<<i<<"\t abs((Scalar)(expected - actual)) ="<<Abs((Scalar)(expected - actual))
-                <<"\t desiredRelativeError<Scalar>() * Abs(expected)= "<<desiredRelativeError<Scalar>() * Abs(expected)<<std::endl;
+                std::cout<<"\nrule "<<i<<"\n Abs(expected - actual) ="<<Abs(expected - actual)
+                    <<"\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                    <<desiredRelativeError<Scalar>() * Abs(expected)<<std::endl;
+                std::cout<<"erroCode ="<<eigenIntegrator.errorCode()<<std::endl;
                 return EXIT_FAILURE;
             }
         }

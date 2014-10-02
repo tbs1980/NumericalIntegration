@@ -41,6 +41,9 @@ class QuadratureKronrod
 {
 public:
 
+    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef typename LaurieGautschiPolicy::VectorType VectorType;
+
     /*
     QuadratureKronrod()
     {
@@ -52,6 +55,7 @@ public:
     {
         if(compute)
         {
+            /*
             Array<Scalar, Dynamic, 2> xwGK = Kronrod::multiPrecisionKronrod<Scalar>(7);
             Array<Scalar, Dynamic, 2> xwG = Kronrod::multiPrecisionGauss<Scalar>(7);
             for(size_t i=0;i<8;++i)
@@ -127,8 +131,118 @@ public:
             {
                 weightsGauss61(i) = Abs( xwG(i,1) );
             }
+            */
+
+            //std::cout<<"computing for precision ="<<Scalar::get_default_prec()<<std::endl;
+
+            VectorType x=VectorType::Zero(15);
+            VectorType w=VectorType::Zero(15);
+            LaurieGautschiPolicy::mpkonrad(7,x,w);
+            for(size_t i=0;i<8;++i)
+            {
+                abscissaeGaussKronrod15(i) = Abs( x(i) );
+                weightsGaussKronrod15(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(7);
+            w=VectorType::Zero(7);
+            LaurieGautschiPolicy::mpgauss(7,x,w);
+            for(size_t i=0;i<4;++i)
+            {
+                weightsGauss15(i) = Abs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(21);
+            w=VectorType::Zero(21);
+            LaurieGautschiPolicy::mpkonrad(10,x,w);
+            for(size_t i=0;i<11;++i)
+            {
+                abscissaeGaussKronrod21(i) = Abs( x(i) );
+                weightsGaussKronrod21(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(10);
+            w=VectorType::Zero(10);
+            LaurieGautschiPolicy::mpgauss(10,x,w);
+            for(size_t i=0;i<5;++i)
+            {
+                weightsGauss21(i) = Abs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(31);
+            w=VectorType::Zero(31);
+            LaurieGautschiPolicy::mpkonrad(15,x,w);
+            for(size_t i=0;i<16;++i)
+            {
+                abscissaeGaussKronrod31(i) = Abs( x(i) );
+                weightsGaussKronrod31(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(15);
+            w=VectorType::Zero(15);
+            LaurieGautschiPolicy::mpgauss(15,x,w);
+            for(size_t i=0;i<8;++i)
+            {
+                weightsGauss31(i) = Abs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(41);
+            w=VectorType::Zero(41);
+            LaurieGautschiPolicy::mpkonrad(20,x,w);
+            for(size_t i=0;i<21;++i)
+            {
+                abscissaeGaussKronrod41(i) = Abs( x(i) );
+                weightsGaussKronrod41(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(20);
+            w=VectorType::Zero(20);
+            LaurieGautschiPolicy::mpgauss(20,x,w);
+            for(size_t i=0;i<10;++i)
+            {
+                weightsGauss41(i) = Abs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(51);
+            w=VectorType::Zero(51);
+            LaurieGautschiPolicy::mpkonrad(25,x,w);
+            for(size_t i=0;i<26;++i)
+            {
+                abscissaeGaussKronrod51(i) = Abs( x(i) );
+                weightsGaussKronrod51(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(25);
+            w=VectorType::Zero(25);
+            LaurieGautschiPolicy::mpgauss(25,x,w);
+            for(size_t i=0;i<13;++i)
+            {
+                weightsGauss51(i) = Abs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(61);
+            w=VectorType::Zero(61);
+            LaurieGautschiPolicy::mpkonrad(30,x,w);
+            for(size_t i=0;i<31;++i)
+            {
+                abscissaeGaussKronrod61(i) = Abs( x(i) );
+                weightsGaussKronrod61(i) =  Abs( w(i) );
+            }
+            x=VectorType::Zero(30);
+            w=VectorType::Zero(30);
+            LaurieGautschiPolicy::mpgauss(30,x,w);
+            for(size_t i=0;i<15;++i)
+            {
+                weightsGauss61(i) = Abs( w(i) );
+            }
 
             //////////////////// PRINT VALUES ////////////////////////////////
+            /*
             std::cout<<"\nGaussKronrod15 \n"<<std::endl;
             std::cout<<std::fixed;
             for(size_t i=0;i<8;++i)
@@ -204,6 +318,7 @@ public:
             {
                 std::cout<<std::setprecision(33)<<weightsGauss61(i)<<std::endl;
             }
+            */
 
             compute = false;
         }
