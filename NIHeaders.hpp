@@ -15,39 +15,17 @@
 
 
 template<typename T>
-T Abs(T x)
-{
-    return abs(x);
-}
-
-double Abs(double x)
-{
-    return std::abs(x);
-}
-
-float Abs(float x)
-{
-    return std::abs(x);
-}
-
-long double Abs(long double x)
-{
-    return std::abs(x);
-}
-
-template<typename T>
 T Pow(T base, T exponent)
 {
     return pow(base,exponent);
 }
 
-
-double Pow(double base, double exponent)
+float Pow(float base, float exponent)
 {
     return std::pow(base,exponent);
 }
 
-float Pow(float base, float exponent)
+double Pow(double base, double exponent)
 {
     return std::pow(base,exponent);
 }

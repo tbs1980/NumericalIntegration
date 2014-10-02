@@ -51,7 +51,7 @@ namespace Kronrod
 /**
 *   multiPrecisionKronrod Arbitrary precision Kronrod abscissae & weights.
 *
-*   xGK = multiPrecisionKronrod(N) computes Kronrod points for (-1,1) of any required precision
+*   xwGK = multiPrecisionKronrod(N) computes Kronrod points for (-1,1) of any required precision
 *
 *   Based on work of Dirk Laurie and Walter Gautschi.
 *   Created by Pavel Holoborodko, November 7, 2011.
@@ -62,20 +62,22 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionKronrod(const unsigned int nNodes
 {
     Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
     Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
-    //Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
-
     return xwGK;
-    //return xwG;
 }
 
+/**
+*   multiPrecisionKronrod Arbitrary precision Gauss abscissae & weights.
+*
+*   xwG = multiPrecisionKronrod(N) computes Kronrod points for (-1,1) of any required precision
+*
+*   Based on work of Dirk Laurie and Walter Gautschi.
+*   Ported to C++/Eigen Grey Point Corporation September 2014
+*/
 template <typename Scalar>
 Array<Scalar,Dynamic,2> Kronrod::multiPrecisionGauss(const unsigned int nNodes)
 {
     Array<Scalar,Dynamic,2> alphaBeta = jacobiRecurrenceCoeffZeroToOne<Scalar>(2 * nNodes);
-    //Array<Scalar,Dynamic,2> xwGK = kronrod(nNodes, alphaBeta);
     Array<Scalar,Dynamic,2> xwG = gaussWeights(nNodes, alphaBeta);
-
-    //return xwGK;
     return xwG;
 }
 
@@ -83,14 +85,14 @@ Array<Scalar,Dynamic,2> Kronrod::multiPrecisionGauss(const unsigned int nNodes)
 /**
 *   gaussWeights Gauss quadrature formula.
 *
-*   Given a weight function w encoded by the nNodesx2 array alphaBeta of
+*   Given a weight function w encoded by the Nx2 array alphaBeta of
 *   the first nNodes recurrence coefficients for the associated orthogonal
-*   polynomials, the first column of alphaBeta containing the n alpha-
-*   coefficients and the second column the n beta-coefficients, the call
+*   polynomials, the first column of alphaBeta containing the N alpha-
+*   coefficients and the second column the N beta-coefficients, the call
 *   gaussWeights(nNodes,alphaBeta) generates the nodes and weights xwG
-*   of the n-point Gauss quadrature rule for the weight function w.
-*   The nodes, in increasing order, are stored in the first column, the
-*   n corresponding weights in the second column, of the nx2 array wG.
+*   of the N-point Gauss quadrature rule for the weight function w.
+*   The N nodes, in increasing order, are stored in the first column, the
+*   N corresponding weights in the second column, of the Nx2 array xwG.
 *   This method is often reffered to as the Golub-Welsch algorithm.
 *
 *   Based on work of Dirk Laurie and Walter Gautschi.
@@ -283,8 +285,8 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes
 {
     typedef Array<Scalar,Dynamic,1> ArrayXdType;
     Scalar nu = (beta - alpha) / (alpha + beta + 2.);
-    Scalar mu = pow(2, alpha + beta + 1) * Gamma(alpha + 1) * Gamma(beta + 1)
-                / Gamma(alpha + beta + 2);
+    Scalar mu = pow(2., alpha + beta + 1.) * Gamma(alpha + 1.) * Gamma(beta + 1.)
+                / Gamma(alpha + beta + 2.);
 
     if (nNodes == 1)
     {
@@ -308,7 +310,7 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeff(const unsigned int nNodes
     }
 
     B(0) = mu;
-    B(1) = 4. * (alpha + 1) * (beta + 1) / (pow(alpha + beta + 2, 2) * (alpha + beta + 3));
+    B(1) = 4. * (alpha + 1.) * (beta + 1.) / (pow(alpha + beta + 2., 2.) * (alpha + beta + 3.));
 
     Array<Scalar,Dynamic,2> alphaBeta = Array<Scalar,Dynamic,2>::Zero(nNodes,2);
     alphaBeta.col(0) = A;
@@ -354,7 +356,7 @@ Array<Scalar,Dynamic,2> Kronrod::jacobiRecurrenceCoeffZeroToOne(const unsigned i
 
     for (size_t i = 0; i < nNodes; ++i)
     {
-        alphaBeta(i, 0) = (1 + coeffs(i, 0)) / 2;
+        alphaBeta(i, 0) = (1. + coeffs(i, 0)) / 2.;
     }
 
     alphaBeta(0, 1) = coeffs(0, 1) / pow(2., alpha + beta + 1);

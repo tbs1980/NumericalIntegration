@@ -40,14 +40,14 @@ class IntegrandLogPowFunctor
 public:
     Scalar operator()(const Scalar param) const
     {
-    return Pow(param, m_alpha) * log(1/param);
+    return pow(param, m_alpha) * log(1/param);
     }
 
     void setAlpha(const Scalar alpha) {m_alpha = alpha;}
 
     static Scalar exact_value_in_01(const Scalar alpha)
     {
-    Scalar a1=alpha+1.;
+    Scalar a1 = alpha+1.;
     return 1./(a1*a1);
     }
 
@@ -79,15 +79,14 @@ int test_logpow(void)
 
             Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
-            if(Abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * Abs(expected))
+            if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
             {
-                std::cout<<"rule "<<i<<"\t abs((Scalar)(expected - actual)) ="<<Abs((Scalar)(expected - actual))
-                <<"\t desiredRelativeError<Scalar>() * Abs(expected)= "<<desiredRelativeError<Scalar>() * Abs(expected)<<std::endl;
+                std::cout << "rule " << i << "\t fabs((Scalar)(expected - actual)) =" << fabs((Scalar)(expected - actual))
+                << "\t desiredRelativeError<Scalar>() * fabs(expected)= " << desiredRelativeError<Scalar>() * fabs(expected)<<std::endl;
                 return EXIT_FAILURE;
             }
         }
     }
-
 
     return EXIT_SUCCESS;
 }

@@ -10,7 +10,6 @@
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  //return std::numeric_limits<Scalar>::epsilon() * 50.;
   return Eigen::NumTraits<Scalar>::epsilon() * 50.;
 }
 
@@ -56,7 +55,7 @@ int test_sine(void)
 
     IntegratorType eigenIntegrator(200);
 
-    return EXIT_SUCCESS;
+    //return EXIT_SUCCESS;
 
     IntegrandSineFunctorType integrandSineFunctor;
 
@@ -72,18 +71,16 @@ int test_sine(void)
 
         Scalar expected = Scalar(2);
 
-        if(Abs(expected - actual) > desiredRelativeError<Scalar>() * Abs(expected)
+        if(fabs(expected - actual) > desiredRelativeError<Scalar>() * fabs(expected)
             or eigenIntegrator.errorCode() !=0)
         {
-            std::cout<<"\nrule "<<i<<"\n Abs(expected - actual) ="<<Abs(expected - actual)
-                <<"\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                <<desiredRelativeError<Scalar>() * Abs(expected)<<std::endl;
-            std::cout<<"erroCode ="<<eigenIntegrator.errorCode()<<std::endl;
+            std::cout << "\nrule " << i << "\n fabs(expected - actual) =" << fabs(expected - actual)
+                      << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
+                      << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+            std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
             //return EXIT_FAILURE;
         }
-
     }
-
 
     return EXIT_SUCCESS;
 }
