@@ -3,14 +3,9 @@
 #include <iostream>
 #include <iomanip>
 
-#ifndef PI
-    #define PI 3.1415926535897932384626433832795028841971693993751
-#endif
-
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  //return std::numeric_limits<Scalar>::epsilon() * 50.;
   return Eigen::NumTraits<Scalar>::epsilon() * 50.;
 }
 
@@ -57,11 +52,18 @@ public:
 
 int test_logpow(void)
 {
+    std::cout<<"Testing Int [0->1] x^a*log(1/x) = 1/(a+1)^2"<<std::endl;
     //typedef float Scalar;
-    typedef double Scalar;
-    //typedef mpfr::mpreal Scalar;
+    //typedef double Scalar;
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(53);
+
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
+
+    //compute the nodes and weights on the fly
+    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
     IntegratorType eigenIntegrator(200);
     IntegrandLogPowFunctorType integrandLogPowFunctor;
@@ -81,8 +83,12 @@ int test_logpow(void)
 
             if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
             {
-                std::cout << "rule " << i << "\t fabs((Scalar)(expected - actual)) =" << fabs((Scalar)(expected - actual))
-                << "\t desiredRelativeError<Scalar>() * fabs(expected)= " << desiredRelativeError<Scalar>() * fabs(expected)<<std::endl;
+                std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                          << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
+
+                std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
+
                 return EXIT_FAILURE;
             }
         }

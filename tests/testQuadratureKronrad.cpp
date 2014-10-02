@@ -1,14 +1,13 @@
 #include <NIHeaders.hpp>
 #include <iostream>
 #include <iomanip>
-#include "../quadrature/QuadratureKronrod_STB.hpp"
 
 int test_values()
 {
-    typedef float RealType;
+    //typedef float RealType;
     //typedef double RealType;
-    //typedef mpfr::mpreal RealType;
-    //RealType::set_default_prec(256);
+    typedef mpfr::mpreal RealType;
+    RealType::set_default_prec(256);
     typedef Eigen::QuadratureKronrod<RealType> QuadratureKronrodValuesType;
 
     //QuadratureKronrodValuesType qgk;

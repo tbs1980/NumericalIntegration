@@ -184,6 +184,39 @@ namespace Kronrod {
 
         }
 
+        static void gauss(const IndexType N,VectorType const & a, VectorType const & b,
+            VectorType & x, VectorType & w)
+        {
+            //TODO : make use the eigen assert facilities
+            assert(N>0);
+            assert(a.rows()==2*N);
+            assert(a.rows()==b.rows());
+            assert(x.rows()==N);
+            assert(x.rows()==w.rows());
+
+            MatrixType J=MatrixType::Zero(N,N);
+
+            J(0,0)=a(0);
+            for(IndexType n=1;n<N;++n)
+            {
+                J(n,n)=a(n);
+                J(n,n-1)=sqrt(b(n));
+                J(n-1,n)=J(n,n-1);
+            }
+
+            //TODO : Is this assumption of positive definiteness correct?
+            SelfAdjointEigenSolverType es(J);
+
+            //TODO : make use the eigen assert facilities
+            assert(es.info()==Eigen::Success);
+
+            x=es.eigenvalues();
+            MatrixType V=es.eigenvectors();
+
+            w=b(0)*(V.row(0).array()*V.row(0).array()).matrix();
+
+        }
+
         static void mpkonrad(const IndexType N,VectorType & x, VectorType & w)
         {
             //TODO : make use the eigen assert facilities
@@ -206,191 +239,26 @@ namespace Kronrod {
             }
         }
 
-        static void mpkonrad15(Eigen::Array<RealType, 8, 1> & abscissaeGaussKronrod15,
-            Eigen::Array<RealType, 8, 1> & weightsGaussKronrod15)
+        static void mpgauss(const IndexType N,VectorType & x, VectorType & w)
         {
-            const IndexType N = 7;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
+            //TODO : make use the eigen assert facilities
+            assert(x.rows() ==  N);
+            assert(w.rows() ==  N);
+            assert(N>0);
 
-            mpkonrad(N,x,w);
 
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
+            VectorType a=VectorType::Zero(2*N);
+            VectorType b=VectorType::Zero(2*N);
 
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
+            r_jacobi_01( 2*N, RealType(0), RealType(0), a, b);
+
+            gauss(N,a,b,x,w);
+
+            for(IndexType i=0;i<x.rows();++i)
             {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
+                x(i) = 2.*x(i) - 1.;
+                w(i) = 2.*w(i);
             }
-
-            abscissaeGaussKronrod15 = xout;
-            weightsGaussKronrod15 = wout;
-        }
-
-static Eigen::Array<RealType, 8, 1> mpkonrad15abscissae()
-{
-    const IndexType N = 7;
-    VectorType x=VectorType::Zero(2*N+1);
-    VectorType w=VectorType::Zero(2*N+1);
-
-    mpkonrad(N,x,w);
-
-    Eigen::Array<RealType, 8, 1> xout;
-
-    IndexType ind=0;
-    for(IndexType i=2*N;i>=N;--i)
-    {
-        xout(ind) = x(i);
-        ++ind;
-    }
-
-    return xout;
-}
-
-static Eigen::Array<RealType, 8, 1> mpkonrad15weights()
-{
-    const IndexType N = 7;
-    VectorType x=VectorType::Zero(2*N+1);
-    VectorType w=VectorType::Zero(2*N+1);
-
-    mpkonrad(N,x,w);
-
-    Eigen::Array<RealType, 8, 1> wout;
-
-    IndexType ind=0;
-    for(IndexType i=2*N;i>=N;--i)
-    {
-        wout(ind) = w(i);
-        ++ind;
-    }
-
-    return wout;
-}
-
-        static void mpkonrad21(Eigen::Array<RealType, 11, 1> & abscissaeGaussKronrod21,
-            Eigen::Array<RealType, 11, 1> & weightsGaussKronrod21)
-        {
-            const IndexType N = 10;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
-
-            mpkonrad(N,x,w);
-
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
-
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
-            {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
-            }
-
-            abscissaeGaussKronrod21 = xout;
-            weightsGaussKronrod21 = wout;
-        }
-
-        static void mpkonrad31(Eigen::Array<RealType, 16, 1> & abscissaeGaussKronrod31,
-            Eigen::Array<RealType, 16, 1> & weightsGaussKronrod31)
-        {
-            const IndexType N = 15;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
-
-            mpkonrad(N,x,w);
-
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
-
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
-            {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
-            }
-
-            abscissaeGaussKronrod31 = xout;
-            weightsGaussKronrod31 = wout;
-        }
-
-
-        static void mpkonrad41(Eigen::Array<RealType, 21, 1> & abscissaeGaussKronrod41,
-            Eigen::Array<RealType, 21, 1> & weightsGaussKronrod41)
-        {
-            const IndexType N = 20;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
-
-            mpkonrad(N,x,w);
-
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
-
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
-            {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
-            }
-
-            abscissaeGaussKronrod41 = xout;
-            weightsGaussKronrod41 = wout;
-        }
-
-
-        static void mpkonrad51(Eigen::Array<RealType, 26, 1> & abscissaeGaussKronrod51,
-            Eigen::Array<RealType, 26, 1> & weightsGaussKronrod51)
-        {
-            const IndexType N = 25;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
-
-            mpkonrad(N,x,w);
-
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
-
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
-            {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
-            }
-
-            abscissaeGaussKronrod51 = xout;
-            weightsGaussKronrod51 = wout;
-        }
-
-
-        static void mpkonrad61(Eigen::Array<RealType, 31, 1> & abscissaeGaussKronrod61,
-            Eigen::Array<RealType, 31, 1> & weightsGaussKronrod61)
-        {
-            const IndexType N = 30;
-            VectorType x=VectorType::Zero(2*N+1);
-            VectorType w=VectorType::Zero(2*N+1);
-
-            mpkonrad(N,x,w);
-
-            Eigen::Array<RealType, N+1, 1> xout;
-            Eigen::Array<RealType, N+1, 1> wout;
-
-            IndexType ind=0;
-            for(IndexType i=2*N;i>=N;--i)
-            {
-                xout(ind) = x(i);
-                wout(ind) = w(i);
-                ++ind;
-            }
-
-            abscissaeGaussKronrod61 = xout;
-            weightsGaussKronrod61 = wout;
         }
     };
 }

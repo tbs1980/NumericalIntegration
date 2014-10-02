@@ -59,7 +59,7 @@ public:
     m_integralList.resize(maxSubintervals, 1);
     m_errorList.resize(maxSubintervals, 1);
 
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    //QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
   }
 
   /**
@@ -89,7 +89,8 @@ public:
     const QuadratureRule quadratureRule = 1)
   {
     if ((desiredAbsoluteError <= 0.
-         && desiredRelativeError < (std::max)(Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.), Scalar(5.e-28) ))
+        // && desiredRelativeError < (std::max)(Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.), Scalar(5.e-28) ))
+         && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon() )
         || m_maxSubintervals < 1)
     {
       m_errorCode = 6;
@@ -440,7 +441,6 @@ private:
     Scalar& estimatedError, Scalar& absIntegral, Scalar& absDiffIntegral,
     const QuadratureRule quadratureRule)
   {
-    //QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
     switch (quadratureRule)
     {
     case GaussKronrod15:

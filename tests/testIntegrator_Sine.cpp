@@ -44,29 +44,27 @@ public:
 int test_sine(void)
 {
     std::cout<<"Testing Int [0->Pi] sin(x) = 2"<<std::endl;
-    typedef float Scalar;
+    //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(128);
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(53);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
+    //compute the nodes and weights on the fly
+    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+
     IntegratorType eigenIntegrator(200);
-
-    //return EXIT_SUCCESS;
-
     IntegrandSineFunctorType integrandSineFunctor;
-
-    std::cout<<"Desired Relatvie error = "<<desiredRelativeError<Scalar>()<<std::endl;
 
     const size_t numKeys = 6;
     for (size_t i = 0; i < numKeys; ++i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(PI),
+        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI),
             Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
 
         Scalar expected = Scalar(2);
@@ -74,11 +72,13 @@ int test_sine(void)
         if(fabs(expected - actual) > desiredRelativeError<Scalar>() * fabs(expected)
             or eigenIntegrator.errorCode() !=0)
         {
-            std::cout << "\nrule " << i << "\n fabs(expected - actual) =" << fabs(expected - actual)
+            std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
                       << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
                       << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+
             std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
-            //return EXIT_FAILURE;
+
+            return EXIT_FAILURE;
         }
     }
 
