@@ -59,7 +59,7 @@ public:
     m_integralList.resize(maxSubintervals, 1);
     m_errorList.resize(maxSubintervals, 1);
 
-    //QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
   }
 
   /**

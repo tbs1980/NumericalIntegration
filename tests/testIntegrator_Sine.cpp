@@ -48,7 +48,7 @@ int test_sine(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(53);
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
@@ -60,7 +60,7 @@ int test_sine(void)
     IntegrandSineFunctorType integrandSineFunctor;
 
     const size_t numKeys = 6;
-    for (size_t i = 0; i < numKeys; ++i)
+    for (int i = numKeys - 1; i >= 0; --i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 

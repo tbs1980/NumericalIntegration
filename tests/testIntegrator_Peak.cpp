@@ -3,12 +3,6 @@
 #include <iostream>
 #include <iomanip>
 
-// PI must defined for use of quad precision, the GNU C preprocessor value of M_PI
-// is double/long double, which will result in reduced accuracy in multiprecision.
-#ifndef PI
-    #define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899
-#endif
-
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -42,7 +36,7 @@ class IntegrandPeakFunctor
 public:
   Scalar operator()(const Scalar param) const
   {
-    return pow(4., -m_alpha) / (pow(param - PI / 4., 2.) + pow(16., -m_alpha));
+    return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
   }
 
   /**
@@ -53,7 +47,7 @@ public:
   static Scalar integralPeak(const Scalar alpha)
   {
     Scalar factor = pow(4., alpha - 1.);
-    return atan((4. - PI) * factor) + atan(PI * factor);
+    return atan((4. - M_PI) * factor) + atan(M_PI * factor);
   }
 
 private:
@@ -67,7 +61,7 @@ int test_peak(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(53);
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
@@ -79,9 +73,9 @@ int test_peak(void)
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     const size_t numKeys = 6;
-    for (size_t i = 0; i < numKeys; ++i)
+    for (int i = numKeys - 1; i >= 0; --i)
     {
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(0);
+        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {

@@ -57,7 +57,7 @@ int test_logpow(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(53);
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
@@ -69,9 +69,9 @@ int test_logpow(void)
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     const size_t numKeys = 6;
-    for (size_t i = 0; i < numKeys; ++i)
+    for (int i = numKeys - 1; i >= 0; --i)
     {
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(0);
+        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {

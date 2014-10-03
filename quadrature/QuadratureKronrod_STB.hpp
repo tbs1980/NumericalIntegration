@@ -55,7 +55,7 @@ public:
     {
         if(compute)
         {
-            /*
+
             Array<Scalar, Dynamic, 2> xwGK = Kronrod::multiPrecisionKronrod<Scalar>(7);
             Array<Scalar, Dynamic, 2> xwG = Kronrod::multiPrecisionGauss<Scalar>(7);
             for(size_t i=0;i<8;++i)
@@ -131,10 +131,10 @@ public:
             {
                 weightsGauss61(i) = fabs( xwG(i,1) );
             }
-            */
+
 
             //std::cout<<"computing for precision ="<<Scalar::get_default_prec()<<std::endl;
-
+/*
             VectorType x=VectorType::Zero(15);
             VectorType w=VectorType::Zero(15);
             LaurieGautschiPolicy::mpkonrad(7,x,w);
@@ -240,7 +240,7 @@ public:
             {
                 weightsGauss61(i) = fabs( w(i) );
             }
-
+*/
             //////////////////// PRINT VALUES ////////////////////////////////
             /*
             std::cout<<"\nGaussKronrod15 \n"<<std::endl;
