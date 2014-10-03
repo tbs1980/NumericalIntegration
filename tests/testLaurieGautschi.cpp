@@ -13,7 +13,7 @@ int compare_codes(void)
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
 
-    const IndexType N = 15;
+    const IndexType N = 10;
     const int outputIntegers = 33;
 
     Eigen::Array<RealType,Dynamic,2> xwGK;
@@ -89,13 +89,13 @@ int compare_codes(void)
 
     for(IndexType i = 0; i < wGPiessens.rows(); ++i)
     {
-        std::cout << std::setprecision(outputIntegers);
+        std::cout << std::setprecision(outputIntegers) << "\t\t\t\t\t";
         std::cout << wGPiessens(i) << std::endl;
     }
 
     for(IndexType i = wGPiessens.rows() - 1; i >= 0; --i)
     {
-        std::cout << std::setprecision(outputIntegers);
+        std::cout << std::setprecision(outputIntegers) << "\t\t\t\t\t";
         std::cout << wGPiessens(i) << std::endl;
     }
 

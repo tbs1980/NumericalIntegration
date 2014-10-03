@@ -144,7 +144,7 @@ void Kronrod::kronrod(
 
     // Coefficient for Gauss and Kronrod abscissae and weights
     Scalar chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
-    Scalar chebCoeff2 = 2.0 / (2. * nNodes + 1);
+    Scalar chebCoeff2 = 2.0 / (Scalar(2. * nNodes + 1));
 
     for (size_t i = 1; i <= nNodes; ++i)
     {
@@ -181,7 +181,6 @@ void Kronrod::kronrod(
     if (even)
     {
         abscWeightKronrod(nNodes, m, even, chebCoeff2, betaCoeffs, abscK, weightGaussKronrod(nNodes));
-        //weightGauss(arraySize / 2) = 0.0;
     }
 
     // Set the abscissa value at the origin to zero and exit the function.
@@ -240,12 +239,12 @@ void Kronrod::abscWeightKronrod(
         b1 = 0.0;
         b2 = betaCoeffs(m);
 
-        yy = 4.0 * (abscGaussKronrod) * (abscGaussKronrod) - 2.0;
+        yy = 4.0 * abscGaussKronrod * abscGaussKronrod - 2.0;
         d1 = 0.0;
 
         if (even)
         {
-            ai = 2 * m + 1;
+            ai = m + m + 1;
             d2 = ai * betaCoeffs(m);
             dif = 2.0;
         }
@@ -256,46 +255,42 @@ void Kronrod::abscWeightKronrod(
             dif = 1.0;
         }
 
-        for (size_t k = 1; k <= m; ++k)
+        for (size_t k = 0; k < m; ++k)
         {
-            ai = ai - dif;
-            i = m - k + 1;
+            ai -= dif;
+            i = m - k - 1;
             b0 = b1;
             b1 = b2;
             d0 = d1;
             d1 = d2;
-            b2 = yy * b1 - b0 + betaCoeffs(i-1);
+            b2 = yy * b1 - b0 + betaCoeffs(i);
 
             if (!even)
             {
                 i += 1;
             }
 
-            d2 = yy * d1 - d0 + ai * betaCoeffs(i-1);
+            d2 = yy * d1 - d0 + ai * betaCoeffs(i);
         }
 
         if (even)
         {
-            f = (abscGaussKronrod) * (b2 - b1);
+            f = abscGaussKronrod * (b2 - b1);
             fd = d2 + d1;
         }
         else
         {
             f = 0.5 * (b2 - b0);
-            fd = 4.0 * (abscGaussKronrod) * d2;
+            fd = 4.0 * abscGaussKronrod * d2;
         }
 
         // Newton correction.
         delta = f / fd;
+        abscGaussKronrod -= delta;
 
-        if (abscGaussKronrod == 0.0)
+        if (abscGaussKronrod == Scalar(0.))
         {
-            abscGaussKronrod -= delta;
             break;
-        }
-        else
-        {
-            abscGaussKronrod -= delta;
         }
 
         // Identify non-convergence of the iterative solver after 50 iterations
@@ -307,14 +302,14 @@ void Kronrod::abscWeightKronrod(
     }
 
     // Computation of the weight.
-    d0 = 1.0;
+    d0 = 1.;
     d1 = abscGaussKronrod;
-    ai = 0.0;
+    ai = 0.;
 
-    for (size_t i = 0; i < nNodes - 1; ++i)
+    for (size_t k = 0; k < nNodes - 1; ++k)
     {
-        ai = ai + 1.0;
-        d2 = ((2.* ai + 1.0) * abscGaussKronrod * d1 - ai * d0) / (ai + 1.0);
+        ai = ai + 1.;
+        d2 = ((ai + ai + 1.) * (abscGaussKronrod * d1) - (ai * d0)) / (ai + 1.);
         d0 = d1;
         d1 = d2;
     }
@@ -364,10 +359,10 @@ void Kronrod::abscWeightGauss(
     while (fabs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
-        p0 = 1.0;
+        p0 = 1.;
         p1 = abscGaussKronrod;
-        pd0 = 0.0;
-        pd1 = 1.0;
+        pd0 = 0.;
+        pd1 = 1.;
 
         // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
         if (nNodes <= 1)
@@ -376,7 +371,8 @@ void Kronrod::abscWeightGauss(
             {
                 p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
                 pd2 = 3.0 * (abscGaussKronrod);
-            }else
+            }
+            else
             {
                 p2 = 3.0 * (abscGaussKronrod);
                 pd2 = 3.0;
@@ -388,8 +384,8 @@ void Kronrod::abscWeightGauss(
         for (size_t k = 0; k < nNodes - 1; ++k)
         {
             ai = ai + 1.0;
-            p2 = ((2. * ai + 1.0) * (abscGaussKronrod) * p1 - ai * p0) / (ai + 1.0);
-            pd2 = ((2. * ai + 1.0) * (p1 + (abscGaussKronrod) * pd1) - ai * pd0) / (ai + 1.0);
+            p2 = ((ai + ai + 1.0) * abscGaussKronrod * p1 - ai * p0) / (ai + 1.0);
+            pd2 = ((ai + ai + 1.0) * (p1 + abscGaussKronrod * pd1) - ai * pd0) / (ai + 1.0);
             p0 = p1;
             p1 = p2;
             pd0 = pd1;
@@ -417,9 +413,8 @@ void Kronrod::abscWeightGauss(
         }
     }
 
-    //  Computation of the Gauss weight.
+    // Computation of the Gauss weight.
     Scalar aN = nNodes;
-
     weightGauss = 2.0 / (aN * pd2 * p0);
 
     // Initialize
@@ -436,11 +431,11 @@ void Kronrod::abscWeightGauss(
 
     if (even)
     {
-        weightGaussKronrod = weightGauss + chebCoeff / ((abscGaussKronrod) * pd2 * (p2 - p1));
+        weightGaussKronrod = weightGauss + chebCoeff / (abscGaussKronrod * pd2 * (p2 - p1));
     }
     else
     {
-        weightGaussKronrod = weightGauss + 2.0 * chebCoeff / (pd2 * (p2 - p0));
+        weightGaussKronrod = weightGauss + (2.0 * chebCoeff) / (pd2 * (p2 - p0));
     }
 
     return;
@@ -460,7 +455,5 @@ Scalar Kronrod::machineEpsilon()
     // extended precision: 	2^-63	(1.08420217248550443e-19)
     // quad precision: 		2^-112	(1.9259299e-34)
 
-    //static double epsilon = 2.220446049250313e-016;
-    //return epsilon;
     return Eigen::NumTraits<Scalar>::epsilon();
 }
