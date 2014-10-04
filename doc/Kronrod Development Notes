@@ -1,0 +1,17 @@
+C++ functionality for calculation of Gauss-Kronrod Quadrature Weights and Abscissa.
+
+Functionality Based on previous work by Dirk Laurie, Walter Gautschi, and Piessens' work to extend to multiple precision by Pavel Holoborodko.  Considerations also paid to the integration of functionality derived from the original FORTRAN77 QUADPACK routines by Piessens et. al. (QUADPACK quadrature routines ported to C++ Eigen as part of this ongoing effort.)
+
+Laurie's algorithm (a.k.a. the Golub-Welsch algorithm) as implemented is found outlined in the the following publication:
+Calculation of Gauss-Kronrod Quadrature Rules, Dirk P. Laurie
+Mathematics of Computation, Volume 66, Number 219, July 1997, Pages 1133 {1145
+S 0025-5718(97)00861-2:
+
+Walter Gautschi's work cited by the above, Orthogonal Polynomials, Quadrature,
+and Approximation: Computational Methods and Software (in Matlab), can be found at: https://www.cs.purdue.edu/homes/wxg/Madrid.pdf
+
+Additional contents of Gautschi's OPQ Matlab library can be found at: https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html 
+
+
+
+Note: Function names and variable naming convention has been altered in some instances to either better match the variable description found in publication or to match the convention used by the QUADPACK functions intended to interact with the output of these functions.  Further improvement to  variable/function naming to meet intent behind transparency to published work and interoperability is welcomed.
