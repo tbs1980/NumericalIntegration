@@ -57,11 +57,10 @@ long double Gamma(long double x)
     return tgamma(x);
 }
 
-#include "nodes_weights/kronrodLaurieGautschi_STB.hpp"
-#include "nodes_weights/kronrodLaurieGautschi_MS.hpp"
+#include "nodes_weights/kronrodLaurieGautschi.hpp"
 #include "nodes_weights/kronrodPiessens.hpp"
 
-#include "quadrature/QuadratureKronrod_STB.hpp"
+#include "quadrature/QuadratureKronrod.hpp"
 #include "quadrature/Integrator.hpp"
 
 
