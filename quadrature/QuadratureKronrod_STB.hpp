@@ -315,6 +315,96 @@ public:
             {
                 weightsGauss61(i) = fabs( w(i) );
             }
+
+
+
+            x=VectorType::Zero(71);
+            w=VectorType::Zero(71);
+            LaurieGautschiPolicy::mpkonrad(35,x,w);
+            for(size_t i=0;i<36;++i)
+            {
+                abscissaeGaussKronrod71(i) = fabs( x(i) );
+                weightsGaussKronrod71(i) =  fabs( w(i) );
+            }
+            x=VectorType::Zero(35);
+            w=VectorType::Zero(35);
+            LaurieGautschiPolicy::mpgauss(35,x,w);
+            for(size_t i=0;i<18;++i)
+            {
+                weightsGauss71(i) = fabs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(81);
+            w=VectorType::Zero(81);
+            LaurieGautschiPolicy::mpkonrad(40,x,w);
+            for(size_t i=0;i<41;++i)
+            {
+                abscissaeGaussKronrod81(i) = fabs( x(i) );
+                weightsGaussKronrod81(i) =  fabs( w(i) );
+            }
+            x=VectorType::Zero(40);
+            w=VectorType::Zero(40);
+            LaurieGautschiPolicy::mpgauss(40,x,w);
+            for(size_t i=0;i<20;++i)
+            {
+                weightsGauss81(i) = fabs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(91);
+            w=VectorType::Zero(91);
+            LaurieGautschiPolicy::mpkonrad(45,x,w);
+            for(size_t i=0;i<46;++i)
+            {
+                abscissaeGaussKronrod91(i) = fabs( x(i) );
+                weightsGaussKronrod91(i) =  fabs( w(i) );
+            }
+            x=VectorType::Zero(45);
+            w=VectorType::Zero(45);
+            LaurieGautschiPolicy::mpgauss(45,x,w);
+            for(size_t i=0;i<23;++i)
+            {
+                weightsGauss91(i) = fabs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(101);
+            w=VectorType::Zero(101);
+            LaurieGautschiPolicy::mpkonrad(50,x,w);
+            for(size_t i=0;i<51;++i)
+            {
+                abscissaeGaussKronrod101(i) = fabs( x(i) );
+                weightsGaussKronrod101(i) =  fabs( w(i) );
+            }
+            x=VectorType::Zero(50);
+            w=VectorType::Zero(50);
+            LaurieGautschiPolicy::mpgauss(50,x,w);
+            for(size_t i=0;i<25;++i)
+            {
+                weightsGauss101(i) = fabs( w(i) );
+            }
+
+
+
+            x=VectorType::Zero(201);
+            w=VectorType::Zero(201);
+            LaurieGautschiPolicy::mpkonrad(100,x,w);
+            for(size_t i=0;i<101;++i)
+            {
+                abscissaeGaussKronrod101(i) = fabs( x(i) );
+                weightsGaussKronrod101(i) =  fabs( w(i) );
+            }
+            x=VectorType::Zero(100);
+            w=VectorType::Zero(100);
+            LaurieGautschiPolicy::mpgauss(100,x,w);
+            for(size_t i=0;i<50;++i)
+            {
+                weightsGauss201(i) = fabs( w(i) );
+            }
 */
             //////////////////// PRINT VALUES ////////////////////////////////
             /*
