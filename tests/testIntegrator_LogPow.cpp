@@ -12,14 +12,19 @@ Scalar desiredRelativeError()
 template <typename Scalar>
 typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
 {
-  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[6] =
+  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[11] =
     {
       Eigen::Integrator<Scalar>::GaussKronrod15,
       Eigen::Integrator<Scalar>::GaussKronrod21,
       Eigen::Integrator<Scalar>::GaussKronrod31,
       Eigen::Integrator<Scalar>::GaussKronrod41,
       Eigen::Integrator<Scalar>::GaussKronrod51,
-      Eigen::Integrator<Scalar>::GaussKronrod61
+      Eigen::Integrator<Scalar>::GaussKronrod61,
+      Eigen::Integrator<Scalar>::GaussKronrod71,
+      Eigen::Integrator<Scalar>::GaussKronrod81,
+      Eigen::Integrator<Scalar>::GaussKronrod91,
+      Eigen::Integrator<Scalar>::GaussKronrod101,
+      Eigen::Integrator<Scalar>::GaussKronrod201
     };
 
   return quadratureRules[i];
@@ -68,7 +73,8 @@ int test_logpow(void)
     IntegratorType eigenIntegrator(200);
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
-    const size_t numKeys = 6;
+    bool success = true;
+    const size_t numKeys = 11;
     for (int i = numKeys - 1; i >= 0; --i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
@@ -88,10 +94,18 @@ int test_logpow(void)
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
                 std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
-
-                return EXIT_FAILURE;
+                success = false;
+                //return EXIT_FAILURE;
             }
         }
+    }
+
+    if (success)
+    {
+        std::cout << "Success!" << std::endl;
+    }else
+    {
+        std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
     }
 
     return EXIT_SUCCESS;

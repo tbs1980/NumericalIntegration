@@ -12,7 +12,7 @@ int piessensNodesWeights(void)
     typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
 
-    const IndexType N=30;
+    const IndexType N=100;
     const int outputIntegers = 34;
 
     Eigen::Array<RealType,Dynamic,2> ans;
