@@ -77,7 +77,7 @@ int test_peak(void)
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    const size_t numKeys = 11;
+    const size_t numKeys = 10;
     for (int i = numKeys - 1; i >= 0; --i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
