@@ -98,6 +98,7 @@ int test_logpow(void)
                 //return EXIT_FAILURE;
             }
         }
+	return EXIT_FAILURE;
     }
 
     if (success)

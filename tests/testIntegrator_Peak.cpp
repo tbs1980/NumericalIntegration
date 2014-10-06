@@ -31,7 +31,6 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t 
 }
 
 
-//////////////////////////// Mark's peak function test /////////////////////////
 /**
  * This integrand has a peak of height 4^alphaPeak at x = pi/4.
  */
@@ -102,6 +101,7 @@ int test_peak(void)
                 //return EXIT_FAILURE;
             }
         }
+	return EXIT_FAILURE;
     }
 
     if (success)

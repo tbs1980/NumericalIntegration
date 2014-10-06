@@ -93,9 +93,7 @@ public:
     const Scalar desiredAbsoluteError = 1.e-8, const Scalar desiredRelativeError = 1.e-8,
     const QuadratureRule quadratureRule = 1)
   {
-    if ((desiredAbsoluteError <= 0.
-        // && desiredRelativeError < (std::max)(Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.), Scalar(5.e-28) ))
-         && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon() )
+    if ((desiredAbsoluteError <= 0. && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon() )
         || m_maxSubintervals < 1)
     {
       m_errorCode = 6;
