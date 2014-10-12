@@ -28,12 +28,11 @@ namespace Kronrod {
         /**
          * \brief Recurrence coefficients for monic Jacobi polynomials.
          *
-         * This method generates the first n recurrence
+         * This method generates the first N recurrence
          * coefficients for monic Jacobi polynomials with parameters
          * a and b. These are orthogonal on [-1,1] relative to the
-         * weight function w(t)=(1-t)^a(1+t)^b. The n alpha-coefficients
-         * are stored in the first column, the n beta-coefficients in
-         * the second column, of the nx2 array ab.
+         * weight function w(t)=(1-t)^a(1+t)^b. The N alpha-coefficients
+         * are stored in \a a_out, the n beta-coefficients in \a b_out.
          * http://en.wikipedia.org/wiki/Jacobi_polynomials
          *
          * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
@@ -69,12 +68,12 @@ namespace Kronrod {
         /**
          * \brief Recurrence coefficients for monic Jacobi polynomials on [0,1].
          *
-         * This method generates the first n recurrence
+         * This method generates the first N recurrence
          * coefficients for monic Jacobi polynomials on [0,1] with
          * parameters a and b. These are orthogonal on [0,1] relative
-         * to the weight function w(t)=(1-t)^a t^b. The n alpha-
-         * coefficients are stored in the first column, the n beta-
-         * coefficients in the second column, of the nx2 array ab.
+         * to the weight function w(t)=(1-t)^a t^b. The N alpha-
+         * coefficients are stored in \a a_out, the N beta-
+         * coefficients in \a b_out.
          * http://en.wikipedia.org/wiki/Jacobi_polynomials
          *
          * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
@@ -116,13 +115,13 @@ namespace Kronrod {
          * \brief Jacobi-Kronrod matrix.
          *
          * This method produces the alpha- and beta-elements in
-         * the Jacobi-Kronrod matrix of order 2n+1 for the weight
+         * the Jacobi-Kronrod matrix of order 2N+1 for the weight
          * function (or measure) w. The input data for the weight
          * function w are the recurrence coefficients of the associated
-         * orthogonal polynomials, which are stored in the array ab0 of
-         * dimension [ceil(3*n/2)+1]x2. The alpha-elements are stored in
-         * the first column, the beta-elements in the second column, of
-         * the (2*n+1)x2 array ab.
+         * orthogonal polynomials, which are stored in \a a_in and \a b_in .
+         * At least ceil(3*N/2)+1 coefficients should be provided.
+         * The 2N+1 alpha- and beta-elements are returned in \a a and \a b
+         * respectively.
          *
          * Created by Dirk Laurie, 6-22.1998
          * Edited by Pavel Holoborodko, November 7, 2011
@@ -184,8 +183,8 @@ namespace Kronrod {
 
             for(IndexType m=N-1;m<2*N-3+1;++m)
             {
-                IndexType k;
-                IndexType j;
+                IndexType k=m+1-N;
+                IndexType j=0;
                 RealType u=0;
                 for(k=m+1-N;k<floor((m-1)/2)+1;++k)
                 {
@@ -217,14 +216,13 @@ namespace Kronrod {
         /**
          * \brief Gauss-Kronrod quadrature formula.
          *
-         * This method generates the (2n+1)-point Gauss-Kronrod
+         * This method generates the (2N+1)-point Gauss-Kronrod
          * quadrature rule for the weight function w encoded by the
-         * recurrence matrix ab of order [ceil(3*n/2)+1]x2 containing
+         * recurrence matrix (a,b) of order [ceil(3*n/2)+1]x2 containing
          * in its first and second column respectively the alpha- and
          * beta-coefficients in the three-term recurrence relation
-         * for w. The 2n+1 nodes, in increasing order, are output
-         * into the first column, the corresponding weights into the
-         * second column, of the (2n+1)x2 array xw.
+         * for w. The 2N+1 nodes, in increasing order, are output
+         * into \a x, the corresponding weights into \a w .
          *
          * Created by Dirk Laurie, June 22, 1998.
          * Edited by Pavel Holoborodko, November 7, 2011:
@@ -279,6 +277,24 @@ namespace Kronrod {
 
         }
 
+        /**
+         * \brief Gauss quadrature rule.
+         *
+         * Given a weight function w encoded by (a,b) of the
+         * first N recurrence coefficients for the associated orthogonal
+         * polynomials, the first column of (a,b) containing the N alpha-
+         * coefficients and the second column the N beta-coefficients,
+         * the method generates the nodes and weights (x,w) of
+         * the N-point Gauss quadrature rule for the weight function w.
+         * The nodes, in increasing order, are stored in \a x ,
+         * the N corresponding weights in \a w .
+         *
+         * \param N Number of nodes
+         * \param a 2N alpha coefficients (input)
+         * \param b 2N beta coefficients (input)
+         * \param x 2N+1 nodes
+         * \param w 2N+1 weights corresponding to \a x
+         */
         static void gauss(const IndexType N,VectorType const & a, VectorType const & b,
             VectorType & x, VectorType & w)
         {
@@ -345,6 +361,16 @@ namespace Kronrod {
             }
         }
 
+        /**
+         * \brief Arbitrary precision Gauss abscissae & weights.
+         *
+         * This method computes Kronrod points for (-1,1) with any required precision.
+         * The result is a vector of N nodes the corresponding weights.
+         *
+         * \param N Number of nodes
+         * \param x Returns a vector of 2N+1 nodes
+         * \param w Returns a vector of weights corresponding to \a x
+         */
         static void mpgauss(const IndexType N,VectorType & x, VectorType & w)
         {
             //TODO : make use the eigen assert facilities
