@@ -3,7 +3,18 @@
 
 namespace Kronrod {
 
-
+    /**
+     * \ingroup Quadrature_Module
+     * \brief This class computes Kronrod abscissae & weights for arbitrary precision.
+     *
+     * Based on work of Dirk Laurie and Walter Gautschi.
+     * D. P. Laurie (1997). Calculation of Gauss-Kronrod Quadrature Rules.
+     * Mathematics of Computation, 66(219), 1133-1145
+     * Created by Pavel Holoborodko, November 7, 2011.
+     * Ported to C++/Eigen by Mark Sauder, Matt Beall and Sreekumar Thaithara Balan, September 2014
+     *
+     * \todo Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
+     */
     template<typename _RealType>
     class LaurieGautschi
     {
@@ -14,6 +25,26 @@ namespace Kronrod {
         typedef typename VectorType::Index IndexType;
         typedef typename Eigen::SelfAdjointEigenSolver<MatrixType> SelfAdjointEigenSolverType;
 
+        /**
+         * \brief Recurrence coefficients for monic Jacobi polynomials.
+         *
+         * This method generates the first n recurrence
+         * coefficients for monic Jacobi polynomials with parameters
+         * a and b. These are orthogonal on [-1,1] relative to the
+         * weight function w(t)=(1-t)^a(1+t)^b. The n alpha-coefficients
+         * are stored in the first column, the n beta-coefficients in
+         * the second column, of the nx2 array ab.
+         * http://en.wikipedia.org/wiki/Jacobi_polynomials
+         *
+         * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         *
+         * \param N Number of recurrence coefficients
+         * \param a alpha parameter of the Jacobi-polynomials
+         * \param b beta parameter of the Jacobi-polynomials
+         * \param a_out N alpha-coefficients
+         * \param b_out N beta-coefficients
+         */
         static void r_jacobi(const IndexType N,const RealType a,const RealType b,
             VectorType & a_out, VectorType & b_out)
         {
@@ -35,6 +66,26 @@ namespace Kronrod {
             }
         }
 
+        /**
+         * \brief Recurrence coefficients for monic Jacobi polynomials on [0,1].
+         *
+         * This method generates the first n recurrence
+         * coefficients for monic Jacobi polynomials on [0,1] with
+         * parameters a and b. These are orthogonal on [0,1] relative
+         * to the weight function w(t)=(1-t)^a t^b. The n alpha-
+         * coefficients are stored in the first column, the n beta-
+         * coefficients in the second column, of the nx2 array ab.
+         * http://en.wikipedia.org/wiki/Jacobi_polynomials
+         *
+         * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         *
+         * \param N Number of recurrence coefficients
+         * \param a alpha parameter of the Jacobi-polynomials
+         * \param b beta parameter of the Jacobi-polynomials
+         * \param a_out N alpha-coefficients
+         * \param b_out N beta-coefficients
+         */
         static void r_jacobi_01(const IndexType N,const RealType a,const RealType b,
             VectorType & a_out, VectorType & b_out)
         {
@@ -61,7 +112,29 @@ namespace Kronrod {
 
         }
 
-
+        /**
+         * \brief Jacobi-Kronrod matrix.
+         *
+         * This method produces the alpha- and beta-elements in
+         * the Jacobi-Kronrod matrix of order 2n+1 for the weight
+         * function (or measure) w. The input data for the weight
+         * function w are the recurrence coefficients of the associated
+         * orthogonal polynomials, which are stored in the array ab0 of
+         * dimension [ceil(3*n/2)+1]x2. The alpha-elements are stored in
+         * the first column, the beta-elements in the second column, of
+         * the (2*n+1)x2 array ab.
+         *
+         * Created by Dirk Laurie, 6-22.1998
+         * Edited by Pavel Holoborodko, November 7, 2011
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         *
+         * \param N Number of nodes
+         * \param a_in The recurrence coefficients of the associated orthogonal polynomials
+         * \param b_in The recurrence coefficients of the associated orthogonal polynomials
+         * \param a alpha-elements in the Jacobi-Kronrod matrix of order 2N+1
+         * \param b beta-elements in the Jacobi-Kronrod matrix of order 2N+1
+         *
+         */
         static void r_kronrod(const IndexType N,VectorType const & a_in, VectorType const & b_in,
             VectorType & a, VectorType & b)
         {
@@ -141,6 +214,28 @@ namespace Kronrod {
             a(2*N)=a(N-1)-b(2*N)*s(1)/t(1);
         }
 
+        /**
+         * \brief Gauss-Kronrod quadrature formula.
+         *
+         * This method generates the (2n+1)-point Gauss-Kronrod
+         * quadrature rule for the weight function w encoded by the
+         * recurrence matrix ab of order [ceil(3*n/2)+1]x2 containing
+         * in its first and second column respectively the alpha- and
+         * beta-coefficients in the three-term recurrence relation
+         * for w. The 2n+1 nodes, in increasing order, are output
+         * into the first column, the corresponding weights into the
+         * second column, of the (2n+1)x2 array xw.
+         *
+         * Created by Dirk Laurie, June 22, 1998.
+         * Edited by Pavel Holoborodko, November 7, 2011:
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         *
+         * \param N Number of nodes
+         * \param a 2N alpha coefficients (input)
+         * \param b 2N beta coefficients (input)
+         * \param x 2N+1 nodes
+         * \param w 2N+1 weights corresponding to \a x
+         */
         static void kronrod(const IndexType N,VectorType const & a, VectorType const & b,
             VectorType & x, VectorType & w)
         {
@@ -217,6 +312,17 @@ namespace Kronrod {
 
         }
 
+        /**
+         * \brief Arbitrary precision Kronrod abscissae & weights.
+         *
+         * This method computes Kronrod points for (-1,1) with any required precision.
+         * The result is a vector 2N+1 nodes (N points on either side of zero and zero)
+         * and the corresponding weights.
+         *
+         * \param N Number of nodes
+         * \param x Returns a vector of 2N+1 nodes
+         * \param w Returns a vector of weights corresponding to \a x
+         */
         static void mpkonrad(const IndexType N,VectorType & x, VectorType & w)
         {
             //TODO : make use the eigen assert facilities
