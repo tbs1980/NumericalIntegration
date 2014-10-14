@@ -4,6 +4,9 @@
  *     for Automatic Integration, Springer Verlag, 1983.
  */
 
+//#include <unsupported/Eigen/MPRealSupport>
+//#include <mpreal.h>
+
 #ifndef EIGEN_INTEGRATOR_H
 #define EIGEN_INTEGRATOR_H
 
@@ -33,17 +36,17 @@ public:
    */
   enum QuadratureRule
   {
-    GaussKronrod15 = 1,    /**<  Use   7-15 points.  */
-    GaussKronrod21 = 2,    /**<  Use  10-21 points.  */
-    GaussKronrod31 = 3,    /**<  Use  15-31 points.  */
-    GaussKronrod41 = 4,    /**<  Use  20-41 points.  */
-    GaussKronrod51 = 5,    /**<  Use  25-51 points.  */
-    GaussKronrod61 = 6,    /**<  Use  30-61 points.  */
-    GaussKronrod71 = 7,    /**<  Use  35-71 points.  */
-    GaussKronrod81 = 8,    /**<  Use  40-81 points.  */
-    GaussKronrod91 = 9,    /**<  Use  45-91 points.  */
-    GaussKronrod101 = 10,  /**<  Use  50-101 points. */
-    GaussKronrod201 = 11   /**<  Use 100-201 points. */
+    GaussKronrod15 = 1,    /**<  Use   7, 15 points.  */
+    GaussKronrod21 = 2,    /**<  Use  10, 21 points.  */
+    GaussKronrod31 = 3,    /**<  Use  15, 31 points.  */
+    GaussKronrod41 = 4,    /**<  Use  20, 41 points.  */
+    GaussKronrod51 = 5,    /**<  Use  25, 51 points.  */
+    GaussKronrod61 = 6,    /**<  Use  30, 61 points.  */
+    GaussKronrod71 = 7,    /**<  Use  35, 71 points.  */
+    GaussKronrod81 = 8,    /**<  Use  40, 81 points.  */
+    GaussKronrod91 = 9,    /**<  Use  45, 91 points.  */
+    GaussKronrod101 = 10,  /**<  Use  50, 101 points. */
+    GaussKronrod201 = 11   /**<  Use 100, 201 points. */
   };
 
   /**
@@ -719,7 +722,5 @@ private:
 };
 
 }
-
-//#include "IntegratorDefinitions.hpp"
 
 #endif // EIGEN_INTEGRATOR_H
