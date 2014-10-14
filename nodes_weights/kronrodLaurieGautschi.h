@@ -11,7 +11,7 @@ namespace Kronrod {
      * D. P. Laurie (1997). Calculation of Gauss-Kronrod Quadrature Rules.
      * Mathematics of Computation, 66(219), 1133-1145
      * Created by Pavel Holoborodko, November 7, 2011.
-     * Ported to C++/Eigen by Mark Sauder, Matt Beall and Sreekumar Thaithara Balan, September 2014
+     * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder, and Matt Beall September 2014
      *
      * \todo Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
      */
