@@ -10,4 +10,7 @@ endif()
 #add the customised package searches to the module path
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+enable_testing()
+add_subdirectory(gtest-1.7.0)
 add_subdirectory(tests)
+add_subdirectory(examples)
