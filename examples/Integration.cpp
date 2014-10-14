@@ -3,7 +3,7 @@
 
 // TODO change this header to something like NumericalInegration
 // We may need to put all the codes some common directory
-#include <NIHeaders.hpp>
+#include <NIHeaders.h>
 #include <iostream>
 #include <iomanip>
 
