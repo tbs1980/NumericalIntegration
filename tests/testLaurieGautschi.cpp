@@ -18,7 +18,7 @@ int compare_codes(void)
 
     VectorType xGK =VectorType::Zero(2*N+1);
     VectorType wGK =VectorType::Zero(2*N+1);
-    LaurieGautschiPolicy::mpkonrad(N,xGK,wGK);
+    LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
 
     std::cout<<"\nSTB Laurie Gautschi"<<std::endl;
     for(IndexType i = 0; i < xGK.rows(); ++i)

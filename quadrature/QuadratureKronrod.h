@@ -74,7 +74,7 @@ public:
 
             VectorType x=VectorType::Zero(15);
             VectorType w=VectorType::Zero(15);
-            LaurieGautschiPolicy::mpkonrad(7,x,w);
+            LaurieGautschiPolicy::mpkronrod(7,x,w);
             for(size_t i=0;i<8;++i)
             {
                 abscissaeGaussKronrod15(i) = fabs( x(i) );
@@ -92,7 +92,7 @@ public:
 
             x=VectorType::Zero(21);
             w=VectorType::Zero(21);
-            LaurieGautschiPolicy::mpkonrad(10,x,w);
+            LaurieGautschiPolicy::mpkronrod(10,x,w);
             for(size_t i=0;i<11;++i)
             {
                 abscissaeGaussKronrod21(i) = fabs( x(i) );
@@ -110,7 +110,7 @@ public:
 
             x=VectorType::Zero(31);
             w=VectorType::Zero(31);
-            LaurieGautschiPolicy::mpkonrad(15,x,w);
+            LaurieGautschiPolicy::mpkronrod(15,x,w);
             for(size_t i=0;i<16;++i)
             {
                 abscissaeGaussKronrod31(i) = fabs( x(i) );
@@ -128,7 +128,7 @@ public:
 
             x=VectorType::Zero(41);
             w=VectorType::Zero(41);
-            LaurieGautschiPolicy::mpkonrad(20,x,w);
+            LaurieGautschiPolicy::mpkronrod(20,x,w);
             for(size_t i=0;i<21;++i)
             {
                 abscissaeGaussKronrod41(i) = fabs( x(i) );
@@ -146,7 +146,7 @@ public:
 
             x=VectorType::Zero(51);
             w=VectorType::Zero(51);
-            LaurieGautschiPolicy::mpkonrad(25,x,w);
+            LaurieGautschiPolicy::mpkronrod(25,x,w);
             for(size_t i=0;i<26;++i)
             {
                 abscissaeGaussKronrod51(i) = fabs( x(i) );
@@ -164,7 +164,7 @@ public:
 
             x=VectorType::Zero(61);
             w=VectorType::Zero(61);
-            LaurieGautschiPolicy::mpkonrad(30,x,w);
+            LaurieGautschiPolicy::mpkronrod(30,x,w);
             for(size_t i=0;i<31;++i)
             {
                 abscissaeGaussKronrod61(i) = fabs( x(i) );
@@ -182,7 +182,7 @@ public:
 
             x=VectorType::Zero(71);
             w=VectorType::Zero(71);
-            LaurieGautschiPolicy::mpkonrad(35,x,w);
+            LaurieGautschiPolicy::mpkronrod(35,x,w);
             for(size_t i=0;i<36;++i)
             {
                 abscissaeGaussKronrod71(i) = fabs( x(i) );
@@ -200,7 +200,7 @@ public:
 
             x=VectorType::Zero(81);
             w=VectorType::Zero(81);
-            LaurieGautschiPolicy::mpkonrad(40,x,w);
+            LaurieGautschiPolicy::mpkronrod(40,x,w);
             for(size_t i=0;i<41;++i)
             {
                 abscissaeGaussKronrod81(i) = fabs( x(i) );
@@ -218,7 +218,7 @@ public:
 
             x=VectorType::Zero(91);
             w=VectorType::Zero(91);
-            LaurieGautschiPolicy::mpkonrad(45,x,w);
+            LaurieGautschiPolicy::mpkronrod(45,x,w);
             for(size_t i=0;i<46;++i)
             {
                 abscissaeGaussKronrod91(i) = fabs( x(i) );
@@ -236,7 +236,7 @@ public:
 
             x=VectorType::Zero(101);
             w=VectorType::Zero(101);
-            LaurieGautschiPolicy::mpkonrad(50,x,w);
+            LaurieGautschiPolicy::mpkronrod(50,x,w);
             for(size_t i=0;i<51;++i)
             {
                 abscissaeGaussKronrod101(i) = fabs( x(i) );
@@ -254,7 +254,7 @@ public:
 
             x=VectorType::Zero(201);
             w=VectorType::Zero(201);
-            LaurieGautschiPolicy::mpkonrad(100,x,w);
+            LaurieGautschiPolicy::mpkronrod(100,x,w);
             for(size_t i=0;i<101;++i)
             {
                 abscissaeGaussKronrod201(i) = fabs( x(i) );

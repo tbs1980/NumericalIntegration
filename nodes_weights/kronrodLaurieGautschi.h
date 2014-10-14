@@ -13,7 +13,7 @@ namespace Kronrod {
      * Created by Pavel Holoborodko, November 7, 2011.
      * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder, and Matt Beall September 2014
      *
-     * \todo Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
+     * \TODO Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
      */
     template<typename _RealType>
     class LaurieGautschi
@@ -249,7 +249,7 @@ namespace Kronrod {
 
             r_kronrod(N,a,b,a0,b0);
 
-            //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KONRAD.M
+            //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONRoD.M
             // Do we have an approximately equal function in Eigen?
             assert( fabs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
 
@@ -339,7 +339,7 @@ namespace Kronrod {
          * \param x Returns a vector of 2N+1 nodes
          * \param w Returns a vector of weights corresponding to \a x
          */
-        static void mpkonrad(const IndexType N,VectorType & x, VectorType & w)
+        static void mpkronrod(const IndexType N,VectorType & x, VectorType & w)
         {
             //TODO : make use the eigen assert facilities
             assert(x.rows() ==  2*N+1);
