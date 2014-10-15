@@ -249,7 +249,7 @@ namespace Kronrod {
 
             r_kronrod(N,a,b,a0,b0);
 
-            //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONRoD.M
+            //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
             assert( fabs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
 
