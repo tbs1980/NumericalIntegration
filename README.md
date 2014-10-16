@@ -1,6 +1,6 @@
 # NumericalIntegration
 
-Comparison of Piessens' method to Laurie-Gautschi approach
+Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method capable of multiprecision calculation of Gauss Kronrod nodes/weights utilizing Laurie/Gautschi and Piessens'/Patterson's methods for the desired number of nodes/ruleset for the quadrature calculations.
 
 ## Requirements
 
