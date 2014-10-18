@@ -93,7 +93,7 @@ int test_logpow(void)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-                std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
+                std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
                 success = false;
                 //return EXIT_FAILURE;
             }

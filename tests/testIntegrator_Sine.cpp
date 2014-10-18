@@ -78,7 +78,7 @@ int test_sine(void)
                       << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
                       << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-            std::cout << "erroCode =" << eigenIntegrator.errorCode() << std::endl;
+            std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
             success = false;
             //return EXIT_FAILURE;
         }
