@@ -101,18 +101,18 @@ int test_peak(void)
                 //return EXIT_FAILURE;
             }
         }
-	return EXIT_FAILURE;
     }
 
     if (success)
     {
         std::cout << "Success!" << std::endl;
+        return EXIT_SUCCESS;
     }else
     {
         std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
     }
 
-    return EXIT_SUCCESS;
+    return EXIT_FAILURE;;
 }
 
 

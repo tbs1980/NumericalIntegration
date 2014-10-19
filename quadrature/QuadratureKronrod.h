@@ -4,8 +4,8 @@
  *     for Automatic Integration, Springer Verlag, 1983.
  */
 
-#ifndef EIGEN_QUADRATURE_KRONROD_HPP
-#define EIGEN_QUADRATURE_KRONROD_HPP
+#ifndef EIGEN_QUADRATURE_KRONROD_H
+#define EIGEN_QUADRATURE_KRONROD_H
 
 namespace Eigen
 {
@@ -1535,4 +1535,4 @@ Array<Scalar, 50, 1> QuadratureKronrod<Scalar>::weightsGauss201 =
   ).finished();
 }
 
-#endif // EIGEN_QUADRATURE_KRONROD_HPP
+#endif // EIGEN_QUADRATURE_KRONROD_H
