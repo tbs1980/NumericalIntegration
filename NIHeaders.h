@@ -13,7 +13,7 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/MPRealSupport>
 
-
+//these must be checked.
 template<typename T>
 T Pow(T base, T exponent)
 {
