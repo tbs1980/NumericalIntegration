@@ -6,9 +6,9 @@ int compare_codes(void)
 {
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(256);
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(256);
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
