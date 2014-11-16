@@ -13,7 +13,6 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/MPRealSupport>
 
-
 template<typename T>
 T Pow(T base, T exponent)
 {
@@ -62,6 +61,5 @@ long double Gamma(long double x)
 
 #include "quadrature/QuadratureKronrod.h"
 #include "quadrature/Integrator.h"
-
 
 #endif //NI_NIHEADERS_H
