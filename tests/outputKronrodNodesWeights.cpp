@@ -4,11 +4,12 @@
 
 int test_values()
 {
-    //typedef float RealType;
-    //typedef double RealType;
-    typedef mpfr::mpreal RealType;
-    RealType::set_default_prec(256);
-    typedef Eigen::QuadratureKronrod<RealType> QuadratureKronrodValuesType;
+    //typedef float Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
+    typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
     //QuadratureKronrodValuesType qgk;
     QuadratureKronrodValuesType::ComputeNodesAndWeights();

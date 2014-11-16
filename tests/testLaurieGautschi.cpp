@@ -4,12 +4,13 @@
 
 int compare_codes(void)
 {
-    //typedef double RealType;
-    typedef mpfr::mpreal RealType;
-    //RealType::set_default_prec(128);
-    RealType::set_default_prec(256);
+    //typedef float Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
 
-    typedef Kronrod::LaurieGautschi<RealType> LaurieGautschiPolicy;
+    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
 
@@ -39,9 +40,9 @@ int compare_codes(void)
         std::cout << xG(i) << "\t" << wG(i) << std::endl;
     }
 
-    Eigen::Array<RealType, Dynamic, 1> xGKPiessens;
-    Eigen::Array<RealType, Dynamic, 1> wGKPiessens;
-    Eigen::Array<RealType, Dynamic, 1> wGPiessens;
+    Eigen::Array<Scalar, Dynamic, 1> xGKPiessens;
+    Eigen::Array<Scalar, Dynamic, 1> wGKPiessens;
+    Eigen::Array<Scalar, Dynamic, 1> wGPiessens;
 
     Kronrod::kronrod(N, xGKPiessens,  wGKPiessens, wGPiessens);
 

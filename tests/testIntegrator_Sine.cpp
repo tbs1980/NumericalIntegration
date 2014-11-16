@@ -47,9 +47,9 @@ int test_sine(void)
     std::cout<<"Testing Int [0->Pi] sin(x) = 2"<<std::endl;
     //typedef float Scalar;
     //typedef double Scalar;
-    //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
