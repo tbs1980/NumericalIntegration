@@ -40,14 +40,16 @@ include_directories(${CMAKE_SOURCE_DIR})
 # libs
 set(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
+add_executable(outputKronrodNodesWeights outputKronrodNodesWeights.cpp)
+#add_executable(IntegratorTest IntegratorTest.cpp)
 add_executable(testLaurieGautschi testLaurieGautschi.cpp)
-add_executable(testQuadratureKronrod testQuadratureKronrod.cpp)
 add_executable(testIntegrator_LogPow testIntegrator_LogPow.cpp)
 add_executable(testIntegrator_Sine testIntegrator_Sine.cpp)
 add_executable(testIntegrator_Peak testIntegrator_Peak.cpp)
 
+target_link_libraries(outputKronrodNodesWeights ${ALL_LIBS})
+#target_link_libraries(IntegratorTest ${ALL_LIBS})
 target_link_libraries(testLaurieGautschi ${ALL_LIBS})
-target_link_libraries(testQuadratureKronrod ${ALL_LIBS})
 target_link_libraries(testIntegrator_LogPow ${ALL_LIBS})
 target_link_libraries(testIntegrator_Sine ${ALL_LIBS})
 target_link_libraries(testIntegrator_Peak ${ALL_LIBS})

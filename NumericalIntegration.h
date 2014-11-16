@@ -19,9 +19,10 @@ namespace Eigen
 /**
   * \defgroup Numerical_Integration_Module Quadrature and Nodes_Weights module
   *
-  * This module provides an adaptive quadrature method of numerical integration while
-  * offering most basic functionality to calculate nodes/weights for Gauss-Kronrod
-  * integration, unit tests, and support for multiprecision using mpreal precision type.
+  * This module provides an adaptive quadrature method of numerical integration of the style 
+  * implemented in the QUADPACK library while offering functionality to calculate nodes/weights
+  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal 
+  * precision type.
   *
   * \code
   * #include <unsupported/Eigen/NumericalIntegration>
@@ -29,9 +30,22 @@ namespace Eigen
   */
 }
 
-#include ".h"
-#include ".h"
-#include "g.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+
+#include <Eigen/Core>
+#include <Eigen/Eigenvalues>
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
+#include <unsupported/Eigen/MPRealSupport>
+
+#include "nodes_weights/kronrodLaurieGautschi.h"
+#include "nodes_weights/kronrodPiessens.h"
+
+#include "quadrature/QuadratureKronrod.h"
+#include "quadrature/Integrator.h"
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
 

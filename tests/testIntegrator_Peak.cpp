@@ -63,9 +63,9 @@ int test_peak(void)
     std::cout<<"Testing Int [0->1] 4^-alpah/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
     //typedef float Scalar;
     //typedef double Scalar;
-    //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;

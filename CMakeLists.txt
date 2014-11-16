@@ -1,16 +1,75 @@
-cmake_minimum_required(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
 
-project(NumericalIntegration CXX)
+PROJECT(NumericalIntegration CXX)
+
+INCLUDE(ExternalProject)
 
 # guard against in-source builds (got this from Eigen)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
-#add the customised package searches to the module path
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+FIND_PACKAGE(Eigen3)
+
+ADD_DEFINITIONS(
+  -O3
+  -g
+  -pedantic
+  -Wall
+  -Wextra
+  -fvisibility=hidden
+  -DXPLM200
+  -DXPLM210
+  -DAPL=0
+  -DIBM=0
+  -DLIN=1
+  -fPIC
+  -DNDEBUG
+  -march=native
+  )
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+SET(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
+EXTERNALPROJECT_ADD(GTestExternal
+    SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
+    SVN_REVISION -r HEAD
+    TIMEOUT 10
+    PREFIX "${GTEST_PREFIX}"
+    INSTALL_COMMAND "")
+
+SET(LIBPREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
+SET(LIBSUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
+SET(GTEST_LOCATION "${GTEST_PREFIX}/src/GTestExternal-build")
+SET(GTEST_LIBRARY  "${GTEST_LOCATION}/${LIBPREFIX}gtest${LIBSUFFIX}")
+SET(GTEST_MAINLIB  "${GTEST_LOCATION}/${LIBPREFIX}gtest_main${LIBSUFFIX}")
+
+ADD_LIBRARY(GTest IMPORTED STATIC GLOBAL)
+SET_TARGET_PROPERTIES(GTest PROPERTIES
+    "IMPORTED_LOCATION" "${GTEST_LIBRARY}"
+    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}")
+
+ADD_LIBRARY(GTestMain IMPORTED STATIC GLOBAL)
+SET_TARGET_PROPERTIES(GTestMain PROPERTIES
+    "IMPORTED_LOCATION" "${GTEST_MAINLIB}"
+    "IMPORTED_LINK_INTERFACE_LIBRARIES"
+    "${GTEST_LIBRARY};${CMAKE_THREAD_LIBS_INIT}")
+
+ADD_DEPENDENCIES(GTest GTestExternal)
+ADD_DEPENDENCIES(GTestMain GTestExternal)
+
+EXTERNALPROJECT_GET_PROPERTY(GTestExternal source_dir)
+
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LD_VERSION_SCRIPT_FLAG}")
 
 enable_testing()
-add_subdirectory(gtest-1.7.0)
-add_subdirectory(tests)
-add_subdirectory(examples)
+ADD_SUBDIRECTORY(examples)
+#ADD_SUBDIRECTORY(quadrature)
+ADD_SUBDIRECTORY(tests)
+
