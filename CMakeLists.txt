@@ -2,16 +2,51 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
 
 PROJECT(NumericalIntegration CXX)
 
-INCLUDE(ExternalProject)
+if(UNIX)
+	if(CMAKE_COMPILER_IS_GNUCXX)
+		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -pedantic -Wall -Wextra -Wfatal-errors -g")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -march=native")
+	endif(CMAKE_COMPILER_IS_GNUCXX)
+	#is the compiler clang?
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -pedantic -Wall -Wextra -g")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -march=native")
+	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=gnu++11 -pedantic -w3 -g")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=gnu++11 -O3 -march=native ")
+	endif()
+#############################
+# NEED CHECKS FOR WINDOWS
+#############################
+endif(UNIX)
 
 # guard against in-source builds (got this from Eigen)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
+INCLUDE(ExternalProject)
+
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-FIND_PACKAGE(Eigen3)
+#Eigen3 headers
+FIND_PACKAGE(Eigen3 REQUIRED)
+FIND_PACKAGE(GMP REQUIRED)
+FIND_PACKAGE(MPFR REQUIRED)
+FIND_PACKAGE(MPFRCPP REQUIRED)
+
+INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${GMP_INCLUDES})
+INCLUDE_DIRECTORIES(${MPFR_INCLUDES})
+INCLUDE_DIRECTORIES(${MPFRCPP_INCLUDES})
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
+# libraries
+SET(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
 ADD_DEFINITIONS(
   -O3
