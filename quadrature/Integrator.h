@@ -93,7 +93,7 @@ public:
   template <typename FunctionType>
   Scalar quadratureAdaptive(
     const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
-    const Scalar desiredAbsoluteError = 1.e-8, const Scalar desiredRelativeError = 1.e-8,
+    const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(1.e-8),
     const QuadratureRule quadratureRule = 1)
   {
     if ((desiredAbsoluteError <= 0. && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon() )

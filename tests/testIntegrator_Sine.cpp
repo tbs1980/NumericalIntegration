@@ -47,9 +47,9 @@ int test_sine(void)
     std::cout<<"Testing Int [0->Pi] sin(x) = 2"<<std::endl;
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(256);
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
@@ -82,18 +82,18 @@ int test_sine(void)
             success = false;
             //return EXIT_FAILURE;
         }
+        else
+        {
+            std::cout << "Success!" << std::endl;
+            return EXIT_SUCCESS;
+        }
     }
 
-    if (success)
-    {
-        std::cout << "Success!" << std::endl;
-        return EXIT_SUCCESS;
-    }else
+    if (!success)
     {
         std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
     }
-
-    return EXIT_FAILURE;;
+    return EXIT_FAILURE;
 }
 
 int main(void)
