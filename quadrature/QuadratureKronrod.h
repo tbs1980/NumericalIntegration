@@ -64,41 +64,48 @@ public:
     {
         if(compute)
         {
-            //---------Begin generic node weight calculation function----------//
+
+        /*
+        //---------Begin generic node weight calculation function----------//
+        void CalculateNodesAndWeightsForGaussRule(
+            int gaussRule, kronrodNodes, VectorType kronrodWeights, VectorType gaussNodes, VectorType gausWeights)
+        {
+
+            typedef mpfr::mpreal Scalar;
+            Scalar::set_default_prec(256);
+
+            int gaussRule = 15;
+            int N = gaussRule;
+
+            VectorType xGK = VectorType::Zero(2*N+1);
+            VectorType wGK = VectorType::Zero(2*N+1);
+            VectorType xG = VectorType::Zero(N);
+            VectorType wG = VectorType::Zero(N);
+
+            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
+            LaurieGautschiPolicy::mpgauss(N,xG,wG);
+            
+            for(size_t i=2*N; i>=N; --i)
+            {
+                abscissaeGaussKronrod15(N-i) = xGK(i);
+                weightsGaussKronrod15(N-i) =  wGK(i);
+            }
+
+            for(size_t i=N-1; i>=N/2; --i)
+            {
+                weightsGauss15(gaussRule-i) = wG(i);
+            }
+        }
+        //---------End generic node weight calculation function----------//
+        */
+
             VectorType xGK;
             VectorType wGK;
             VectorType xG;
             VectorType wG;
+	        
+            //--------------15--------------//
 
-            int kronrodRule = 15;
-
-            int kronrodRuleHalf = ceil(kronrodRule / 2.);
-            int gaussRule = floor(kronrodRule / 2.);
-            int gaussRuleHalf = ceil(gaussRule / 2.);
-
-            xGK=VectorType::Zero(kronrodRule);
-            wGK=VectorType::Zero(kronrodRule);
-
-            LaurieGautschiPolicy::mpkronrod(gaussRule,xGK,wGK);
-            
-            for(size_t i=kronrodRule; i>kronrodRuleHalf; --i)
-            {
-                abscissaeGaussKronrod15(kronrodRule-i) = xGK(i-1);
-                weightsGaussKronrod15(kronrodRule-i) =  wGK(i-1);
-            }
-            xG=VectorType::Zero(gaussRule);
-            wG=VectorType::Zero(gaussRule);
-            LaurieGautschiPolicy::mpgauss(gaussRule,xG,wG);
-
-            for(size_t i=gaussRule; i>gaussRuleHalf; --i)
-            {
-                weightsGauss15(gaussRule-i) = wG(i);
-            }
-            
-        //---------End generic node weight calculation function----------//
-
-	    //--------------15--------------//
-/*
             xGK=VectorType::Zero(15);
             wGK=VectorType::Zero(15);
             LaurieGautschiPolicy::mpkronrod(7,xGK,wGK);
@@ -114,8 +121,8 @@ public:
             {
                 weightsGauss15(i) = fabs( wG(i) );
             }
-*/
-	    //--------------21--------------//
+
+	        //--------------21--------------//
 
             xGK=VectorType::Zero(21);
             wGK=VectorType::Zero(21);
@@ -133,7 +140,7 @@ public:
                 weightsGauss21(i) = fabs( wG(i) );
             }
 
-	    //--------------31--------------//
+	        //--------------31--------------//
 
             xGK=VectorType::Zero(31);
             wGK=VectorType::Zero(31);
@@ -151,7 +158,7 @@ public:
                 weightsGauss31(i) = fabs( wG(i) );
             }
 
-	    //--------------41--------------//
+	        //--------------41--------------//
 
             xGK=VectorType::Zero(41);
             wGK=VectorType::Zero(41);
@@ -169,7 +176,7 @@ public:
                 weightsGauss41(i) = fabs( wG(i) );
             }
 
-	    //--------------51--------------//
+	        //--------------51--------------//
 
             xGK=VectorType::Zero(51);
             wGK=VectorType::Zero(51);
@@ -187,7 +194,7 @@ public:
                 weightsGauss51(i) = fabs( wG(i) );
             }
 
-	    //--------------61--------------//
+	        //--------------61--------------//
 
             xGK=VectorType::Zero(61);
             wGK=VectorType::Zero(61);
@@ -205,7 +212,7 @@ public:
                 weightsGauss61(i) = fabs( wG(i) );
             }
 
-	    //--------------71--------------//
+	        //--------------71--------------//
 
             xGK=VectorType::Zero(71);
             wGK=VectorType::Zero(71);
@@ -223,7 +230,7 @@ public:
                 weightsGauss71(i) = fabs( wG(i) );
             }
 
-	    //--------------81--------------//
+	        //--------------81--------------//
 
             xGK=VectorType::Zero(81);
             wGK=VectorType::Zero(81);
@@ -241,7 +248,7 @@ public:
                 weightsGauss81(i) = fabs( wG(i) );
             }
 
-	    //--------------91--------------//
+	        //--------------91--------------//
 
             xGK=VectorType::Zero(91);
             wGK=VectorType::Zero(91);
@@ -259,7 +266,7 @@ public:
                 weightsGauss91(i) = fabs( wG(i) );
             }
 
-	    //--------------101--------------//
+	        //--------------101--------------//
 
             xGK=VectorType::Zero(101);
             wGK=VectorType::Zero(101);
@@ -277,7 +284,7 @@ public:
                 weightsGauss101(i) = fabs( wG(i) );
             }
 
-	    //--------------201--------------//
+	        //--------------201--------------//
 
             xGK=VectorType::Zero(201);
             wGK=VectorType::Zero(201);
