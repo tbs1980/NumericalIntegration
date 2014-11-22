@@ -197,8 +197,8 @@ public:
 
       if (defAb1 != error1 && defAb2 != error2)
       {
-          if (fabs(m_integralList[maxErrorIndex] - area12) <= fabs(area12) * Scalar(1.e-5)
-            && error12 >= errorMax * Scalar(.99))
+          if (fabs(m_integralList[maxErrorIndex] - area12) <= fabs(area12) * desiredRelativeError
+             && error12 >= errorMax * Scalar(1.-desiredRelativeError))
         {
           ++roundOff1;
         }
@@ -337,11 +337,9 @@ private:
       for (i = 1; i < nrMax; ++i)
       {
         succeed = m_errorListIndices[nrMax - 1];
-        std::cout << "Here 1" << std::endl;
 
         if (errorMaximum <= m_errorList[succeed])
         {
-          std::cout << "Here 2" << std::endl;
           break;
         }
 

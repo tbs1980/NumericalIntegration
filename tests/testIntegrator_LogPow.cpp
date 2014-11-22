@@ -99,6 +99,10 @@ int test_logpow(void)
             }
             else
             {
+                std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                          
                 std::cout << "Success!" << std::endl;
                 return EXIT_SUCCESS;
             }
