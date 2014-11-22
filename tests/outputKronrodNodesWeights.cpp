@@ -13,7 +13,6 @@ int test_values()
     Scalar::set_default_prec(256);
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
-    //QuadratureKronrodValuesType qgk;
     QuadratureKronrodValuesType::ComputeNodesAndWeights();
 
     int outputDigits = 80;

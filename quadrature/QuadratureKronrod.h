@@ -51,6 +51,7 @@ namespace Eigen
  * \var weightsGauss101 The weights of the  50 point gauss rule.
  * \var weightsGauss201 The weights of the 100 point gauss rule.
  */
+
 template <typename Scalar>
 class QuadratureKronrod
 {
@@ -59,24 +60,16 @@ public:
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
-    /*
-    QuadratureKronrod()
-    {
-        ComputeNodesAndWeights();
-    }
-    */
-
     static void ComputeNodesAndWeights()
     {
         if(compute)
         {
+            //---------Begin generic node weight calculation function----------//
             VectorType xGK;
             VectorType wGK;
             VectorType xG;
             VectorType wG;
 
-        //---------Begin node weight generic calculation function----------//
-            /*
             int kronrodRule = 15;
 
             int kronrodRuleHalf = ceil(kronrodRule / 2.);
@@ -101,10 +94,11 @@ public:
             {
                 weightsGauss15(gaussRule-i) = wG(i);
             }
-            */
+            
+        //---------End generic node weight calculation function----------//
 
 	    //--------------15--------------//
-
+/*
             xGK=VectorType::Zero(15);
             wGK=VectorType::Zero(15);
             LaurieGautschiPolicy::mpkronrod(7,xGK,wGK);
@@ -120,7 +114,7 @@ public:
             {
                 weightsGauss15(i) = fabs( wG(i) );
             }
-
+*/
 	    //--------------21--------------//
 
             xGK=VectorType::Zero(21);
@@ -300,87 +294,6 @@ public:
             {
                 weightsGauss201(i) = fabs( wG(i) );
             }
-
-            //////////////////// PRINT VALUES ////////////////////////////////
-            /*
-            const int outputDigits = 33;
-
-            std::cout<<"\nGaussKronrod15 \n"<<std::endl;
-            std::cout<<std::fixed;
-            for(size_t i=0;i<8;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod15(i)
-                    <<"\t"<<weightsGaussKronrod15(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<4;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss15(i)<<std::endl;
-            }
-
-            std::cout<<"\nGaussKronrod21 \n"<<std::endl;
-            for(size_t i=0;i<11;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod21(i)
-                    <<"\t"<<weightsGaussKronrod21(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<5;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss21(i)<<std::endl;
-            }
-
-
-            std::cout<<"\nGaussKronrod31 \n"<<std::endl;
-            for(size_t i=0;i<16;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod31(i)
-                    <<"\t"<<weightsGaussKronrod31(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<8;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss31(i)<<std::endl;
-            }
-
-
-            std::cout<<"\nGaussKronrod41 \n"<<std::endl;
-            for(size_t i=0;i<21;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod41(i)
-                    <<"\t"<<weightsGaussKronrod41(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<10;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss41(i)<<std::endl;
-            }
-
-            std::cout<<"\nGaussKronrod51 \n"<<std::endl;
-            for(size_t i=0;i<26;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod51(i)
-                    <<"\t"<<weightsGaussKronrod51(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<13;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss51(i)<<std::endl;
-            }
-
-
-            std::cout<<"\nGaussKronrod61 \n"<<std::endl;
-            for(size_t i=0;i<31;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<abscissaeGaussKronrod61(i)
-                    <<"\t"<<weightsGaussKronrod61(i)<<std::endl;
-            }
-            std::cout<<std::endl;
-            for(size_t i=0;i<15;++i)
-            {
-                std::cout<<std::setprecision(outputDigits)<<weightsGauss61(i)<<std::endl;
-            }
-            */
 
             compute = false;
         }
