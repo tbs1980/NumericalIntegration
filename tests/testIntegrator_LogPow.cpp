@@ -74,8 +74,9 @@ int test_logpow(void)
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
-    const size_t numKeys = 10;
-    for (int i = numKeys - 1; i >= 0; --i)
+    const size_t numKeys = 11;
+
+    for (size_t i = 0; i < numKeys; ++i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
@@ -93,7 +94,7 @@ int test_logpow(void)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-                std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
+                std::cout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
                 //return EXIT_FAILURE;
             }

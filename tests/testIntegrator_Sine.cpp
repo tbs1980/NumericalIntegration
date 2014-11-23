@@ -61,8 +61,9 @@ int test_sine(void)
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
-    const size_t numKeys = 10;
-    for (int i = numKeys - 1; i >= 0; --i)
+    const size_t numKeys = 11;
+
+    for (size_t i = 0; i < numKeys; ++i)
     {
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
@@ -78,7 +79,7 @@ int test_sine(void)
                       << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
                       << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-            std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
+            std::cout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
             success = false;
         }
         else
