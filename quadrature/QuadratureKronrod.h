@@ -66,11 +66,6 @@ public:
         void CalculateNodesAndWeightsForGaussRule(int gaussRule, VectorType& kronrodAbscissae, VectorType& kronrodWeights,
             VectorType& gaussAbscissae, VectorType& gaussWeights)
         {
-
-            typedef mpfr::mpreal Scalar;
-            Scalar::set_default_prec(256);
-
-            int gaussRule = 15;
             int N = gaussRule;
 
             VectorType xGK = VectorType::Zero(2*N+1);
@@ -83,14 +78,14 @@ public:
             
             for(size_t i=2*N; i>=N; --i)
             {
-                kronrodAbscissae(N-i) = xGK(i);
-                kronrodWeights(N-i) =  wGK(i);
+                kronrodAbscissae(2*N-i) = xGK(i);
+                kronrodWeights(2*N-i) =  wGK(i);
             }
 
             for(size_t i=N-1; i>=N/2; --i)
             {
-                gaussAbscissae(gaussRule-i) = xG(i);
-                gaussWeights(gaussRule-i) = wG(i);
+                gaussAbscissae(N-1-i) = xG(i);
+                gaussWeights(N-1-i) = wG(i);
             }
         }
         //---------End generic node weight calculation function----------*/
