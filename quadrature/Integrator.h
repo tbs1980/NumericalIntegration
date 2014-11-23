@@ -221,7 +221,7 @@ public:
           m_errorCode = 1;
         }
         // Test for roundoff error and set error flag.
-        else if (roundOff1 >= 6 || roundOff2 >= 20)
+        else if (roundOff1 >= 6 || roundOff2 >= 50)
         {
           m_errorCode = 2;
         }

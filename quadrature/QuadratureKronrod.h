@@ -57,41 +57,99 @@ class QuadratureKronrod
 {
 public:
 
+    static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
+    static Array<Scalar, 8, 1> weightsGaussKronrod15;
+    static Array<Scalar, 4, 1> weightsGauss15;
+
+    static Array<Scalar, 11, 1> abscissaeGaussKronrod21;
+    static Array<Scalar, 11, 1> weightsGaussKronrod21;
+    static Array<Scalar, 5, 1> weightsGauss21;
+
+    static Array<Scalar, 16, 1> abscissaeGaussKronrod31;
+    static Array<Scalar, 16, 1> weightsGaussKronrod31;
+    static Array<Scalar, 8, 1> weightsGauss31;
+
+    static Array<Scalar, 21, 1> abscissaeGaussKronrod41;
+    static Array<Scalar, 21, 1> weightsGaussKronrod41;
+    static Array<Scalar, 10, 1> weightsGauss41;
+
+    static Array<Scalar, 26, 1> abscissaeGaussKronrod51;
+    static Array<Scalar, 26, 1> weightsGaussKronrod51;
+    static Array<Scalar, 13, 1> weightsGauss51;
+
+    static Array<Scalar, 31, 1> abscissaeGaussKronrod61;
+    static Array<Scalar, 31, 1> weightsGaussKronrod61;
+    static Array<Scalar, 15, 1> weightsGauss61;
+
+    static Array<Scalar, 36, 1> abscissaeGaussKronrod71;
+    static Array<Scalar, 36, 1> weightsGaussKronrod71;
+    static Array<Scalar, 18, 1> weightsGauss71;
+
+    static Array<Scalar, 41, 1> abscissaeGaussKronrod81;
+    static Array<Scalar, 41, 1> weightsGaussKronrod81;
+    static Array<Scalar, 20, 1> weightsGauss81;
+
+    static Array<Scalar, 46, 1> abscissaeGaussKronrod91;
+    static Array<Scalar, 46, 1> weightsGaussKronrod91;
+    static Array<Scalar, 23, 1> weightsGauss91;
+
+    static Array<Scalar, 51, 1> abscissaeGaussKronrod101;
+    static Array<Scalar, 51, 1> weightsGaussKronrod101;
+    static Array<Scalar, 25, 1> weightsGauss101;
+
+    static Array<Scalar, 101, 1> abscissaeGaussKronrod201;
+    static Array<Scalar, 101, 1> weightsGaussKronrod201;
+    static Array<Scalar, 50, 1> weightsGauss201;
+
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
+    static bool compute;
+/*
+    void ComputeForRule(VectorType& kronrodAbscissae, VectorType& kronrodWeights,
+            VectorType& gaussAbscissae, VectorType& gaussWeights, int gaussRule)
+    {
+        int N = gaussRule;
+
+        VectorType xGK = VectorType::Zero(2*N+1);
+        VectorType wGK = VectorType::Zero(2*N+1);
+        VectorType xG = VectorType::Zero(N);
+        VectorType wG = VectorType::Zero(N);
+
+        LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
+        LaurieGautschiPolicy::mpgauss(N,xG,wG);
+        
+        for(size_t i=2*N; i>=N; --i)
+        {
+            kronrodAbscissae(2*N-i) = xGK(i);
+            kronrodWeights(2*N-i) =  wGK(i);
+        }
+
+        for(size_t i=N-1; i>=N/2; --i)
+        {
+            gaussAbscissae(N-1-i) = xG(i);
+            gaussWeights(N-1-i) = wG(i);
+        }
+    }
+*/
     static void ComputeNodesAndWeights()
     {
-        /*---------Begin generic Node/Weight calculation function----------//
-        void CalculateNodesAndWeightsForGaussRule(int gaussRule, VectorType& kronrodAbscissae, VectorType& kronrodWeights,
-            VectorType& gaussAbscissae, VectorType& gaussWeights)
-        {
-            int N = gaussRule;
-
-            VectorType xGK = VectorType::Zero(2*N+1);
-            VectorType wGK = VectorType::Zero(2*N+1);
-            VectorType xG = VectorType::Zero(N);
-            VectorType wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=2*N; i>=N; --i)
-            {
-                kronrodAbscissae(2*N-i) = xGK(i);
-                kronrodWeights(2*N-i) =  wGK(i);
-            }
-
-            for(size_t i=N-1; i>=N/2; --i)
-            {
-                gaussAbscissae(N-1-i) = xG(i);
-                gaussWeights(N-1-i) = wG(i);
-            }
-        }
-        //---------End generic node weight calculation function----------*/
-
         if(compute)
         {
+/*
+            ComputeForRule(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15, 7);
+            ComputeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
+            ComputeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
+            ComputeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
+            ComputeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
+            ComputeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
+            ComputeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
+            ComputeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
+            ComputeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
+            ComputeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
+            ComputeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
+*/
+
             VectorType xGK;
             VectorType wGK;
             VectorType xG;
@@ -321,52 +379,6 @@ public:
             compute = false;
         }
     }
-
-    static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
-    static Array<Scalar, 8, 1> weightsGaussKronrod15;
-    static Array<Scalar, 4, 1> weightsGauss15;
-
-    static Array<Scalar, 11, 1> abscissaeGaussKronrod21;
-    static Array<Scalar, 11, 1> weightsGaussKronrod21;
-    static Array<Scalar, 5, 1> weightsGauss21;
-
-    static Array<Scalar, 16, 1> abscissaeGaussKronrod31;
-    static Array<Scalar, 16, 1> weightsGaussKronrod31;
-    static Array<Scalar, 8, 1> weightsGauss31;
-
-    static Array<Scalar, 21, 1> abscissaeGaussKronrod41;
-    static Array<Scalar, 21, 1> weightsGaussKronrod41;
-    static Array<Scalar, 10, 1> weightsGauss41;
-
-    static Array<Scalar, 26, 1> abscissaeGaussKronrod51;
-    static Array<Scalar, 26, 1> weightsGaussKronrod51;
-    static Array<Scalar, 13, 1> weightsGauss51;
-
-    static Array<Scalar, 31, 1> abscissaeGaussKronrod61;
-    static Array<Scalar, 31, 1> weightsGaussKronrod61;
-    static Array<Scalar, 15, 1> weightsGauss61;
-
-    static Array<Scalar, 36, 1> abscissaeGaussKronrod71;
-    static Array<Scalar, 36, 1> weightsGaussKronrod71;
-    static Array<Scalar, 18, 1> weightsGauss71;
-
-    static Array<Scalar, 41, 1> abscissaeGaussKronrod81;
-    static Array<Scalar, 41, 1> weightsGaussKronrod81;
-    static Array<Scalar, 20, 1> weightsGauss81;
-
-    static Array<Scalar, 46, 1> abscissaeGaussKronrod91;
-    static Array<Scalar, 46, 1> weightsGaussKronrod91;
-    static Array<Scalar, 23, 1> weightsGauss91;
-
-    static Array<Scalar, 51, 1> abscissaeGaussKronrod101;
-    static Array<Scalar, 51, 1> weightsGaussKronrod101;
-    static Array<Scalar, 25, 1> weightsGauss101;
-
-    static Array<Scalar, 101, 1> abscissaeGaussKronrod201;
-    static Array<Scalar, 101, 1> weightsGaussKronrod201;
-    static Array<Scalar, 50, 1> weightsGauss201;
-
-    static bool compute;
 };
 
 template <typename Scalar>
