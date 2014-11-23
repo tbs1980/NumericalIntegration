@@ -46,7 +46,8 @@ public:
     GaussKronrod81 = 8,    /**<  Use  40, 81 points.  */
     GaussKronrod91 = 9,    /**<  Use  45, 91 points.  */
     GaussKronrod101 = 10,  /**<  Use  50, 101 points. */
-    GaussKronrod201 = 11   /**<  Use 100, 201 points. */
+    GaussKronrod121 = 11,  /**<  Use  60, 121 points. */
+    GaussKronrod201 = 12   /**<  Use 100, 201 points. */
   };
 
   /**

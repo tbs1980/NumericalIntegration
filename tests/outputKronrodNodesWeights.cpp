@@ -567,6 +567,61 @@ int test_values()
         }
     }
 
+    //--------121--------//
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 61, 1> QuadratureKronrod<Scalar>::abscissaeGaussKronrod121 ="
+        <<"\n  (Array<Scalar, 61, 1>() <<\n";
+
+    for(size_t i=0;i<61;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGaussKronrod121(i);
+
+        if(i<60)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 61, 1> QuadratureKronrod<Scalar>::weightsGaussKronrod121 ="
+        <<"\n  (Array<Scalar, 61, 1>() <<\n";
+    
+    for(size_t i=0;i<61;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGaussKronrod121(i);
+
+        if(i<60)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+    
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 30, 1> QuadratureKronrod<Scalar>::weightsGauss121 ="
+        <<"\n  (Array<Scalar, 30, 1>() <<\n";
+
+    for(size_t i=0;i<30;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGauss121(i);
+
+        if(i<29)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
     //--------201--------//
     fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 101, 1> QuadratureKronrod<Scalar>::abscissaeGaussKronrod201 ="

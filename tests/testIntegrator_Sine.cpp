@@ -13,7 +13,7 @@ Scalar desiredRelativeError()
 template <typename Scalar>
 typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
 {
-  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[11] =
+  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
       Eigen::Integrator<Scalar>::GaussKronrod15,
       Eigen::Integrator<Scalar>::GaussKronrod21,
@@ -25,6 +25,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t 
       Eigen::Integrator<Scalar>::GaussKronrod81,
       Eigen::Integrator<Scalar>::GaussKronrod91,
       Eigen::Integrator<Scalar>::GaussKronrod101,
+      Eigen::Integrator<Scalar>::GaussKronrod121,
       Eigen::Integrator<Scalar>::GaussKronrod201
     };
 
@@ -66,7 +67,7 @@ int test_sine(void)
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
-    const size_t numKeys = 11;
+    const size_t numKeys = 12;
 
     for (size_t i = 0; i < numKeys; ++i)
     {
