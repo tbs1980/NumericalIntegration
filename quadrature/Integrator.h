@@ -197,8 +197,8 @@ public:
 
       if (defAb1 != error1 && defAb2 != error2)
       {
-          if (fabs(m_integralList[maxErrorIndex] - area12) <= fabs(area12) * desiredRelativeError
-             && error12 >= errorMax * Scalar(1.-desiredRelativeError))
+          if (fabs(m_integralList[maxErrorIndex] - area12) <= fabs(area12) * Scalar(1.e-5)
+              && error12 >= errorMax * Scalar(.99))
         {
           ++roundOff1;
         }
@@ -221,7 +221,7 @@ public:
           m_errorCode = 1;
         }
         // Test for roundoff error and set error flag.
-        else if (roundOff1 >= 6 || roundOff2 >= 50)
+        else if (roundOff1 >= 6 || roundOff2 >= 20)
         {
           m_errorCode = 2;
         }
