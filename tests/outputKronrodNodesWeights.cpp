@@ -17,7 +17,7 @@ int test_values()
 
     int outputDigits = 80;
     std::cout<<std::fixed;
-
+/*
     //--------15--------//
     std::cout<<"\nGaussKronrod15 \n"<<std::endl;
     for(size_t i=0;i<8;++i)
@@ -132,7 +132,7 @@ int test_values()
         std::cout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGauss61(i)<<","<<std::endl;
     }
 
-    /*
+
     //--------71--------//
     std::cout<<"\nGaussKronrod71 \n"<<std::endl;
     for(size_t i=0;i<36;++i)
@@ -189,7 +189,7 @@ int test_values()
     {
         std::cout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGauss91(i)<<","<<std::endl;
     }
-
+*/
     //--------101--------//
     std::cout<<"\nGaussKronrod101 \n"<<std::endl;
     for(size_t i=0;i<51;++i)
@@ -227,7 +227,6 @@ int test_values()
     {
         std::cout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGauss201(i)<<","<<std::endl;
     }
-    */
 
     return EXIT_SUCCESS;
 }

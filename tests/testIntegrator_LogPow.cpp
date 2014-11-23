@@ -104,16 +104,26 @@ int test_logpow(void)
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                           
                 std::cout << "Success!" << std::endl;
-                return EXIT_SUCCESS;
             }
+        }
+
+        if(success)    
+        {
+          std::cout << std::endl << "Test Succeeded!!!!  WoooHooooo!!!!  Great Work!!!!" << std::endl;
+          return EXIT_SUCCESS;
         }
     }
 
     if (!success)
     {
         std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
+        return EXIT_FAILURE;
     }
-    return EXIT_FAILURE;
+    else
+    {
+      std::cout << std::endl << "Test Succeeded!!!!  WoooHooooo!!!!  Great Work!!!!" << std::endl;
+      return EXIT_SUCCESS;
+    }
 }
 
 int main(void)
