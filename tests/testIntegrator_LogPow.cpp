@@ -1,6 +1,7 @@
 #include <NIHeaders.h>
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 
 template <typename Scalar>
@@ -57,7 +58,11 @@ public:
 
 int test_logpow(void)
 {
+    ofstream fout;
+    fout.open("LogPow_integration_test_output.txt");
+
     std::cout<<"Testing Int [0->1] x^a*log(1/x) = 1/(a+1)^2"<<std::endl;
+
     //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
@@ -90,40 +95,46 @@ int test_logpow(void)
 
             if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
             {
-                std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-                std::cout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
+                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
-                //return EXIT_FAILURE;
             }
             else
             {
-                std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                           
-                std::cout << "Success!" << std::endl;
+                fout << "  Success!\n" << std::endl;
             }
         }
 
         if(success)    
         {
-          std::cout << std::endl << "Test Succeeded!!!!  WoooHooooo!!!!  Great Work!!!!" << std::endl;
+          fout << "\n  Test Succeeded!\n" << std::endl;
+          fout.close();
           return EXIT_SUCCESS;
+        }
+        else
+        {
+          fout <<"\n  Test Failed.\n" << std::endl;
         }
     }
 
-    if (!success)
+    fout.close();
+
+    if (success)
     {
-        std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
-        return EXIT_FAILURE;
+      std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+      return EXIT_SUCCESS;
     }
     else
     {
-      std::cout << std::endl << "Test Succeeded!!!!  WoooHooooo!!!!  Great Work!!!!" << std::endl;
-      return EXIT_SUCCESS;
+      std::cout << std::endl << "  Test Failed.\n" << std::endl;
+      return EXIT_FAILURE;
     }
 }
 

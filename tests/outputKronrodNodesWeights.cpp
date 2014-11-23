@@ -623,7 +623,7 @@ int test_values()
     }
 
     fout.close();
-    std::cout<<std::endl<<"Kronrod Nodes and Weights written to file \"KronrodNodesAndWeights.txt\"\n\n.";
+    std::cout<<std::endl<<"  Kronrod Nodes and Weights written to file \"KronrodNodesAndWeights.txt\"\n\n.";
 
     return EXIT_SUCCESS;
 }
