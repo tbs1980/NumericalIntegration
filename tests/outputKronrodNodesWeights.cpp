@@ -10,12 +10,12 @@ int test_values()
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(512);
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
     QuadratureKronrodValuesType::ComputeNodesAndWeights();
 
-    int outputDigits = 120;
+    int outputDigits = 256;
     ofstream fout;
     fout.open("KronrodNodesAndWeights.txt");
 

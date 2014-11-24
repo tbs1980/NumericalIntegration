@@ -71,7 +71,7 @@ int test_peak(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(80);
+    Scalar::set_default_prec(6);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;

@@ -68,7 +68,7 @@ int test_logpow(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(80);
+    Scalar::set_default_prec(254);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;

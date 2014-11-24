@@ -55,7 +55,7 @@ int test_sine(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(80);
+    Scalar::set_default_prec(90);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
