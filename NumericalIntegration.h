@@ -3,9 +3,9 @@
 //
 // Development work based on work from QUADPACK, Robert Piessens, et al,
 // and original work by Dirk Laurie, Walter Gautschi, with support by work
-// from John Burkardt. Code porting, multiprecision templating, and unit 
-// tests created by Pavel Holoborodko, Sreekumar Thaithara Balan, Mark Sauder,
-// and Matt Beall 2014
+// from John Burkardt. 
+// Code porting, multiprecision templating, and unit tests created by 
+// Pavel Holoborodko, Sreekumar Thaithara Balan, Mark Sauder, and Matt Beall 2014
 //
 // This Source Code Form is subject to the terms of the Mozilla
 // Public License v. 2.0. If a copy of the MPL was not distributed

@@ -508,6 +508,12 @@ private:
         QuadratureKronrod<Scalar>::weightsGaussKronrod101, QuadratureKronrod<Scalar>::weightsGauss101,
         f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
 
+    case GaussKronrod121:
+      return quadratureKronrodHelper(
+        QuadratureKronrod<Scalar>::abscissaeGaussKronrod101,
+        QuadratureKronrod<Scalar>::weightsGaussKronrod101, QuadratureKronrod<Scalar>::weightsGauss101,
+        f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+
     case GaussKronrod201:
       return quadratureKronrodHelper(
         QuadratureKronrod<Scalar>::abscissaeGaussKronrod201,
