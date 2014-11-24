@@ -15,44 +15,44 @@ namespace Eigen
  *        Because of symmetry, only the positive abscissae and their
  *        corresponding weights are given.
  *
- * \var abscissaeGaussKronrod15  The abscissae of the  15 point kronrod rule.
- * \var abscissaeGaussKronrod21  The abscissae of the  21 point kronrod rule.
- * \var abscissaeGaussKronrod31  The abscissae of the  31 point kronrod rule.
- * \var abscissaeGaussKronrod41  The abscissae of the  41 point kronrod rule.
- * \var abscissaeGaussKronrod51  The abscissae of the  51 point kronrod rule.
- * \var abscissaeGaussKronrod61  The abscissae of the  61 point kronrod rule.
- * \var abscissaeGaussKronrod71  The abscissae of the  71 point kronrod rule.
- * \var abscissaeGaussKronrod81  The abscissae of the  81 point kronrod rule.
- * \var abscissaeGaussKronrod91  The abscissae of the  91 point kronrod rule.
- * \var abscissaeGaussKronrod101 The abscissae of the 101 point kronrod rule.
- * \var abscissaeGaussKronrod121 The abscissae of the 121 point kronrod rule.
- * \var abscissaeGaussKronrod201 The abscissae of the 201 point kronrod rule.
+ * \param abscissaeGaussKronrod15  The abscissae of the  15 point kronrod rule.
+ * \param abscissaeGaussKronrod21  The abscissae of the  21 point kronrod rule.
+ * \param abscissaeGaussKronrod31  The abscissae of the  31 point kronrod rule.
+ * \param abscissaeGaussKronrod41  The abscissae of the  41 point kronrod rule.
+ * \param abscissaeGaussKronrod51  The abscissae of the  51 point kronrod rule.
+ * \param abscissaeGaussKronrod61  The abscissae of the  61 point kronrod rule.
+ * \param abscissaeGaussKronrod71  The abscissae of the  71 point kronrod rule.
+ * \param abscissaeGaussKronrod81  The abscissae of the  81 point kronrod rule.
+ * \param abscissaeGaussKronrod91  The abscissae of the  91 point kronrod rule.
+ * \param abscissaeGaussKronrod101 The abscissae of the 101 point kronrod rule.
+ * \param abscissaeGaussKronrod121 The abscissae of the 121 point kronrod rule.
+ * \param abscissaeGaussKronrod201 The abscissae of the 201 point kronrod rule.
  *
- * \var weightsGaussKronrod15  The weights of the  15 point kronrod rule.
- * \var weightsGaussKronrod21  The weights of the  21 point kronrod rule.
- * \var weightsGaussKronrod31  The weights of the  31 point kronrod rule.
- * \var weightsGaussKronrod41  The weights of the  41 point kronrod rule.
- * \var weightsGaussKronrod51  The weights of the  51 point kronrod rule.
- * \var weightsGaussKronrod61  The weights of the  61 point kronrod rule.
- * \var weightsGaussKronrod71  The weights of the  71 point kronrod rule.
- * \var weightsGaussKronrod81  The weights of the  81 point kronrod rule.
- * \var weightsGaussKronrod91  The weights of the  91 point kronrod rule.
- * \var weightsGaussKronrod101 The weights of the 101 point kronrod rule.
- * \var weightsGaussKronrod121 The weights of the 121 point kronrod rule.
- * \var weightsGaussKronrod201 The weights of the 201 point kronrod rule.
+ * \param weightsGaussKronrod15  The weights of the  15 point kronrod rule.
+ * \param weightsGaussKronrod21  The weights of the  21 point kronrod rule.
+ * \param weightsGaussKronrod31  The weights of the  31 point kronrod rule.
+ * \param weightsGaussKronrod41  The weights of the  41 point kronrod rule.
+ * \param weightsGaussKronrod51  The weights of the  51 point kronrod rule.
+ * \param weightsGaussKronrod61  The weights of the  61 point kronrod rule.
+ * \param weightsGaussKronrod71  The weights of the  71 point kronrod rule.
+ * \param weightsGaussKronrod81  The weights of the  81 point kronrod rule.
+ * \param weightsGaussKronrod91  The weights of the  91 point kronrod rule.
+ * \param weightsGaussKronrod101 The weights of the 101 point kronrod rule.
+ * \param weightsGaussKronrod121 The weights of the 121 point kronrod rule.
+ * \param weightsGaussKronrod201 The weights of the 201 point kronrod rule.
  *
- * \var weightsGauss15  The weights of the   7 point gauss rule.
- * \var weightsGauss21  The weights of the  10 point gauss rule.
- * \var weightsGauss31  The weights of the  15 point gauss rule.
- * \var weightsGauss41  The weights of the  20 point gauss rule.
- * \var weightsGauss51  The weights of the  25 point gauss rule.
- * \var weightsGauss61  The weights of the  30 point gauss rule.
- * \var weightsGauss71  The weights of the  35 point gauss rule.
- * \var weightsGauss81  The weights of the  40 point gauss rule.
- * \var weightsGauss91  The weights of the  45 point gauss rule.
- * \var weightsGauss101 The weights of the  50 point gauss rule.
- * \var weightsGauss121 The weights of the  60 point gauss rule.
- * \var weightsGauss201 The weights of the 100 point gauss rule.
+ * \param weightsGauss15  The weights of the   7 point gauss rule.
+ * \param weightsGauss21  The weights of the  10 point gauss rule.
+ * \param weightsGauss31  The weights of the  15 point gauss rule.
+ * \param weightsGauss41  The weights of the  20 point gauss rule.
+ * \param weightsGauss51  The weights of the  25 point gauss rule.
+ * \param weightsGauss61  The weights of the  30 point gauss rule.
+ * \param weightsGauss71  The weights of the  35 point gauss rule.
+ * \param weightsGauss81  The weights of the  40 point gauss rule.
+ * \param weightsGauss91  The weights of the  45 point gauss rule.
+ * \param weightsGauss101 The weights of the  50 point gauss rule.
+ * \param weightsGauss121 The weights of the  60 point gauss rule.
+ * \param weightsGauss201 The weights of the 100 point gauss rule.
  */
 
 template <typename Scalar>

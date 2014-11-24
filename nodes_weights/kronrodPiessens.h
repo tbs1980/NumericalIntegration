@@ -74,7 +74,7 @@ namespace Kronrod
 *    the Gauss-Kronrod and Gauss rules, respectively.
 *
 * Input Parameters:
-* @param n, the order of the Gauss rule.
+* \param n, the order of the Gauss rule.
 *
 * Return Parameters:
 * \return abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.

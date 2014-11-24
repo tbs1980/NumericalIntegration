@@ -84,9 +84,9 @@ public:
    * \param lowerLimit The lower limit of integration.
    * \param upperLimit The upper limit of integration.
    * \param desiredAbsoluteError The absolute accuracy requested.
-   * \param desiredRelativeError The relative accuracy requested. If desiredAbsoluteError <= 0
-   *        and desiredRelativeError < 50 * machinePrecision, the routine will end with
-   *        errorCode = 6.
+   * \param desiredRelativeError The relative accuracy requested.
+   *        If desiredAbsoluteError <= 0 and desiredRelativeError < 50 * machinePrecision, 
+   *        the routine will end with errorCode = 6.
    * \param quadratureRule The local Gauss-Kronrod quadrature rule to use.
    *
    * \returns The approximation to the integral.
@@ -427,8 +427,8 @@ private:
    *             fabs(f - I/(upperLimit - lowerLimit)).
    *
    * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
-   *          41, 51, or 61-point kronrod rule obtained by optimal addition of abscissae to the 7,
-   *          10, 15, 20, 25, or 30-point Gauss rule.
+   *          41, 51, 61, 71, 81, 91, 101, 121, 201-point kronrod rule obtained by optimal addition 
+   *          of abscissae to the 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100-point Gauss rule.
    *
    * \detail This series of functions represents a priority queue data structure:
    *         - Apply Gauss-Kronrod on the whole initial interval and estimate the error.
