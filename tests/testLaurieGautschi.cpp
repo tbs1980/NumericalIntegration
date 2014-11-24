@@ -19,8 +19,8 @@ int compare_codes(void)
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
 
-    const IndexType N = 60;
-    const int outputIntegers = 120;
+    const IndexType N = 100;
+    const int outputIntegers = 256;
 
     VectorType xGK = VectorType::Zero(2*N+1);
     VectorType wGK = VectorType::Zero(2*N+1);
@@ -35,25 +35,25 @@ int compare_codes(void)
     fout << "\nKronrod Nodes\n";
     for(IndexType i = 0; i < xGK.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << xGK(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << xGK(i) << ",\n";
     }
 
-    fout << "\nKronrod Weights" << std::endl;
+    fout << "\nKronrod Weights\n";
     for(IndexType i = 0; i < wGK.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << wGK(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << wGK(i) << ",\n";
     }
 
-    fout << "\nGauss Nodes" << std::endl;
+    fout << "\nGauss Nodes\n";
     for(IndexType i = 0; i < xG.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << xG(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << xG(i) << ",\n";
     }
     
-    fout << "\nGauss Weights" << std::endl;
+    fout << "\nGauss Weights\n";
     for(IndexType i = 0; i < xG.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << wG(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << wG(i) << ",\n";
     }
 
     Eigen::Array<Scalar, Dynamic, 1> xGKPiessens;
@@ -74,29 +74,29 @@ int compare_codes(void)
         wGK(wGK.rows()-1-i) = wGKPiessens(i);
     }
 
-    fout << "\nPiessens Calculations" << std::endl;
+    fout << "\nPiessens Calculations\n";
     fout << "\nKronrod Nodes" << std::endl;
     for(IndexType i = 0; i < xGK.rows(); ++i)
     {
-       fout << std::setprecision(outputIntegers) << xGK(i) << std::endl;
+       fout << std::setprecision(outputIntegers) << xGK(i) << ",\n";
     }
     
     fout << "\nKronrod Weights" << std::endl;
     for(IndexType i = 0; i < xGK.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << wGK(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << wGK(i) << ",\n";
     }
 
-    fout << "\n(Piessens' method does not calculate the Gauss Nodes)" << std::endl;
+    fout << "\n(Piessens' method does not calculate the Gauss Nodes)\n";
     fout << "\nGauss Weights" << std::endl;
-    for(IndexType i = wGPiessens.rows() - 1; i >= 0; --i)
+    for(IndexType i = 0; i < wGPiessens.rows(); ++i)
     {
-        fout << std::setprecision(outputIntegers) << wGPiessens(i) << std::endl;
+        fout << std::setprecision(outputIntegers) << wGPiessens(i) << ",\n";
     }
 
     fout.close();
 
-    std::cout << "\n Node Calculations successfully writte to \"SingleRuleKronrodNodesAndWeights.txt\"." << std::endl;
+    std::cout << "\nNode Calculations successfully written to \"SingleRuleKronrodNodesAndWeights.txt\"." << std::endl;
 
     return EXIT_SUCCESS;
 }
