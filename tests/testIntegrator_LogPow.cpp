@@ -68,7 +68,7 @@ int test_logpow(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(80);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
@@ -76,7 +76,7 @@ int test_logpow(void)
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(200);
+    IntegratorType eigenIntegrator(500);
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
@@ -88,6 +88,7 @@ int test_logpow(void)
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {
+            success = true;
             integrandLogPowFunctor.setAlpha(alpha);
 
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
@@ -117,7 +118,7 @@ int test_logpow(void)
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();
-          return EXIT_SUCCESS;
+          break;
         }
         else
         {

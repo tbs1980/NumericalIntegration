@@ -65,13 +65,13 @@ int test_peak(void)
     ofstream fout;
     fout.open("Peak_integration_test_output.txt");
 
-    std::cout<<"Testing Int [0->1] 4^-alpah/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
+    std::cout<<"Testing Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
 
     //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(80);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
@@ -79,7 +79,7 @@ int test_peak(void)
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(200);
+    IntegratorType eigenIntegrator(500);
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
@@ -91,6 +91,7 @@ int test_peak(void)
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {
+            success = true;
             integrandPeakFunctor.setAlpha(alpha);
 
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPeakFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
@@ -120,7 +121,7 @@ int test_peak(void)
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();
-          return EXIT_SUCCESS;
+          break;
         }
         else
         {

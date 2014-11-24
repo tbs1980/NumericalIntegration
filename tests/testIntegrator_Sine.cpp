@@ -55,7 +55,7 @@ int test_sine(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(80);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
@@ -63,7 +63,7 @@ int test_sine(void)
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(200);
+    IntegratorType eigenIntegrator(500);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
@@ -71,6 +71,8 @@ int test_sine(void)
 
     for (size_t i = 0; i < numKeys; ++i)
     {
+        success = true;
+
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI),
@@ -101,7 +103,7 @@ int test_sine(void)
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();
-          return EXIT_SUCCESS;
+          break;
         }
         else
         {
