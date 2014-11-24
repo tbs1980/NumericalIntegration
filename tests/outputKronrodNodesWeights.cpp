@@ -10,7 +10,7 @@ int test_values()
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(512);
+    Scalar::set_default_prec(256);
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
     QuadratureKronrodValuesType::ComputeNodesAndWeights();

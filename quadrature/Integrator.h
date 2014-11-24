@@ -715,7 +715,8 @@ private:
    * errorCode = 3 Extremely bad integrand behaviour occurs at points in the integration interval.
    * errorCode = 6 The input is invalid, because (desiredAbsoluteError <= 0 and
    *               desiredRealtiveError < 50 * relativeMachineAccuracy, or
-   *               m_maxSubintervals < 1. \todo make relativeMachineAccuracy a member variable.
+   *               m_maxSubintervals < 1. 
+   * \todo make relativeMachineAccuracy a member variable.
    */
   int m_errorCode;
 

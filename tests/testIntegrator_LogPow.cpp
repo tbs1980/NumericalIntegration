@@ -110,7 +110,7 @@ int test_logpow(void)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                           
-                fout << "  Success!\n" << std::endl;
+                fout << "Success!\n";
             }
         }
 
