@@ -83,6 +83,7 @@ int test_peak(void)
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
+    int counter = 0;
     const size_t numKeys = 12;
 
     for (size_t i = 0; i < numKeys; ++i)
@@ -114,10 +115,11 @@ int test_peak(void)
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                           
                 fout << "Success!\n";
+                counter++;
             }
         }
         
-        if(success)    
+        if(success && counter == 18)    
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();

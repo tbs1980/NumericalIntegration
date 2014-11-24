@@ -68,7 +68,7 @@ int test_logpow(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(113);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
@@ -80,6 +80,7 @@ int test_logpow(void)
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
+    int counter = 0;
     const size_t numKeys = 12;
 
     for (size_t i = 0; i < numKeys; ++i)
@@ -111,10 +112,11 @@ int test_logpow(void)
                           << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
                           
                 fout << "Success!\n";
+                counter++;
             }
         }
 
-        if(success)    
+        if(success && counter == 18)    
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();
