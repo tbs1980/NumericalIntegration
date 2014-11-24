@@ -125,11 +125,10 @@ public:
 
     static bool compute;
 
-    void computeForRule(VectorType& kronrodAbscissae, VectorType& kronrodWeights,
-            VectorType& gaussAbscissae, VectorType& gaussWeights, int gaussRule)
+    template <int N>
+    void computeForRule(Array<Scalar, 2*N+1, 1>& kronrodAbscissae, Array<Scalar, 2*N+1, 1>& kronrodWeights,
+                        Array<Scalar, N, 1>& gaussAbscissae, Array<Scalar, N, 1>& gaussWeights)
     {
-        int N = gaussRule;
-
         VectorType xGK = VectorType::Zero(2*N+1);
         VectorType wGK = VectorType::Zero(2*N+1);
         VectorType xG = VectorType::Zero(N);
@@ -155,21 +154,20 @@ public:
     {
         if(compute)
         {
-/*
-            computeForRule(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15, 7);
-            computeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
-            computeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
-            computeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
-            computeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
-            computeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
-            computeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
-            computeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
-            computeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
-            computeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
-            computeForRule(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss101, 60);
-            computeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
-*/
 
+            computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
+            // computeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
+            // computeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
+            // computeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
+            // computeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
+            // computeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
+            // computeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
+            // computeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
+            // computeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
+            // computeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
+            // computeForRule(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss101, 60);
+            // computeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
+/*
             VectorType xGK;
             VectorType wGK;
             VectorType xG;
@@ -415,7 +413,7 @@ public:
             {
                 weightsGauss201(i) = wG(i);
             }
-
+*/
             compute = false;
         }
     }
