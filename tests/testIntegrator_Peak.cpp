@@ -77,7 +77,7 @@ int test_peak(void)
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(500);
     IntegrandPeakFunctorType integrandPeakFunctor;

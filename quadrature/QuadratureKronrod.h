@@ -113,7 +113,7 @@ public:
 
     static bool compute;
 /*
-    void ComputeForRule(VectorType& kronrodAbscissae, VectorType& kronrodWeights,
+    void computeForRule(VectorType& kronrodAbscissae, VectorType& kronrodWeights,
             VectorType& gaussAbscissae, VectorType& gaussWeights, int gaussRule)
     {
         int N = gaussRule;
@@ -126,36 +126,36 @@ public:
         LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
         LaurieGautschiPolicy::mpgauss(N,xG,wG);
         
-        for(size_t i=2*N; i>=N; --i)
+        for(size_t i=0; i<=N; ++i)
         {
-            kronrodAbscissae(2*N-i) = xGK(i);
-            kronrodWeights(2*N-i) =  wGK(i);
+            kronrodAbscissae(i) = -xGK(i);
+            kronrodWeights(i) =  wGK(i);
         }
 
-        for(size_t i=N-1; i>=N/2; --i)
+        for(size_t i=0; i<=N/2; ++i)
         {
-            gaussAbscissae(N-1-i) = xG(i);
-            gaussWeights(N-1-i) = wG(i);
+            gaussAbscissae(i) = xG(i);
+            gaussWeights(i) = wG(i);
         }
     }
 */
-    static void ComputeNodesAndWeights()
+    static void computeNodesAndWeights()
     {
         if(compute)
         {
 /*
-            ComputeForRule(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15, 7);
-            ComputeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
-            ComputeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
-            ComputeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
-            ComputeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
-            ComputeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
-            ComputeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
-            ComputeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
-            ComputeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
-            ComputeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
-            ComputeForRule(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss101, 60);
-            ComputeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
+            computeForRule(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15, 7);
+            computeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
+            computeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
+            computeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
+            computeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
+            computeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
+            computeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
+            computeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
+            computeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
+            computeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
+            computeForRule(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss101, 60);
+            computeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
 */
 
             VectorType xGK;

@@ -74,7 +74,7 @@ int test_logpow(void)
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
     IntegrandLogPowFunctorType integrandLogPowFunctor;

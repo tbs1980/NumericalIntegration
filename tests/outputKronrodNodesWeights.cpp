@@ -13,7 +13,7 @@ int test_values()
     Scalar::set_default_prec(256);
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
-    QuadratureKronrodValuesType::ComputeNodesAndWeights();
+    QuadratureKronrodValuesType::computeNodesAndWeights();
 
     int outputDigits = 256;
     ofstream fout;

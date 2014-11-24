@@ -61,7 +61,7 @@ int test_sine(void)
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
     IntegrandSineFunctorType integrandSineFunctor;
