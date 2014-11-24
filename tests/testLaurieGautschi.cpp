@@ -96,7 +96,7 @@ int compare_codes(void)
 
     fout.close();
 
-    std::cout << "  Node Calculations successfully writte to \"SingleRuleKronrodNodesAndWeights.txt\"." << std::endl;
+    std::cout << "\n Node Calculations successfully writte to \"SingleRuleKronrodNodesAndWeights.txt\"." << std::endl;
 
     return EXIT_SUCCESS;
 }

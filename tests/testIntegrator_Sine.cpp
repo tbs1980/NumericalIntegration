@@ -55,7 +55,7 @@ int test_sine(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(90);
+    Scalar::set_default_prec(113);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
@@ -63,7 +63,7 @@ int test_sine(void)
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(500);
+    IntegratorType eigenIntegrator(256);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
