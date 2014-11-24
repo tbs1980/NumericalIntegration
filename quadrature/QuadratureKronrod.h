@@ -126,8 +126,8 @@ public:
     static bool compute;
 
     template <int N>
-    void computeForRule(Array<Scalar, 2*N+1, 1>& kronrodAbscissae, Array<Scalar, 2*N+1, 1>& kronrodWeights,
-                        Array<Scalar, N, 1>& gaussAbscissae, Array<Scalar, N, 1>& gaussWeights)
+    static void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,
+                        Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)
     {
         VectorType xGK = VectorType::Zero(2*N+1);
         VectorType wGK = VectorType::Zero(2*N+1);
@@ -136,7 +136,7 @@ public:
 
         LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
         LaurieGautschiPolicy::mpgauss(N,xG,wG);
-        
+
         for(size_t i=0; i<=N; ++i)
         {
             kronrodAbscissae(i) = -xGK(i);
@@ -155,7 +155,7 @@ public:
         if(compute)
         {
 
-            computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
+          QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
             // computeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
             // computeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
             // computeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
@@ -173,7 +173,7 @@ public:
             VectorType xG;
             VectorType wG;
             int N;
-            
+
             //--------------15--------------//
             N = 7;
             xGK = VectorType::Zero(2*N+1);
@@ -183,7 +183,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod15(i) = -xGK(i);
@@ -203,7 +203,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod21(i) = -xGK(i);
@@ -223,7 +223,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod31(i) = -xGK(i);
@@ -243,7 +243,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod41(i) = -xGK(i);
@@ -263,7 +263,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod51(i) = -xGK(i);
@@ -283,7 +283,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod61(i) = -xGK(i);
@@ -303,7 +303,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod71(i) = -xGK(i);
@@ -323,7 +323,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod81(i) = -xGK(i);
@@ -343,7 +343,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod91(i) = -xGK(i);
@@ -363,7 +363,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod101(i) = -xGK(i);
@@ -383,7 +383,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod121(i) = -xGK(i);
@@ -403,7 +403,7 @@ public:
 
             LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
             LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
+
             for(size_t i=0; i<=N; ++i)
             {
                 abscissaeGaussKronrod201(i) = -xGK(i);
