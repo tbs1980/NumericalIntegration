@@ -251,7 +251,7 @@ namespace Kronrod {
 
             //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            assert( fabs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
+            assert( std::abs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
 
             MatrixType J=MatrixType::Zero(2*N+1,2*N+1);
 

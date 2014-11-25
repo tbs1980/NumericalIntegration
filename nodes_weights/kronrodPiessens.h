@@ -1,5 +1,5 @@
 /**
-* Kronrod routines
+* Piessens' implementation of the Kronrod calculations
 */
 
 #include <Eigen/Dense>
@@ -10,15 +10,6 @@
 
 using namespace Eigen;
 using namespace std;
-
-/*
-template <typename Scalar>
-class Kronrod
-{
-public:
-  typedef Scalar_ Scalar;
-}
-*/
 
 namespace Kronrod
 {
