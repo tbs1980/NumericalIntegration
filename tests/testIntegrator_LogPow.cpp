@@ -59,7 +59,7 @@ public:
 
 int test_logpow(void)
 {
-    ofstream fout;
+    std::ofstream fout;
     fout.open("LogPow_integration_test_output.txt");
 
     std::cout<<"Testing Int [0->1] x^a*log(1/x) = 1/(a+1)^2"<<std::endl;

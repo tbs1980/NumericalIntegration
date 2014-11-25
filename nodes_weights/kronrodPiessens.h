@@ -9,7 +9,6 @@
 #include <iostream>
 
 using namespace Eigen;
-using namespace std;
 
 namespace Kronrod
 {
@@ -287,7 +286,7 @@ void Kronrod::abscWeightKronrod(
         // Identify non-convergence of the iterative solver after 50 iterations
         if (iter > iterationLimit)
         {
-            cout << "Newton-Raphson iterative abscissae solver failed.";
+            std::cout << "Newton-Raphson iterative abscissae solver failed.";
             return;
         }
     }
@@ -399,7 +398,7 @@ void Kronrod::abscWeightGauss(
         // Identify non-convergence of the iterative solver after 50 iterations
         if (iter > iterationLimit)
         {
-            cout << "Newton-Raphson iterative abscissae solver failed.";
+            std::cout << "Newton-Raphson iterative abscissae solver failed.";
             return;
         }
     }

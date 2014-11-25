@@ -62,7 +62,7 @@ private:
 
 int test_peak(void)
 {
-    ofstream fout;
+    std::ofstream fout;
     fout.open("Peak_integration_test_output.txt");
 
     std::cout<<"Testing Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;

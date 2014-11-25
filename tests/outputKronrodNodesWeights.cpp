@@ -16,7 +16,7 @@ int test_values()
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
     int outputDigits = 256;
-    ofstream fout;
+    std::ofstream fout;
     fout.open("KronrodNodesAndWeights.txt");
 
     //--------15--------//

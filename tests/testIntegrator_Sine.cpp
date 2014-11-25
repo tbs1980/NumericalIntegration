@@ -46,7 +46,7 @@ public:
 
 int test_sine(void)
 {
-    ofstream fout;
+    std::ofstream fout;
     fout.open("Sine_integration_test_output.txt");
 
     std::cout<<"Testing Int [0->Pi] sin(x) = 2"<<std::endl;

@@ -6,7 +6,7 @@
 
 int compare_codes(void)
 {
-    ofstream fout;
+    std::ofstream fout;
     fout.open("SingleRuleKronrodNodesAndWeights.txt");
 
     //typedef float Scalar;
