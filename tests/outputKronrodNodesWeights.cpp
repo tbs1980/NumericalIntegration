@@ -57,6 +57,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 4, 1> QuadratureKronrod<Scalar>::abscissaeGauss15 ="
+        <<"\n  (Array<Scalar, 4, 1>() <<\n";
+
+    for(size_t i=0;i<4;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss15(i);
+        
+        if(i<3)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 4, 1> QuadratureKronrod<Scalar>::weightsGauss15 ="
         <<"\n  (Array<Scalar, 4, 1>() <<\n";
 
@@ -102,6 +120,24 @@ int test_values()
         fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGaussKronrod21(i);
 
         if(i<10)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 5, 1> QuadratureKronrod<Scalar>::abscissaeGauss21 ="
+        <<"\n  (Array<Scalar, 5, 1>() <<\n";
+
+    for(size_t i=0;i<5;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss21(i);
+
+        if(i<4)
         {
             fout<<",\n";
         }
@@ -167,6 +203,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 8, 1> QuadratureKronrod<Scalar>::abscissaeGauss31 ="
+        <<"\n  (Array<Scalar, 8, 1>() <<\n";
+
+    for(size_t i=0;i<8;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss31(i);
+
+        if(i<7)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 8, 1> QuadratureKronrod<Scalar>::weightsGauss31 ="
         <<"\n  (Array<Scalar, 8, 1>() <<\n";
 
@@ -222,6 +276,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 10, 1> QuadratureKronrod<Scalar>::abscissaeGauss41 ="
+        <<"\n  (Array<Scalar, 10, 1>()  <<\n";
+
+    for(size_t i=0;i<10;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss41(i);
+
+        if(i<9)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 10, 1> QuadratureKronrod<Scalar>::weightsGauss41 ="
         <<"\n  (Array<Scalar, 10, 1>()  <<\n";
 
@@ -266,6 +338,24 @@ int test_values()
         fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGaussKronrod51(i);
 
         if(i<25)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 13, 1> QuadratureKronrod<Scalar>::abscissaeGauss51 ="
+        <<"\n  (Array<Scalar, 13, 1>() <<\n";
+
+    for(size_t i=0;i<13;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss51(i);
+
+        if(i<12)
         {
             fout<<",\n";
         }
@@ -331,6 +421,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 15, 1> QuadratureKronrod<Scalar>::abscissaeGauss61 ="
+        <<"\n  (Array<Scalar, 15, 1>() <<\n";
+
+    for(size_t i=0;i<15;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss61(i);
+
+        if(i<14)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 15, 1> QuadratureKronrod<Scalar>::weightsGauss61 ="
         <<"\n  (Array<Scalar, 15, 1>() <<\n";
 
@@ -386,6 +494,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 18, 1> QuadratureKronrod<Scalar>::abscissaeGauss71 ="
+        <<"\n  (Array<Scalar, 18, 1>() <<\n";
+
+    for(size_t i=0;i<18;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss71(i);
+
+        if(i<17)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 18, 1> QuadratureKronrod<Scalar>::weightsGauss71 ="
         <<"\n  (Array<Scalar, 18, 1>() <<\n";
 
@@ -430,6 +556,24 @@ int test_values()
         fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGaussKronrod81(i);
 
         if(i<40)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 20, 1> QuadratureKronrod<Scalar>::abscissaeGauss81 ="
+        <<"\n  (Array<Scalar, 20, 1>() <<\n";
+
+    for(size_t i=0;i<20;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss81(i);
+
+        if(i<19)
         {
             fout<<",\n";
         }
@@ -495,6 +639,24 @@ int test_values()
     }
 
     fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 23, 1> QuadratureKronrod<Scalar>::abscissaeGauss91 ="
+        <<"\n  (Array<Scalar, 23, 1>() <<\n";
+
+    for(size_t i=0;i<23;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss91(i);
+
+        if(i<22)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 23, 1> QuadratureKronrod<Scalar>::weightsGauss91 ="
         <<"\n  (Array<Scalar, 23, 1>() <<\n";
 
@@ -540,6 +702,24 @@ int test_values()
         fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::weightsGaussKronrod101(i);
 
         if(i<50)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 25, 1> QuadratureKronrod<Scalar>::abscissaeGauss101 ="
+        <<"\n  (Array<Scalar, 25, 1>() <<\n";
+
+    for(size_t i=0;i<25;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss101(i);
+
+        if(i<24)
         {
             fout<<",\n";
         }
@@ -603,7 +783,25 @@ int test_values()
             fout<<"\n  ).finished();\n\n";
         }
     }
-    
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 30, 1> QuadratureKronrod<Scalar>::abscissaeGauss121 ="
+        <<"\n  (Array<Scalar, 30, 1>() <<\n";
+
+    for(size_t i=0;i<30;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss121(i);
+
+        if(i<29)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
     fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 30, 1> QuadratureKronrod<Scalar>::weightsGauss121 ="
         <<"\n  (Array<Scalar, 30, 1>() <<\n";
@@ -658,7 +856,25 @@ int test_values()
             fout<<"\n  ).finished();\n\n";
         }
     }
-    
+
+    fout<<"template <typename Scalar>"
+        <<"\nArray<Scalar, 50, 1> QuadratureKronrod<Scalar>::abscissaeGauss201 ="
+        <<"\n  (Array<Scalar, 50, 1>() <<\n";
+
+    for(size_t i=0;i<50;++i)
+    {
+        fout<<std::setprecision(outputDigits)<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss201(i);
+
+        if(i<49)
+        {
+            fout<<",\n";
+        }
+        else
+        {
+            fout<<"\n  ).finished();\n\n";
+        }
+    }
+
     fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 50, 1> QuadratureKronrod<Scalar>::weightsGauss201 ="
         <<"\n  (Array<Scalar, 50, 1>() <<\n";
