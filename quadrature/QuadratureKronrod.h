@@ -171,13 +171,13 @@ public:
         LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
         LaurieGautschiPolicy::mpgauss(N,xG,wG);
 
-        for(size_t i=0; i<=N; ++i)
+        for(size_t i=0; i<N; ++i)
         {
             kronrodAbscissae(i) = -xGK(i);
             kronrodWeights(i) =  wGK(i);
         }
 
-        for(size_t i=0; i<=N/2; ++i)
+        for(size_t i=0; i<N/2; ++i)
         {
             gaussAbscissae(i) = -xG(i);
             gaussWeights(i) = wG(i);
