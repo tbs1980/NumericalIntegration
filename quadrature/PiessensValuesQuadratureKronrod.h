@@ -41,6 +41,19 @@ namespace Eigen
  * \param weightsGaussKronrod121 The weights of the 121 point kronrod rule.
  * \param weightsGaussKronrod201 The weights of the 201 point kronrod rule.
  *
+ * \param abscissaeGauss15  The abscissae of the   7 point gauss rule.
+ * \param abscissaeGauss21  The abscissae of the  10 point gauss rule.
+ * \param abscissaeGauss31  The abscissae of the  15 point gauss rule.
+ * \param abscissaeGauss41  The abscissae of the  20 point gauss rule.
+ * \param abscissaeGauss51  The abscissae of the  25 point gauss rule.
+ * \param abscissaeGauss61  The abscissae of the  30 point gauss rule.
+ * \param abscissaeGauss71  The abscissae of the  35 point gauss rule.
+ * \param abscissaeGauss81  The abscissae of the  40 point gauss rule.
+ * \param abscissaeGauss91  The abscissae of the  45 point gauss rule.
+ * \param abscissaeGauss101 The abscissae of the  50 point gauss rule.
+ * \param abscissaeGauss121 The abscissae of the  60 point gauss rule.
+ * \param abscissaeGauss201 The abscissae of the 100 point gauss rule.
+ *
  * \param weightsGauss15  The weights of the   7 point gauss rule.
  * \param weightsGauss21  The weights of the  10 point gauss rule.
  * \param weightsGauss31  The weights of the  15 point gauss rule.
@@ -62,62 +75,94 @@ public:
 
     static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
     static Array<Scalar, 8, 1> weightsGaussKronrod15;
+    static Array<Scalar, 4, 1> abscissaeGauss15;
     static Array<Scalar, 4, 1> weightsGauss15;
 
     static Array<Scalar, 11, 1> abscissaeGaussKronrod21;
     static Array<Scalar, 11, 1> weightsGaussKronrod21;
+    static Array<Scalar, 5, 1> abscissaeGauss21;
     static Array<Scalar, 5, 1> weightsGauss21;
 
     static Array<Scalar, 16, 1> abscissaeGaussKronrod31;
     static Array<Scalar, 16, 1> weightsGaussKronrod31;
+    static Array<Scalar, 8, 1> abscissaeGauss31;
     static Array<Scalar, 8, 1> weightsGauss31;
 
     static Array<Scalar, 21, 1> abscissaeGaussKronrod41;
     static Array<Scalar, 21, 1> weightsGaussKronrod41;
+    static Array<Scalar, 10, 1> abscissaeGauss41;
     static Array<Scalar, 10, 1> weightsGauss41;
 
     static Array<Scalar, 26, 1> abscissaeGaussKronrod51;
     static Array<Scalar, 26, 1> weightsGaussKronrod51;
+    static Array<Scalar, 13, 1> abscissaeGauss51;
     static Array<Scalar, 13, 1> weightsGauss51;
 
     static Array<Scalar, 31, 1> abscissaeGaussKronrod61;
     static Array<Scalar, 31, 1> weightsGaussKronrod61;
+    static Array<Scalar, 15, 1> abscissaeGauss61;
     static Array<Scalar, 15, 1> weightsGauss61;
 
     static Array<Scalar, 36, 1> abscissaeGaussKronrod71;
     static Array<Scalar, 36, 1> weightsGaussKronrod71;
+    static Array<Scalar, 18, 1> abscissaeGauss71;
     static Array<Scalar, 18, 1> weightsGauss71;
 
     static Array<Scalar, 41, 1> abscissaeGaussKronrod81;
     static Array<Scalar, 41, 1> weightsGaussKronrod81;
+    static Array<Scalar, 20, 1> abscissaeGauss81;
     static Array<Scalar, 20, 1> weightsGauss81;
 
     static Array<Scalar, 46, 1> abscissaeGaussKronrod91;
     static Array<Scalar, 46, 1> weightsGaussKronrod91;
+    static Array<Scalar, 23, 1> abscissaeGauss91;
     static Array<Scalar, 23, 1> weightsGauss91;
 
     static Array<Scalar, 51, 1> abscissaeGaussKronrod101;
     static Array<Scalar, 51, 1> weightsGaussKronrod101;
+    static Array<Scalar, 25, 1> abscissaeGauss101;
     static Array<Scalar, 25, 1> weightsGauss101;
 
     static Array<Scalar, 61, 1> abscissaeGaussKronrod121;
     static Array<Scalar, 61, 1> weightsGaussKronrod121;
+    static Array<Scalar, 30, 1> abscissaeGauss121;
     static Array<Scalar, 30, 1> weightsGauss121;
 
     static Array<Scalar, 101, 1> abscissaeGaussKronrod201;
     static Array<Scalar, 101, 1> weightsGaussKronrod201;
+    static Array<Scalar, 50, 1> abscissaeGauss201;
     static Array<Scalar, 50, 1> weightsGauss201;
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
     static bool compute;
-/*
-    void ComputeForRule(VectorType& kronrodAbscissae, VectorType& kronrodWeights,
-            VectorType& gaussAbscissae, VectorType& gaussWeights, int gaussRule)
+    
+    static void computeNodesAndWeights()
     {
-        int N = gaussRule;
+        if(compute)
+        {
+            QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
+            QuadratureKronrod::computeForRule<10>(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21);
+            QuadratureKronrod::computeForRule<15>(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31);
+            QuadratureKronrod::computeForRule<20>(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41);
+            QuadratureKronrod::computeForRule<25>(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51);
+            QuadratureKronrod::computeForRule<30>(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61);
+            QuadratureKronrod::computeForRule<35>(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71);
+            QuadratureKronrod::computeForRule<40>(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81);
+            QuadratureKronrod::computeForRule<45>(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91);
+            QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
+            QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
+            QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
 
+            compute = false;
+        }
+    }
+
+    template <int N>
+    static void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,
+                        Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)
+    {
         VectorType xGK = VectorType::Zero(2*N+1);
         VectorType wGK = VectorType::Zero(2*N+1);
         VectorType xG = VectorType::Zero(N);
@@ -125,286 +170,17 @@ public:
 
         LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
         LaurieGautschiPolicy::mpgauss(N,xG,wG);
-        
-        for(size_t i=2*N; i>=N; --i)
+
+        for(size_t i=0; i<N+1; ++i)
         {
-            kronrodAbscissae(2*N-i) = xGK(i);
-            kronrodWeights(2*N-i) =  wGK(i);
+            kronrodAbscissae(i) = -xGK(i);
+            kronrodWeights(i) =  wGK(i);
         }
 
-        for(size_t i=N-1; i>=N/2; --i)
+        for(size_t i=0; i<(N+1)/2; ++i)
         {
-            gaussAbscissae(N-1-i) = xG(i);
-            gaussWeights(N-1-i) = wG(i);
-        }
-    }
-*/
-    static void ComputeNodesAndWeights()
-    {
-        if(compute)
-        {
-/*
-            ComputeForRule(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15, 7);
-            ComputeForRule(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21, 10);
-            ComputeForRule(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31, 15);
-            ComputeForRule(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41, 20);
-            ComputeForRule(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51, 25);
-            ComputeForRule(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61, 30);
-            ComputeForRule(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71, 35);
-            ComputeForRule(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81, 40);
-            ComputeForRule(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91, 45);
-            ComputeForRule(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101, 50);
-            ComputeForRule(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss101, 60);
-            ComputeForRule(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201, 100);
-*/
-
-            VectorType xGK;
-            VectorType wGK;
-            VectorType xG;
-            VectorType wG;
-            int N;
-	        
-            //--------------15--------------//
-            N = 7;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod15(i) = -xGK(i);
-                weightsGaussKronrod15(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss15(i) = wG(i);
-            }
-
-	        //--------------21--------------//
-            N = 10;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod21(i) = -xGK(i);
-                weightsGaussKronrod21(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss21(i) = wG(i);
-            }
-
-	        //--------------31--------------//
-            N = 15;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod31(i) = -xGK(i);
-                weightsGaussKronrod31(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss31(i) = wG(i);
-            }
-
-	        //--------------41--------------//
-            N = 20;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod41(i) = -xGK(i);
-                weightsGaussKronrod41(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss41(i) = wG(i);
-            }
-
-	        //--------------51--------------//
-            N = 25;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod51(i) = -xGK(i);
-                weightsGaussKronrod51(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss51(i) = wG(i);
-            }
-
-	        //--------------61--------------//
-            N = 30;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod61(i) = -xGK(i);
-                weightsGaussKronrod61(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss61(i) = wG(i);
-            }
-
-	        //--------------71--------------//
-            N = 35;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod71(i) = -xGK(i);
-                weightsGaussKronrod71(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss71(i) = wG(i);
-            }
-
-	        //--------------81--------------//
-            N = 40;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod81(i) = -xGK(i);
-                weightsGaussKronrod81(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss81(i) = wG(i);
-            }
-
-	        //--------------91--------------//
-            N = 45;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod91(i) = -xGK(i);
-                weightsGaussKronrod91(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss91(i) = wG(i);
-            }
-
-	        //--------------101--------------//
-            N = 50;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod101(i) = -xGK(i);
-                weightsGaussKronrod101(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss101(i) = wG(i);
-            }
-
-            //--------------121--------------//
-            N = 60;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod121(i) = -xGK(i);
-                weightsGaussKronrod121(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss121(i) = wG(i);
-            }
-
-	        //--------------201--------------//
-            N = 100;
-            xGK = VectorType::Zero(2*N+1);
-            wGK = VectorType::Zero(2*N+1);
-            xG = VectorType::Zero(N);
-            wG = VectorType::Zero(N);
-
-            LaurieGautschiPolicy::mpkronrod(N,xGK,wGK);
-            LaurieGautschiPolicy::mpgauss(N,xG,wG);
-            
-            for(size_t i=0; i<=N; ++i)
-            {
-                abscissaeGaussKronrod201(i) = -xGK(i);
-                weightsGaussKronrod201(i) = wGK(i);
-            }
-            for(size_t i=0; i<=N/2; ++i)
-            {
-                weightsGauss201(i) = wG(i);
-            }
-
-            compute = false;
+            gaussAbscissae(i) = -xG(i);
+            gaussWeights(i) = wG(i);
         }
     }
 };
