@@ -17,6 +17,7 @@ int test_values()
 
     int outputDigits = 256;
     std::ofstream fout;
+
     fout.open("KronrodNodesAndWeights.txt");
 
     //--------15--------//
