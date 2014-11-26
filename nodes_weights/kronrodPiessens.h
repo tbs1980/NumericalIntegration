@@ -3,6 +3,9 @@
 * using the Piessens/Patterson method.
 */
 
+#ifndef NI_KRONRODPIESSENS_H
+#define NI_KRONRODPIESSENS_H
+
 namespace Kronrod
 {
     template <typename Scalar>
@@ -446,3 +449,5 @@ Scalar Kronrod::machineEpsilon()
 
     return Eigen::NumTraits<Scalar>::epsilon();
 }
+
+#endif NI_KRONRODPIESSENS_H
