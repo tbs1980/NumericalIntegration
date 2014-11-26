@@ -1,5 +1,5 @@
 /**
-* Piessens' implementation of the Kronrod calculations
+* This fIle contains Piessens', et. al., implementation of the Kronrod calculations
 */
 
 #include <Eigen/Dense>
@@ -8,26 +8,27 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace Eigen;
+//using namespace Eigen;
 
 namespace Kronrod
 {
     template <typename Scalar>
     void kronrod(
-        unsigned int nNodes, Array<Scalar, Dynamic, 1>& abscGaussKronrod,
-        Array<Scalar, Dynamic, 1>& weightGaussKronrod, Array<Scalar,
-        Dynamic, 1>& weightGauss);
+        unsigned int nNodes, 
+        Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+        Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod, 
+        Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss);
 
     template <typename Scalar>
     void abscWeightKronrod(
         unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-        Array<Scalar, Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
         Scalar& weightGaussKronrod);
 
     template <typename Scalar>
     void abscWeightGauss(
         unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-        Array<Scalar,Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
         Scalar& weightGaussKronrod, Scalar& weightGauss);
 
     template <typename Scalar>
@@ -67,16 +68,18 @@ namespace Kronrod
 * \param[in] n, the order of the Gauss rule.
 *
 * Return Parameters:
-* \return abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
-* \return weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
-* \return weightGauss[n+1] The weights for the Gauss rule.
+* \param[in/out] abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
+* \param[in/out] weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
+* \param[in/out] weightGauss[n+1] The weights for the Gauss rule.
 */
 template <typename Scalar>
 void Kronrod::kronrod(
-    unsigned int nNodes, Array<Scalar, Dynamic, 1> &abscGaussKronrod,
-    Array<Scalar, Dynamic, 1> &weightGaussKronrod, Array<Scalar, Dynamic, 1> &weightGauss)
+    unsigned int nNodes,
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> &abscGaussKronrod,
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGaussKronrod,
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGauss)
 {
-    typedef Array<Scalar,Dynamic,1> ArrayXdType;
+    typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
     unsigned int arraySize = nNodes + 1;
     abscGaussKronrod = ArrayXdType::Zero(arraySize);
     weightGaussKronrod = ArrayXdType::Zero(arraySize);
@@ -94,7 +97,7 @@ void Kronrod::kronrod(
     unsigned int m = (nNodes + 1) / 2;
     bool even = (nNodes == 2 * m);
 
-    // aK is an index variable to account for only calculating positive abscissae
+    // aK is an index variable to account for calculating only the positive abscissae
     Scalar aK = aN;
 
     // Calculation of the Chebyshev coefficients of the orthogonal polynomial.
@@ -195,7 +198,7 @@ void Kronrod::kronrod(
 template <typename Scalar>
 void Kronrod::abscWeightKronrod(
     unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-    Array<Scalar, Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
     Scalar& weightGaussKronrod)
 {
     Scalar ai;
@@ -222,6 +225,7 @@ void Kronrod::abscWeightKronrod(
     size_t iterationLimit = 50;
 
     // Iterative process for the computation of a Kronrod abscissa.
+    //@TODO fabs() call needs to be replaced with std::abs()
     while (fabs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
@@ -326,7 +330,7 @@ void Kronrod::abscWeightKronrod(
 template <typename Scalar>
 void Kronrod::abscWeightGauss(
     unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-    Array<Scalar,Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
     Scalar& weightGaussKronrod, Scalar& weightGauss)
 {
     Scalar ai = 0.;
@@ -346,6 +350,7 @@ void Kronrod::abscWeightGauss(
     size_t iterationLimit = 50;
 
     //  Iterative process for the computation of a Gaussian abscissa.
+    // @TODO fabs() call needs to be replaced with std::abs()
     while (fabs(delta) > machineEpsilon<Scalar>())
     {
         ++iter;
@@ -357,6 +362,7 @@ void Kronrod::abscWeightGauss(
         // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
         if (nNodes <= 1)
         {
+            //@TODO fabs() call needs to be replaced with std::abs()
             if (Kronrod::machineEpsilon<Scalar>() < fabs(abscGaussKronrod))
             {
                 p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
