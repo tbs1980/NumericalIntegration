@@ -2,7 +2,7 @@
 */
 
 // TODO change this header to something like NumericalInegration
-// We may need to put all the codes some common directory
+// We may need to put all the code some common directory
 #include <NIHeaders.h>
 #include <iostream>
 #include <iomanip>
@@ -43,7 +43,11 @@ private:
 int main(void)
 {
     //define the sclar
+    //typedef float Scalar;
     typedef double Scalar;
+    //typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
 
     //define the functor
     Scalar alpha=1.;

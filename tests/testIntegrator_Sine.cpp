@@ -1,6 +1,7 @@
 #include <NIHeaders.h>
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 
 template <typename Scalar>
@@ -12,7 +13,7 @@ Scalar desiredRelativeError()
 template <typename Scalar>
 typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
 {
-  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[11] =
+  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
       Eigen::Integrator<Scalar>::GaussKronrod15,
       Eigen::Integrator<Scalar>::GaussKronrod21,
@@ -24,6 +25,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t 
       Eigen::Integrator<Scalar>::GaussKronrod81,
       Eigen::Integrator<Scalar>::GaussKronrod91,
       Eigen::Integrator<Scalar>::GaussKronrod101,
+      Eigen::Integrator<Scalar>::GaussKronrod121,
       Eigen::Integrator<Scalar>::GaussKronrod201
     };
 
@@ -44,26 +46,33 @@ public:
 
 int test_sine(void)
 {
+    std::ofstream fout;
+    fout.open("Sine_integration_test_output.txt");
+
     std::cout<<"Testing Int [0->Pi] sin(x) = 2"<<std::endl;
+
     //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(117);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(200);
+    IntegratorType eigenIntegrator(256);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
-    const size_t numKeys = 10;
-    for (int i = numKeys - 1; i >= 0; --i)
+    const size_t numKeys = 12;
+
+    for (size_t i = 0; i < numKeys; ++i)
     {
+        success = true;
+
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI),
@@ -74,26 +83,47 @@ int test_sine(void)
         if(fabs(expected - actual) > desiredRelativeError<Scalar>() * fabs(expected)
             or eigenIntegrator.errorCode() !=0)
         {
-            std::cout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+            fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
                       << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
                       << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
 
-            std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
+            fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
             success = false;
-            //return EXIT_FAILURE;
+        }
+        else
+        {
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                          
+                fout << "Success!\n ";
+        }
+
+        if(success)    
+        {
+          fout << "\n  Test Succeeded!\n" << std::endl;
+          fout.close();
+          break;
+        }
+        else
+        {
+          fout <<"\n  Test Failed.\n" << std::endl;
         }
     }
 
+    fout.close();
+
     if (success)
     {
-        std::cout << "Success!" << std::endl;
-        return EXIT_SUCCESS;
-    }else
+      std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+      return EXIT_SUCCESS;
+    }
+    else
     {
-        std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
+      std::cout << std::endl << "  Test Failed.\n" << std::endl;
+      return EXIT_FAILURE;
     }
 
-    return EXIT_FAILURE;;
 }
 
 int main(void)
