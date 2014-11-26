@@ -1,5 +1,4 @@
 #include <NumericalIntegration.h>
-#include <NIHeaders.h>
 
 #include <iostream>
 #include <fstream>
