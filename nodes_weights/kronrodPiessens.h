@@ -450,4 +450,4 @@ Scalar Kronrod::machineEpsilon()
     return Eigen::NumTraits<Scalar>::epsilon();
 }
 
-#endif NI_KRONRODPIESSENS_H
+#endif //NI_KRONRODPIESSENS_H
