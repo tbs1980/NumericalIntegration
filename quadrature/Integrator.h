@@ -4,9 +4,6 @@
  *     for Automatic Integration, Springer Verlag, 1983.
  */
 
-//#include <unsupported/Eigen/MPRealSupport>
-//#include <mpreal.h>
-
 #ifndef EIGEN_INTEGRATOR_H
 #define EIGEN_INTEGRATOR_H
 

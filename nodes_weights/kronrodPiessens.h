@@ -1,14 +1,7 @@
 /**
-* This fIle contains Piessens', et. al., implementation of the Kronrod calculations
+* The functions contained in this file calculate the Gauss-Kronrod nodes and weights 
+* using the Piessens/Patterson method.
 */
-
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-
-#include <cstdlib>
-#include <iostream>
-
-//using namespace Eigen;
 
 namespace Kronrod
 {
