@@ -83,11 +83,11 @@ int test_peak(void)
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    int counter = 0;
     const size_t numKeys = 12;
 
     for (size_t i = 0; i < numKeys; ++i)
     {
+	int counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
