@@ -82,7 +82,7 @@ public:
    * \param[in] upperLimit The upper limit of integration.
    * \param[in] desiredAbsoluteError The absolute accuracy requested.
    * \param[in] desiredRelativeError The relative accuracy requested.
-   *            If desiredAbsoluteError <= 0 and desiredRelativeError < 50 * machinePrecision, 
+   *            If desiredAbsoluteError <= 0 and desiredRelativeError < 50 * machinePrecision,
    *            the routine will end with errorCode = 6.
    * \param[in] quadratureRule The local Gauss-Kronrod quadrature rule to use.
    *
@@ -122,7 +122,7 @@ public:
     m_errorList[0] = m_estimatedError;
 
     // Test on accuracy.
-    Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * fabs(integral));
+    Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * Abs(integral));
 
     if (m_maxSubintervals == 1)
     {
@@ -195,7 +195,7 @@ public:
 
       if (defAb1 != error1 && defAb2 != error2)
       {
-          if (fabs(m_integralList[maxErrorIndex] - area12) <= fabs(area12) * Scalar(1.e-5)
+          if (Abs(m_integralList[maxErrorIndex] - area12) <= Abs(area12) * Scalar(1.e-5)
               && error12 >= errorMax * Scalar(.99))
         {
           ++roundOff1;
@@ -209,7 +209,7 @@ public:
       m_integralList[maxErrorIndex] = area1;
       m_integralList[numSubintervalsIndex] = area2;
 
-      errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * fabs(area));
+      errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * Abs(area));
 
       if (errorSum > errorBound)
       {
@@ -225,9 +225,9 @@ public:
         }
         // Set m_error_code in the case of poor integrand behaviour within
         // the integration range.
-        else if ((std::max)(fabs(lower1), fabs(upper2))
+        else if ((std::max)(Abs(lower1), Abs(upper2))
             <= (Eigen::NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
-            * (fabs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
+            * (Abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
         {
           m_errorCode = 3;
         }
@@ -424,7 +424,7 @@ private:
    *             fabs(f - I/(upperLimit - lowerLimit)).
    *
    * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
-   *          41, 51, 61, 71, 81, 91, 101, 121, 201-point kronrod rule obtained by optimal addition 
+   *          41, 51, 61, 71, 81, 91, 101, 121, 201-point kronrod rule obtained by optimal addition
    *          of abscissae to the 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100-point Gauss rule.
    *
    * \detail This series of functions represents a priority queue data structure:
@@ -561,7 +561,7 @@ private:
 
     // The result of the Kronrod formula.
     Scalar resultKronrod = weightsGaussKronrod[weightsGaussKronrod.size() - 1] * fCenter;
-    absIntegral = fabs(resultKronrod);
+    absIntegral = Abs(resultKronrod);
 
     for (DenseIndex j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
     {
@@ -578,7 +578,7 @@ private:
       resultGauss += weightsGauss[j - 1] * funcSum;
       resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-      absIntegral += weightsGaussKronrod[jj] * (fabs(f1) + fabs(f2));
+      absIntegral += weightsGaussKronrod[jj] * (Abs(f1) + Abs(f2));
     }
 
     for (DenseIndex j = 0; j < weightsGauss.size(); ++j)
@@ -596,14 +596,14 @@ private:
 
       resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-      absIntegral += weightsGaussKronrod[jj] * (fabs(f1) + fabs(f2));
+      absIntegral += weightsGaussKronrod[jj] * (Abs(f1) + Abs(f2));
     }
 
     // Approximation to the mean value of f over the interval (lowerLimit, upperLimit),
     // i.e. I / (upperLimit - lowerLimit)
     Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
-    absDiffIntegral = weightsGaussKronrod[7] * (fabs(fCenter - resultMeanKronrod));
+    absDiffIntegral = weightsGaussKronrod[7] * (Abs(fCenter - resultMeanKronrod));
 
     DenseIndex size1 = weightsGaussKronrod.size() - 1;
 
@@ -612,9 +612,9 @@ private:
                         * weightsGaussKronrod.head(size1)).sum();
 
     Scalar result = resultKronrod * halfLength;
-    absIntegral *= fabs(halfLength);
-    absDiffIntegral *= fabs(halfLength);
-    estimatedError = fabs((resultKronrod - resultGauss) * halfLength);
+    absIntegral *= Abs(halfLength);
+    absDiffIntegral *= Abs(halfLength);
+    estimatedError = Abs((resultKronrod - resultGauss) * halfLength);
 
     if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
     {
@@ -712,7 +712,7 @@ private:
    * errorCode = 3 Extremely bad integrand behaviour occurs at points in the integration interval.
    * errorCode = 6 The input is invalid, because (desiredAbsoluteError <= 0 and
    *               desiredRealtiveError < 50 * relativeMachineAccuracy, or
-   *               m_maxSubintervals < 1. 
+   *               m_maxSubintervals < 1.
    * \todo make relativeMachineAccuracy a member variable.
    */
   int m_errorCode;

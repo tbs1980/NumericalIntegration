@@ -1,5 +1,7 @@
 #include <NumericalIntegration.h>
 
+#include "../nodes_weights/kronrodPiessensClass.h"
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -49,7 +51,7 @@ int compare_codes(void)
     {
         fout << std::setprecision(outputIntegers) << xG(i) << ",\n";
     }
-    
+
     fout << "\nGauss Weights\n";
     for(IndexType i = 0; i < xG.rows(); ++i)
     {
@@ -80,7 +82,7 @@ int compare_codes(void)
     {
        fout << std::setprecision(outputIntegers) << xGK(i) << ",\n";
     }
-    
+
     fout << "\nKronrod Weights" << std::endl;
     for(IndexType i = 0; i < xGK.rows(); ++i)
     {
@@ -101,11 +103,90 @@ int compare_codes(void)
     return EXIT_SUCCESS;
 }
 
+int compare_codes_unified_interface(void)
+{
+    //typedef float Scalar;
+    //typedef double Scalar;
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(256);
+
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
+
+    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef LaurieGautschiPolicy::IndexType IndexType;
+    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
+
+    const unsigned int N = 10;
+    const int outputIntegers = 50;
+
+    LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,wGLaurieGautschi);
+
+    std::ofstream fout;
+    fout.open("SingleRuleKronrodNodesAndWeightsLaurieGautschi.txt");
+
+    fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
+    fout << "\nKronrod Nodes\n";
+    for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << xGKLaurieGautschi(i) << ",\n";
+    }
+
+    fout << "\nKronrod Weights\n";
+    for(IndexType i = 0; i < wGKLaurieGautschi.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGKLaurieGautschi(i) << ",\n";
+    }
+
+    fout << "\nGauss Weights\n";
+    for(IndexType i = 0; i < wGLaurieGautschi.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGLaurieGautschi(i) << ",\n";
+    }
+
+    fout.close();
+
+
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGPiessens;
+
+    PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,wGPiessens);
+
+    fout.open("SingleRuleKronrodNodesAndWeightsPiessens.txt");
+
+    fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
+    fout << "\nKronrod Nodes\n";
+    for(IndexType i = 0; i < xGKPiessens.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << xGKPiessens(i) << ",\n";
+    }
+
+    fout << "\nKronrod Weights\n";
+    for(IndexType i = 0; i < wGKPiessens.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGKPiessens(i) << ",\n";
+    }
+
+    fout << "\nGauss Weights\n";
+    for(IndexType i = 0; i < wGPiessens.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGPiessens(i) << ",\n";
+    }
+
+    fout.close();
+
+    return EXIT_SUCCESS;
+}
+
 
 int main(void)
 {
     int ret = 0;
-    ret += compare_codes();
+    //ret += compare_codes();
+    ret += compare_codes_unified_interface();
 
     return ret;
 }

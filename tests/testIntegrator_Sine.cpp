@@ -6,6 +6,10 @@
 
 using namespace Eigen;
 
+
+
+
+
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -41,7 +45,7 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar param) const
     {
-        return sin(param);
+        return Sin(param);
     }
 };
 
@@ -57,13 +61,15 @@ int test_sine(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(117);
+    Scalar::set_default_prec(236);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::computeNodesAndWeights();
+
+    Scalar::set_default_prec(118);
 
     IntegratorType eigenIntegrator(256);
     IntegrandSineFunctorType integrandSineFunctor;
@@ -82,26 +88,26 @@ int test_sine(void)
 
         Scalar expected = Scalar(2);
 
-        if(fabs(expected - actual) > desiredRelativeError<Scalar>() * fabs(expected)
+        if(Abs(expected - actual) > desiredRelativeError<Scalar>() * Abs(expected)
             or eigenIntegrator.errorCode() !=0)
         {
-            fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
-                      << "\n desiredRelativeError<Scalar>() * fabs(expected)= "
-                      << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+            fout << "\nrule " << i << "\n Abs(expected - actual) =" << Abs(expected - actual)
+                      << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                      << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
 
             fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
             success = false;
         }
         else
         {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << Abs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
-                          
+                          << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
+
                 fout << "Success!\n ";
         }
 
-        if(success)    
+        if(success)
         {
           fout << "\n  Test Succeeded!\n" << std::endl;
           fout.close();

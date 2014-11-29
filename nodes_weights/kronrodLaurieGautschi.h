@@ -1,5 +1,5 @@
 /**
-* The functions contained in this file calculate the Gauss-Kronrod nodes and weights 
+* The functions contained in this file calculate the Gauss-Kronrod nodes and weights
 * using the Laurie/Gautschi method.
 */
 
@@ -399,6 +399,40 @@ namespace Kronrod {
                 w(i) = 2.*w(i);
             }
         }
+
+        static void computeAbscissaeAndWeights(unsigned int nNodes,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> &abscGaussKronrod,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGaussKronrod,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGauss)
+        {
+            VectorType xGK = VectorType::Zero(2*nNodes+1);
+            VectorType wGK = VectorType::Zero(2*nNodes+1);
+            VectorType xG = VectorType::Zero(nNodes);
+            VectorType wG = VectorType::Zero(nNodes);
+
+            LaurieGautschi::mpkronrod(nNodes,xGK,wGK);
+            LaurieGautschi::mpgauss(nNodes,xG,wG);
+
+            unsigned int arraySize = nNodes + 1;
+
+            abscGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
+
+            for(unsigned int i=0;i<arraySize;++i)
+            {
+                abscGaussKronrod(i) = Abs(xGK(i));
+                weightGaussKronrod(i) = wGK(i);
+            }
+
+            abscGaussKronrod(arraySize-1) = RealType(0);
+
+            for(unsigned int i=0;i<arraySize/2;++i)
+            {
+                weightGauss(i) = wG(i);
+            }
+        }
+
     };
 }
 

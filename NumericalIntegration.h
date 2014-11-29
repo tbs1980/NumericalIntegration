@@ -3,10 +3,10 @@
 //
 // Development work based on work from QUADPACK, Robert Piessens, et al,
 // and original work by Dirk Laurie, Walter Gautschi, with support by work
-// from John Burkardt. 
+// from John Burkardt.
 //
-// Multiprecision templating by Pavel Holoborodko. 
-// Code porting and unit tests created by Sreekumar Thaithara Balan, 
+// Multiprecision templating by Pavel Holoborodko.
+// Code porting and unit tests created by Sreekumar Thaithara Balan,
 // Mark Sauder, and Matt Beall 2014
 //
 // This Source Code Form is subject to the terms of the Mozilla
@@ -16,14 +16,14 @@
 #ifndef EIGEN_NUMERICAL_INTEGRATION_H
 #define EIGEN_NUMERICAL_INTEGRATION_H
 
-namespace Eigen 
+namespace Eigen
 {
 /**
   * \defgroup Numerical_Integration_Module Quadrature and Nodes_Weights module
   *
-  * This module provides an adaptive quadrature method of numerical integration of the style 
+  * This module provides an adaptive quadrature method of numerical integration of the style
   * implemented in the QUADPACK library while offering functionality to calculate nodes/weights
-  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal 
+  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal
   * precision type.
   *
   * \code
@@ -87,6 +87,49 @@ long double Gamma(long double x)
 {
     return tgamma(x);
 }
+
+template<typename T>
+T Sin(T arg)
+{
+    return sin(arg);
+}
+
+float Sin(float arg)
+{
+    return std::sin(arg);
+}
+
+double Sin(double arg)
+{
+    return std::sin(arg);
+}
+
+long double Sin(long double arg)
+{
+    return std::sin(arg);
+}
+
+template<typename T>
+T Abs(T arg)
+{
+    return abs(arg);
+}
+
+float Abs(float arg)
+{
+    return std::abs(arg);
+}
+
+double Abs(double arg)
+{
+    return std::abs(arg);
+}
+
+long double Abs(long double arg)
+{
+    return std::abs(arg);
+}
+
 
 #include "nodes_weights/kronrodLaurieGautschi.h"
 #include "nodes_weights/kronrodPiessens.h"
