@@ -1,19 +1,21 @@
-/* An example illustrating the use of numerical integration module in Eigen.
+/*
+* An example illustrating the use of numerical integration module in Eigen.
 */
 
-// TODO change this header to something like NumericalInegration
-// We may need to put all the code some common directory
-#include <NIHeaders.h>
+// @TODO We may need to put all the code some common directory
+#include <NumericalIntegration.h>
+
 #include <iostream>
 #include <iomanip>
 
-/* We consider the example from
-http://www.gnu.org/software/gsl/manual/html_node/Numerical-integration-examples.html
-
-\int_0^1 x^{-1/2} log(x) dx = -4
-
-Our integrator expects the user to provide a functor as shown below.
-
+/* 
+*  We consider the example from:
+*
+*       http://www.gnu.org/software/gsl/manual/html_node/Numerical-integration-examples.html
+*
+*       int_0^1 x^{-1/2} log(x) dx = -4
+*
+*  The integrator expects the user to provide a functor as shown below.
 */
 
 template<typename Scalar>
@@ -75,7 +77,6 @@ int main(void)
     std::cout<<"result          = "<<std::setprecision(outputPrecision)<<result<<std::endl;
     std::cout<<"exact result    = "<<std::setprecision(outputPrecision)<<expected<<std::endl;
     std::cout<<"actual error    = "<<std::setprecision(outputPrecision)<<(expected-result)<<std::endl;
-
 
     return 0;
 }

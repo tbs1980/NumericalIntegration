@@ -1,4 +1,4 @@
-#include <NIHeaders.h>
+#include <NumericalIntegration.h>
 
 #include "gtest/gtest.h"
 #include <iostream>

@@ -1,6 +1,6 @@
 #ifndef NI_NIHEADERS_H
 #define NI_NIHEADERS_H
-
+/*
 //#include <cassert>
 #include <cmath>
 #include <cstdlib>
@@ -61,5 +61,5 @@ long double Gamma(long double x)
 
 #include "quadrature/QuadratureKronrod.h"
 #include "quadrature/Integrator.h"
-
+*/
 #endif //NI_NIHEADERS_H

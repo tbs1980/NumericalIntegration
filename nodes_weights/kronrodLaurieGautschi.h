@@ -1,3 +1,8 @@
+/**
+* The functions contained in this file calculate the Gauss-Kronrod nodes and weights 
+* using the Laurie/Gautschi method.
+*/
+
 #ifndef NI_KRONRODLAURIEGAUTSCHI_H
 #define NI_KRONRODLAURIEGAUTSCHI_H
 

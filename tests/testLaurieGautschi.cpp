@@ -1,4 +1,4 @@
-#include <NIHeaders.h>
+#include <NumericalIntegration.h>
 
 #include <iostream>
 #include <fstream>
@@ -56,9 +56,9 @@ int compare_codes(void)
         fout << std::setprecision(outputIntegers) << wG(i) << ",\n";
     }
 
-    Eigen::Array<Scalar, Dynamic, 1> xGKPiessens;
-    Eigen::Array<Scalar, Dynamic, 1> wGKPiessens;
-    Eigen::Array<Scalar, Dynamic, 1> wGPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGPiessens;
 
     Kronrod::kronrod(N, xGKPiessens,  wGKPiessens, wGPiessens);
 

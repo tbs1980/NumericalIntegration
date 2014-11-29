@@ -1,8 +1,10 @@
-#include <NIHeaders.h>
+#include <NumericalIntegration.h>
 
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+
+using namespace Eigen;
 
 template <typename Scalar>
 Scalar desiredRelativeError()
