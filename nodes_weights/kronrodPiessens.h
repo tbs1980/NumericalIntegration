@@ -1,5 +1,5 @@
 /**
-* Kronrod routines
+* Piessens' implementation of the Kronrod calculations
 */
 
 #include <Eigen/Dense>
@@ -9,16 +9,6 @@
 #include <iostream>
 
 using namespace Eigen;
-using namespace std;
-
-/*
-template <typename Scalar>
-class Kronrod
-{
-public:
-  typedef Scalar_ Scalar;
-}
-*/
 
 namespace Kronrod
 {
@@ -74,7 +64,7 @@ namespace Kronrod
 *    the Gauss-Kronrod and Gauss rules, respectively.
 *
 * Input Parameters:
-* @param n, the order of the Gauss rule.
+* \param[in] n, the order of the Gauss rule.
 *
 * Return Parameters:
 * \return abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
@@ -192,15 +182,15 @@ void Kronrod::kronrod(
 * \brief abscWeightKronrod calculates a Kronrod abscissa and weight.
 *
 *  Input Parameters:
-* \param betaCoeffs[m+1] The Chebyshev coefficients.
-* \param chebCoeff A value needed to compute weights.
-* \param even A boolean variable that is TRUE if n is even.
-* \param n The order of the Gauss rule.
-* \param m The value of ( n + 1 ) / 2.
+* \param[in] betaCoeffs[m+1] The Chebyshev coefficients.
+* \param[in] chebCoeff A value needed to compute weights.
+* \param[in] even A boolean variable that is TRUE if n is even.
+* \param[in] n The order of the Gauss rule.
+* \param[in] m The value of ( n + 1 ) / 2.
 *
 *  Input/output:
-* \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
-* \param weightGaussKronrod The Gauss-Kronrod weight.
+* \param[in/out] abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
+* \param[in/out] weightGaussKronrod The Gauss-Kronrod weight.
 */
 template <typename Scalar>
 void Kronrod::abscWeightKronrod(
@@ -296,7 +286,7 @@ void Kronrod::abscWeightKronrod(
         // Identify non-convergence of the iterative solver after 50 iterations
         if (iter > iterationLimit)
         {
-            cout << "Newton-Raphson iterative abscissae solver failed.";
+            std::cout << "Newton-Raphson iterative abscissae solver failed.";
             return;
         }
     }
@@ -322,16 +312,16 @@ void Kronrod::abscWeightKronrod(
 * \brief abscWeightGauss calculates a Gaussian abscissa and two weights.
 *
 *   Input Parameters
-* \param betaCoeffs[m+1] The Chebyshev coefficients.
-* \param chebCoeff A value needed to compute weights.
-* \param even A boolean variable that is TRUE if n is even.
-* \param nNodes The order of the Gauss rule.
-* \param m The value of ( nNodes + 1 ) / 2.
+* \param[in] betaCoeffs[m+1] The Chebyshev coefficients.
+* \param[in] chebCoeff A value needed to compute weights.
+* \param[in] even A boolean variable that is TRUE if n is even.
+* \param[in] nNodes The order of the Gauss rule.
+* \param[in] m The value of ( nNodes + 1 ) / 2.
 *
 *   Input/Output
-* \param abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
-* \param weightGaussKronrod The Gauss-Kronrod weight.
-* \param weightGauss The Gauss weight.
+* \param[in/out] abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
+* \param[in/out] weightGaussKronrod The Gauss-Kronrod weight.
+* \param[in/out] weightGauss The Gauss weight.
 */
 template <typename Scalar>
 void Kronrod::abscWeightGauss(
@@ -408,7 +398,7 @@ void Kronrod::abscWeightGauss(
         // Identify non-convergence of the iterative solver after 50 iterations
         if (iter > iterationLimit)
         {
-            cout << "Newton-Raphson iterative abscissae solver failed.";
+            std::cout << "Newton-Raphson iterative abscissae solver failed.";
             return;
         }
     }

@@ -1,6 +1,7 @@
 #include <NIHeaders.h>
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 
 template <typename Scalar>
@@ -12,7 +13,7 @@ Scalar desiredRelativeError()
 template <typename Scalar>
 typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
 {
-  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[11] =
+  static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
       Eigen::Integrator<Scalar>::GaussKronrod15,
       Eigen::Integrator<Scalar>::GaussKronrod21,
@@ -24,6 +25,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t 
       Eigen::Integrator<Scalar>::GaussKronrod81,
       Eigen::Integrator<Scalar>::GaussKronrod91,
       Eigen::Integrator<Scalar>::GaussKronrod101,
+      Eigen::Integrator<Scalar>::GaussKronrod121,
       Eigen::Integrator<Scalar>::GaussKronrod201
     };
 
@@ -60,30 +62,38 @@ private:
 
 int test_peak(void)
 {
-    std::cout<<"Testing Int [0->1] 4^-alpah/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
+    std::ofstream fout;
+    fout.open("Peak_integration_test_output.txt");
+
+    std::cout<<"Testing Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))"<<std::endl;
+
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(256);
+    //typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(6);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::ComputeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(200);
+    IntegratorType eigenIntegrator(500);
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    const size_t numKeys = 10;
-    for (int i = numKeys - 1; i >= 0; --i)
+    int counter = 0;
+    const size_t numKeys = 12;
+
+    for (size_t i = 0; i < numKeys; ++i)
     {
+	counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {
+            success = true;
             integrandPeakFunctor.setAlpha(alpha);
 
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPeakFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
@@ -92,27 +102,48 @@ int test_peak(void)
 
             if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
             {
-                std::cout << "\nrule " << i << "\n fabs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n fabs(expected - actual) =" << fabs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
                           << desiredRelativeError<Scalar>() * fabs(expected)<<std::endl;
 
-                std::cout << "errorCode =" << eigenIntegrator.errorCode() << std::endl;
+                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
-                //return EXIT_FAILURE;
             }
+            else
+            {
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                          
+                fout << "Success!\n";
+                counter++;
+            }
+        }
+        
+        if(success && counter == 18)    
+        {
+          fout << "\n  Test Succeeded!\n" << std::endl;
+          fout.close();
+          break;
+        }
+        else
+        {
+          fout <<"\n  Test Failed.\n" << std::endl;
         }
     }
 
-    if (success)
-    {
-        std::cout << "Success!" << std::endl;
-        return EXIT_SUCCESS;
-    }else
-    {
-        std::cout << std::endl << "Test Failed. Keep trying, and best of luck!" << std::endl;
-    }
+    fout.close();
 
-    return EXIT_FAILURE;;
+    if(success && counter == 18)
+    {
+      std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+      return EXIT_SUCCESS;
+    }
+    else
+    {
+      std::cout << std::endl << "  Test Failed.\n" << std::endl;
+      return EXIT_FAILURE;
+    }
 }
 
 

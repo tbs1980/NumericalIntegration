@@ -38,11 +38,11 @@ namespace Kronrod {
          * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
          * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
          *
-         * \param N Number of recurrence coefficients
-         * \param a alpha parameter of the Jacobi-polynomials
-         * \param b beta parameter of the Jacobi-polynomials
-         * \param a_out N alpha-coefficients
-         * \param b_out N beta-coefficients
+         * \param[in] N Number of recurrence coefficients
+         * \param[in] a alpha parameter of the Jacobi-polynomials
+         * \param[in] b beta parameter of the Jacobi-polynomials
+         * \param[in/out] a_out N alpha-coefficients
+         * \param[in/out] b_out N beta-coefficients
          */
         static void r_jacobi(const IndexType N,const RealType a,const RealType b,
             VectorType & a_out, VectorType & b_out)
@@ -79,11 +79,11 @@ namespace Kronrod {
          * Created by Dirk Laurie, 6-22-1998; edited by Walter Gautschi, 4-4-2002.
          * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
          *
-         * \param N Number of recurrence coefficients
-         * \param a alpha parameter of the Jacobi-polynomials
-         * \param b beta parameter of the Jacobi-polynomials
-         * \param a_out N alpha-coefficients
-         * \param b_out N beta-coefficients
+         * \param[in] N Number of recurrence coefficients
+         * \param[in] a alpha parameter of the Jacobi-polynomials
+         * \param[in] b beta parameter of the Jacobi-polynomials
+         * \param[in/out] a_out N alpha-coefficients
+         * \param[in/out] b_out N beta-coefficients
          */
         static void r_jacobi_01(const IndexType N,const RealType a,const RealType b,
             VectorType & a_out, VectorType & b_out)
@@ -125,13 +125,14 @@ namespace Kronrod {
          *
          * Created by Dirk Laurie, 6-22.1998
          * Edited by Pavel Holoborodko, November 7, 2011
-         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and
+         * Matt Beall, September 2014
          *
-         * \param N Number of nodes
-         * \param a_in The recurrence coefficients of the associated orthogonal polynomials
-         * \param b_in The recurrence coefficients of the associated orthogonal polynomials
-         * \param a alpha-elements in the Jacobi-Kronrod matrix of order 2N+1
-         * \param b beta-elements in the Jacobi-Kronrod matrix of order 2N+1
+         * \param[in] N Number of nodes
+         * \param[in/out] a_in The recurrence coefficients of the associated orthogonal polynomials
+         * \param[in/out] b_in The recurrence coefficients of the associated orthogonal polynomials
+         * \param[in/out] a alpha-elements in the Jacobi-Kronrod matrix of order 2N+1
+         * \param[in/out] b beta-elements in the Jacobi-Kronrod matrix of order 2N+1
          *
          */
         static void r_kronrod(const IndexType N,VectorType const & a_in, VectorType const & b_in,
@@ -226,13 +227,14 @@ namespace Kronrod {
          *
          * Created by Dirk Laurie, June 22, 1998.
          * Edited by Pavel Holoborodko, November 7, 2011:
-         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder and  Matt Beall, September 2014
+         * Ported to C++/Eigen by Sreekumar Thaithara Balan, Mark Sauder
+         * and  Matt Beall, September 2014
          *
-         * \param N Number of nodes
-         * \param a 2N alpha coefficients (input)
-         * \param b 2N beta coefficients (input)
-         * \param x 2N+1 nodes
-         * \param w 2N+1 weights corresponding to \a x
+         * \param[in] N Number of nodes
+         * \param[in/out] a 2N alpha coefficients (input)
+         * \param[in/out] b 2N beta coefficients (input)
+         * \param[in/out] x 2N+1 nodes
+         * \param[in/out] w 2N+1 weights corresponding to \a x
          */
         static void kronrod(const IndexType N,VectorType const & a, VectorType const & b,
             VectorType & x, VectorType & w)
@@ -251,7 +253,7 @@ namespace Kronrod {
 
             //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            assert( fabs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
+            assert( std::abs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
 
             MatrixType J=MatrixType::Zero(2*N+1,2*N+1);
 
@@ -289,11 +291,11 @@ namespace Kronrod {
          * The nodes, in increasing order, are stored in \a x ,
          * the N corresponding weights in \a w .
          *
-         * \param N Number of nodes
-         * \param a 2N alpha coefficients (input)
-         * \param b 2N beta coefficients (input)
-         * \param x 2N+1 nodes
-         * \param w 2N+1 weights corresponding to \a x
+         * \param[in] N Number of nodes
+         * \param[in/out] a 2N alpha coefficients (input)
+         * \param[in/out] b 2N beta coefficients (input)
+         * \param[in/out] x 2N+1 nodes
+         * \param[in/out] w 2N+1 weights corresponding to \a x
          */
         static void gauss(const IndexType N,VectorType const & a, VectorType const & b,
             VectorType & x, VectorType & w)
@@ -335,9 +337,9 @@ namespace Kronrod {
          * The result is a vector 2N+1 nodes (N points on either side of zero and zero)
          * and the corresponding weights.
          *
-         * \param N Number of nodes
-         * \param x Returns a vector of 2N+1 nodes
-         * \param w Returns a vector of weights corresponding to \a x
+         * \param[in] N Number of nodes
+         * \param[in/out] x Returns a vector of 2N+1 nodes
+         * \param[in/out] w Returns a vector of weights corresponding to \a x
          */
         static void mpkronrod(const IndexType N,VectorType & x, VectorType & w)
         {
@@ -367,9 +369,9 @@ namespace Kronrod {
          * This method computes Kronrod points for (-1,1) with any required precision.
          * The result is a vector of N nodes the corresponding weights.
          *
-         * \param N Number of nodes
-         * \param x Returns a vector of 2N+1 nodes
-         * \param w Returns a vector of weights corresponding to \a x
+         * \param[in] N Number of nodes
+         * \param[in/out] x Returns a vector of 2N+1 nodes
+         * \param[in/out] w Returns a vector of weights corresponding to \a x
          */
         static void mpgauss(const IndexType N,VectorType & x, VectorType & w)
         {
