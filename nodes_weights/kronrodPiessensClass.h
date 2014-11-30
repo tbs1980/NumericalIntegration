@@ -13,8 +13,6 @@ namespace Kronrod
     {
     public:
         typedef _Scalar Scalar;
-        typedef typename Eigen::Matrix<Scalar,Eigen::Dynamic,1>  VectorType;
-        typedef typename VectorType::Index IndexType;
 
         /**
         * \brief kronrod adds n+1 points to an n-point Gaussian rule.
@@ -206,7 +204,7 @@ namespace Kronrod
 
             // Iterative process for the computation of a Kronrod abscissa.
             //@TODO fabs() call needs to be replaced with std::abs()
-            while (Abs(delta) > Piessens::machineEpsilon())
+            while (Abs(delta) > machineEpsilon())
             {
                 ++iter;
 
@@ -330,7 +328,7 @@ namespace Kronrod
 
             //  Iterative process for the computation of a Gaussian abscissa.
             // @TODO fabs() call needs to be replaced with std::abs()
-            while (Abs(delta) > Piessens::machineEpsilon())
+            while (Abs(delta) > machineEpsilon())
             {
                 ++iter;
                 p0 = 1.;
@@ -342,7 +340,7 @@ namespace Kronrod
                 if (nNodes <= 1)
                 {
                     //@TODO fabs() call needs to be replaced with std::abs()
-                    if (Piessens::machineEpsilon() < Abs(abscGaussKronrod))
+                    if (machineEpsilon() < Abs(abscGaussKronrod))
                     {
                         p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
                         pd2 = 3.0 * (abscGaussKronrod);

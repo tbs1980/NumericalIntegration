@@ -134,10 +134,11 @@ public:
     static Array<Scalar, 50, 1> weightsGauss201;
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
     typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
     static bool compute;
-    
+
     static void computeNodesAndWeights()
     {
         if(compute)
@@ -163,6 +164,7 @@ public:
     static void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,
                         Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)
     {
+        /*
         VectorType xGK = VectorType::Zero(2*N+1);
         VectorType wGK = VectorType::Zero(2*N+1);
         VectorType xG = VectorType::Zero(N);
@@ -182,6 +184,25 @@ public:
             gaussAbscissae(i) = -xG(i);
             gaussWeights(i) = wG(i);
         }
+        */
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> xGK;
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> wGK;
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> wG;
+
+        LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,wG);
+        //PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,wG);
+
+        for(size_t i=0; i<N+1; ++i)
+        {
+            kronrodAbscissae(i) = xGK(i);
+            kronrodWeights(i) =  wGK(i);
+        }
+
+        for(size_t i=0; i<(N+1)/2; ++i)
+        {
+            gaussWeights(i) = wG(i);
+        }
+
     }
 };
 

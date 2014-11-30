@@ -109,7 +109,7 @@ int compare_codes_unified_interface(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(200);
 
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
@@ -119,7 +119,7 @@ int compare_codes_unified_interface(void)
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef Kronrod::Piessens<Scalar> PiessensPolicy;
 
-    const unsigned int N = 10;
+    const unsigned int N = 100;
     const int outputIntegers = 50;
 
     LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,wGLaurieGautschi);

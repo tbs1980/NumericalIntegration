@@ -133,6 +133,7 @@ long double Abs(long double arg)
 
 #include "nodes_weights/kronrodLaurieGautschi.h"
 #include "nodes_weights/kronrodPiessens.h"
+#include "nodes_weights/kronrodPiessensClass.h"
 
 #include "quadrature/QuadratureKronrod.h"
 #include "quadrature/Integrator.h"

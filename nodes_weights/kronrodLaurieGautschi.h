@@ -53,20 +53,20 @@ namespace Kronrod {
             VectorType & a_out, VectorType & b_out)
         {
             //TODO : make use the eigen assert facilities
-            assert(a > -1);
-            assert(b > -1);
+            assert(a > RealType(-1));
+            assert(b > RealType(-1));
             assert(a_out.rows()==b_out.rows());
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
 
             a_out(0) = (b-a)/(a+b+2.);
-            b_out(0) = pow(2.,(a+b+1.))*Gamma(a+1.)*Gamma(b+1.)/Gamma(a+b+2.);
+            b_out(0) = Pow(RealType(2.),(a+b+1.))*Gamma(a+1.)*Gamma(b+1.)/Gamma(a+b+2.);
 
             for(IndexType n=1;n<N;++n)
             {
-                RealType nab = 2.*n+a+b;
+                RealType nab = RealType(2.)*n+a+b;
                 a_out(n) = (b*b - a*a)/(nab*(nab+2.));
-                b_out(n) =  4.*(n+a)*(n+b)*n*(n+a+b)/(nab*nab*(nab+1.)*(nab-1.));
+                b_out(n) =  RealType(4.)*(n+a)*(n+b)*n*(n+a+b)/(nab*nab*(nab+RealType(1.))*(nab-RealType(1.)));
             }
         }
 
@@ -94,8 +94,8 @@ namespace Kronrod {
             VectorType & a_out, VectorType & b_out)
         {
             //TODO : make use the eigen assert facilities
-            assert(a > -1);
-            assert(b > -1);
+            assert(a > RealType(-1));
+            assert(b > RealType(-1));
             assert(a_out.rows()==b_out.rows());
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
@@ -104,14 +104,14 @@ namespace Kronrod {
 
             for(IndexType n=0;n<N;++n)
             {
-                a_out(n)  = (1+a_out(n))/2.;
+                a_out(n)  = (RealType(1.)+a_out(n))/RealType(2.);
             }
 
-            b_out(0) = b_out(0)/pow(2,a+b+1.);
+            b_out(0) = b_out(0)/Pow(RealType(2),a+b+RealType(1.));
 
             for(IndexType n=1;n<N;++n)
             {
-                b_out(n) = b_out(n)/4.;
+                b_out(n) = b_out(n)/RealType(4.);
             }
 
         }
