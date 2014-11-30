@@ -15,7 +15,7 @@ int compare_codes(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(384);
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
@@ -109,8 +109,8 @@ int compare_codes_unified_interface(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(200);
-
+    Scalar::set_default_prec(320); //128,320, 384,448 gives an error Newton-Raphson iterative abscissae solver failed.
+    //256,288,320,352,384,416,448
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
@@ -120,15 +120,16 @@ int compare_codes_unified_interface(void)
     typedef Kronrod::Piessens<Scalar> PiessensPolicy;
 
     const unsigned int N = 100;
-    const int outputIntegers = 50;
+    const int outputIntegers = 80; //beyond 67 integers methods disagree for precision=256.
 
     LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,wGLaurieGautschi);
 
     std::ofstream fout;
-    fout.open("SingleRuleKronrodNodesAndWeightsLaurieGautschi.txt");
+    fout.open("LaurieGautschi320.dat");
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
     fout << "\nKronrod Nodes\n";
+    fout << std::fixed;
     for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << xGKLaurieGautschi(i) << ",\n";
@@ -155,10 +156,11 @@ int compare_codes_unified_interface(void)
 
     PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,wGPiessens);
 
-    fout.open("SingleRuleKronrodNodesAndWeightsPiessens.txt");
+    fout.open("Piessens320.dat");
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
     fout << "\nKronrod Nodes\n";
+    fout << std::fixed;
     for(IndexType i = 0; i < xGKPiessens.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << xGKPiessens(i) << ",\n";

@@ -59,13 +59,13 @@ namespace Kronrod {
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
 
-            a_out(0) = (b-a)/(a+b+2.);
-            b_out(0) = Pow(RealType(2.),(a+b+1.))*Gamma(a+1.)*Gamma(b+1.)/Gamma(a+b+2.);
+            a_out(0) = (b-a)/(a+b+RealType(2.));
+            b_out(0) = Pow(RealType(2.),(a+b+RealType(1.)))*Gamma(a+RealType(1.))*Gamma(b+RealType(1.))/Gamma(a+b+RealType(2.));
 
             for(IndexType n=1;n<N;++n)
             {
                 RealType nab = RealType(2.)*n+a+b;
-                a_out(n) = (b*b - a*a)/(nab*(nab+2.));
+                a_out(n) = (b*b - a*a)/(nab*(nab+RealType(2.)));
                 b_out(n) =  RealType(4.)*(n+a)*(n+b)*n*(n+a+b)/(nab*nab*(nab+RealType(1.))*(nab-RealType(1.)));
             }
         }
@@ -363,8 +363,8 @@ namespace Kronrod {
 
             for(IndexType i=0;i<x.rows();++i)
             {
-                x(i) = 2.*x(i) - 1.;
-                w(i) = 2.*w(i);
+                x(i) = RealType(2.)*x(i) - RealType(1.);
+                w(i) = RealType(2.)*w(i);
             }
         }
 
@@ -395,8 +395,8 @@ namespace Kronrod {
 
             for(IndexType i=0;i<x.rows();++i)
             {
-                x(i) = 2.*x(i) - 1.;
-                w(i) = 2.*w(i);
+                x(i) = RealType(2.)*x(i) - RealType(1.);
+                w(i) = RealType(2.)*w(i);
             }
         }
 

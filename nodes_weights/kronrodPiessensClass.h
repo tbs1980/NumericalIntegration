@@ -63,13 +63,13 @@ namespace Kronrod
             weightGaussKronrod = ArrayXdType::Zero(arraySize);
             weightGauss = ArrayXdType::Zero(arraySize / 2);
 
-            Scalar aN = 0.0;
-            Scalar d = 2.0;
+            Scalar aN(0.0);
+            Scalar d(2.0);
 
             for (size_t i = 0; i < nNodes; ++i)
             {
-                aN += 1.0;
-                d *= aN / (aN + 0.5);
+                aN += Scalar(1.0);
+                d *= aN / (aN + Scalar(0.5));
             }
 
             unsigned int m = (nNodes + 1) / 2;
@@ -80,18 +80,18 @@ namespace Kronrod
 
             // Calculation of the Chebyshev coefficients of the orthogonal polynomial.
             ArrayXdType tau(m);
-            tau(0) = (aN + 2.0) / (2 * aN + 3.0);
+            tau(0) = (aN + Scalar(2.0)) / (Scalar(2) * aN + Scalar(3.0));
 
             ArrayXdType betaCoeffs(m + 1);
-            betaCoeffs(m - 1) = tau(0) - 1.0;
+            betaCoeffs(m - 1) = tau(0) - Scalar(1.0);
 
             for (size_t k = 1; k < m; ++k)
             {
                 // This step accounts for both positive and negative abscissae
-                aK += 2.0;
+                aK += Scalar(2.0);
 
-                tau(k) = ((aK - 1.0) * aK - aN * (aN + 1.0)) * (aK + 2.0) * tau(k-1) /
-                         (aK * ((aK + 3.0) * (aK + 2.0) - aN * (aN + 1.0)));
+                tau(k) = ((aK - Scalar(1.0)) * aK - aN * (aN + Scalar(1.0) )) * (aK + Scalar(2.0) ) * tau(k-1) /
+                         (aK * ((aK + Scalar(3.0) ) * (aK + Scalar(2.0) ) - aN * (aN + Scalar(1.0) )));
 
                 betaCoeffs(m-k-1) = tau(k);
 
@@ -101,29 +101,29 @@ namespace Kronrod
                 }
             }
 
-            betaCoeffs(m) = 1.;
+            betaCoeffs(m) = Scalar(1.);
 
             // Calculation of approximate values for the abscissae as inital values
             // for the Newton-Raphson iterative solution.  These values are derived
             // from Pythagorean identities to the original code to more closely follow
             // the mathematics of the 1974 CoM paper.
-            Scalar s1 = sin((M_PI / 2) / (2. * aN + 1.0));
-            Scalar c1 = cos((M_PI / 2) / (2. * aN + 1.0));
+            Scalar s1 = Sin((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c1 = Cos((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
 
-            Scalar s2 = sin((M_PI) / (2. * aN + 1.0));
-            Scalar c2 = cos((M_PI) / (2. * aN + 1.0));
+            Scalar s2 = Sin((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c2 = Cos((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
 
             // Coefficient for Gauss and Kronrod abscissae and weights
-            Scalar chebCoeff1 = 1.0 - 1.0 / (8.0 * aN * aN) + 1.0 / (8.0 * aN * aN * aN);
-            Scalar chebCoeff2 = 2.0 / (Scalar(2. * nNodes + 1));
+            Scalar chebCoeff1 = Scalar(1.0) - Scalar(1.0) / (Scalar(8.0) * aN * aN) + Scalar(1.0) / (Scalar(8.0) * aN * aN * aN);
+            Scalar chebCoeff2 = Scalar(2.0) / (Scalar(2. * nNodes + 1));
 
             for (size_t i = 1; i <= nNodes; ++i)
             {
-                chebCoeff2 =  4.0 * chebCoeff2 * i / (nNodes + i);
+                chebCoeff2 =  Scalar(4.0) * chebCoeff2 * i / (nNodes + i);
             }
 
             Scalar abscK = chebCoeff1 * c1;
-            Scalar temp = 0.;
+            Scalar temp(0.);
 
             // Calculation of the K-th (Kronrod) abscissa and the corresponding weight.
             for (size_t k = 0; k < nNodes; ++k)
@@ -155,7 +155,7 @@ namespace Kronrod
             }
 
             // Set the abscissa value at the origin to zero and exit the function.
-            abscGaussKronrod(nNodes) = 0.0;
+            abscGaussKronrod(nNodes) = Scalar(0.0);
             return;
         }
 
@@ -181,21 +181,21 @@ namespace Kronrod
         {
             Scalar ai;
 
-            Scalar b0 = 0.;
-            Scalar b1 = 0.;
-            Scalar b2 = 0.;
+            Scalar b0(0.);
+            Scalar b1(0.);
+            Scalar b2(0.);
 
-            Scalar d0 = 0.;
-            Scalar d1 = 0.;
-            Scalar d2 = 0.;
+            Scalar d0(0.);
+            Scalar d1(0.);
+            Scalar d2(0.);
 
-            Scalar delta = 1.;
-            Scalar dif = 0.;
+            Scalar delta(1.);
+            Scalar dif(0.);
 
-            Scalar f = 0.;
-            Scalar fd = 0.;
+            Scalar f(0.);
+            Scalar fd(0.);
 
-            Scalar yy = 0.;
+            Scalar yy(0.);
 
             int i = 0;
 
@@ -208,23 +208,23 @@ namespace Kronrod
             {
                 ++iter;
 
-                b1 = 0.0;
+                b1 = Scalar(0.0);
                 b2 = betaCoeffs(m);
 
-                yy = 4.0 * abscGaussKronrod * abscGaussKronrod - 2.0;
-                d1 = 0.0;
+                yy = Scalar(4.0) * abscGaussKronrod * abscGaussKronrod - Scalar(2.0);
+                d1 = Scalar(0.0);
 
                 if (even)
                 {
-                    ai = m + m + 1;
+                    ai = Scalar(m + m + 1);
                     d2 = ai * betaCoeffs(m);
-                    dif = 2.0;
+                    dif = Scalar(2.0);
                 }
                 else
                 {
-                    ai = m + 1;
-                    d2 = 0.0;
-                    dif = 1.0;
+                    ai = Scalar(m + 1);
+                    d2 = Scalar(0.0);
+                    dif = Scalar(1.0);
                 }
 
                 for (size_t k = 0; k < m; ++k)
@@ -252,8 +252,8 @@ namespace Kronrod
                 }
                 else
                 {
-                    f = 0.5 * (b2 - b0);
-                    fd = 4.0 * abscGaussKronrod * d2;
+                    f = Scalar(0.5) * (b2 - b0);
+                    fd = Scalar(4.0) * abscGaussKronrod * d2;
                 }
 
                 // Newton correction.
@@ -268,20 +268,20 @@ namespace Kronrod
                 // Identify non-convergence of the iterative solver after 50 iterations
                 if (iter > iterationLimit)
                 {
-                    std::cout << "Newton-Raphson iterative abscissae solver failed.";
+                    std::cout << "@abscWeightKronrod Newton-Raphson iterative abscissae solver failed."<<std::endl;
                     return;
                 }
             }
 
             // Computation of the weight.
-            d0 = 1.;
+            d0 = Scalar(1.);
             d1 = abscGaussKronrod;
-            ai = 0.;
+            ai = Scalar(0.);
 
             for (size_t k = 0; k < nNodes - 1; ++k)
             {
-                ai = ai + 1.;
-                d2 = ((ai + ai + 1.) * (abscGaussKronrod * d1) - (ai * d0)) / (ai + 1.);
+                ai = ai + Scalar(1.);
+                d2 = ((ai + ai + Scalar(1.)) * (abscGaussKronrod * d1) - (ai * d0)) / (ai + Scalar(1.));
                 d0 = d1;
                 d1 = d2;
             }
@@ -310,18 +310,18 @@ namespace Kronrod
             Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
             Scalar& weightGaussKronrod, Scalar& weightGauss)
         {
-            Scalar ai = 0.;
-            Scalar delta = 1.;
+            Scalar ai(0.);
+            Scalar delta(1.);
 
-            Scalar p0 = 0.;
-            Scalar p1 = 0.;
-            Scalar p2 = 0.;
+            Scalar p0(0.);
+            Scalar p1(0.);
+            Scalar p2(0.);
 
-            Scalar pd0 = 0.;
-            Scalar pd1 = 0.;
-            Scalar pd2 = 0.;
+            Scalar pd0(0.);
+            Scalar pd1(0.);
+            Scalar pd2(0.);
 
-            Scalar yy = 0.;
+            Scalar yy(0.);
 
             size_t iter = 0;
             size_t iterationLimit = 50;
@@ -331,10 +331,10 @@ namespace Kronrod
             while (Abs(delta) > machineEpsilon())
             {
                 ++iter;
-                p0 = 1.;
+                p0 = Scalar(1.);
                 p1 = abscGaussKronrod;
-                pd0 = 0.;
-                pd1 = 1.;
+                pd0 = Scalar(0.);
+                pd1 = Scalar(1.);
 
                 // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
                 if (nNodes <= 1)
@@ -342,23 +342,23 @@ namespace Kronrod
                     //@TODO fabs() call needs to be replaced with std::abs()
                     if (machineEpsilon() < Abs(abscGaussKronrod))
                     {
-                        p2 = (3.0 * (abscGaussKronrod) * (abscGaussKronrod) - 1.0) / 2.0;
-                        pd2 = 3.0 * (abscGaussKronrod);
+                        p2 = (Scalar(3.0) * (abscGaussKronrod) * (abscGaussKronrod) - Scalar(1.0)) / Scalar(2.0);
+                        pd2 = Scalar(3.0) * (abscGaussKronrod);
                     }
                     else
                     {
-                        p2 = 3.0 * (abscGaussKronrod);
-                        pd2 = 3.0;
+                        p2 = Scalar(3.0) * (abscGaussKronrod);
+                        pd2 = Scalar(3.0);
                     }
                 }
 
-                ai = 0.0;
+                ai = Scalar(0.0);
 
                 for (size_t k = 0; k < nNodes - 1; ++k)
                 {
-                    ai = ai + 1.0;
-                    p2 = ((ai + ai + 1.0) * abscGaussKronrod * p1 - ai * p0) / (ai + 1.0);
-                    pd2 = ((ai + ai + 1.0) * (p1 + abscGaussKronrod * pd1) - ai * pd0) / (ai + 1.0);
+                    ai = ai + Scalar(1.0);
+                    p2 = ((ai + ai + Scalar(1.0) ) * abscGaussKronrod * p1 - ai * p0) / (ai + Scalar(1.0) );
+                    pd2 = ((ai + ai + Scalar(1.0) ) * (p1 + abscGaussKronrod * pd1) - ai * pd0) / (ai + Scalar(1.0) );
                     p0 = p1;
                     p1 = p2;
                     pd0 = pd1;
@@ -368,7 +368,7 @@ namespace Kronrod
                 // Newton correction.
                 delta = p2 / pd2;
 
-                if (abscGaussKronrod == 0.0)
+                if (abscGaussKronrod == Scalar(0.0))
                 {
                     abscGaussKronrod -= delta;
                     break;
@@ -381,19 +381,19 @@ namespace Kronrod
                 // Identify non-convergence of the iterative solver after 50 iterations
                 if (iter > iterationLimit)
                 {
-                    std::cout << "Newton-Raphson iterative abscissae solver failed.";
+                    std::cout << "@abscWeightGauss Newton-Raphson iterative abscissae solver failed."<<std::endl;;
                     return;
                 }
             }
 
             // Computation of the Gauss weight.
             Scalar aN = nNodes;
-            weightGauss = 2.0 / (aN * pd2 * p0);
+            weightGauss = Scalar(2.0) / (aN * pd2 * p0);
 
             // Initialize
-            p1 = 0.0;
+            p1 = Scalar(0.0);
             p2 = betaCoeffs(m);
-            yy = 4.0 * (abscGaussKronrod) * (abscGaussKronrod) - 2.0;
+            yy = Scalar(4.0) * (abscGaussKronrod) * (abscGaussKronrod) - Scalar(2.0);
 
             for (size_t k = 1; k <= m; ++k)
             {
@@ -408,7 +408,7 @@ namespace Kronrod
             }
             else
             {
-                weightGaussKronrod = weightGauss + (2.0 * chebCoeff) / (pd2 * (p2 - p0));
+                weightGaussKronrod = weightGauss + (Scalar(2.0) * chebCoeff) / (pd2 * (p2 - p0));
             }
 
             return;
