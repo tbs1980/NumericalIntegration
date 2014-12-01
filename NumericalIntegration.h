@@ -19,18 +19,17 @@
 namespace Eigen
 {
 /**
-  * \defgroup Numerical_Integration_Module Quadrature and Nodes_Weights module
-  *
-  * This module provides an adaptive quadrature method of numerical integration of the style
-  * implemented in the QUADPACK library while offering functionality to calculate nodes/weights
-  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal
-  * precision type.
-  *
-  * \code
-  * #include <unsupported/Eigen/NumericalIntegration>
-  * \endcode
-  */
+ * \defgroup Numerical_Integration_Module Quadrature and Nodes_Weights module
+ *
+ * This module provides an adaptive quadrature method of numerical integration of the style
+ * implemented in the QUADPACK library while offering functionality to calculate nodes/weights
+ * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal
+ * precision type.
+ */
+
+ //  include <unsupported/Eigen/NumericalIntegration>
 }
+
 //#include <cassert>
 #include <cmath>
 #include <cstdlib>

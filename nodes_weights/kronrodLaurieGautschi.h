@@ -403,6 +403,7 @@ namespace Kronrod {
         static void computeAbscissaeAndWeights(unsigned int nNodes,
             Eigen::Array<RealType, Eigen::Dynamic, 1> &abscGaussKronrod,
             Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGaussKronrod,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> &abscGauss,
             Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGauss)
         {
             VectorType xGK = VectorType::Zero(2*nNodes+1);
@@ -417,6 +418,7 @@ namespace Kronrod {
 
             abscGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
             weightGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
+            abscGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
             weightGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
 
             for(unsigned int i=0;i<arraySize;++i)
@@ -429,10 +431,10 @@ namespace Kronrod {
 
             for(unsigned int i=0;i<arraySize/2;++i)
             {
+                abscGauss(i) = Abs(xG(i));
                 weightGauss(i) = wG(i);
             }
         }
-
     };
 }
 

@@ -109,20 +109,22 @@ int compare_codes_unified_interface(void)
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(320); //128,320, 384,448 gives an error Newton-Raphson iterative abscissae solver failed.
+    Scalar::set_default_prec(320); //128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
     //256,288,320,352,384,416,448
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-    typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef Kronrod::Piessens<Scalar> PiessensPolicy;
 
+    typedef LaurieGautschiPolicy::IndexType IndexType;
+    
     const unsigned int N = 100;
     const int outputIntegers = 80; //beyond 67 integers methods disagree for precision=256.
 
-    LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,wGLaurieGautschi);
+    LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,xGLaurieGautschi,wGLaurieGautschi);
 
     std::ofstream fout;
     fout.open("LaurieGautschi320.dat");
@@ -149,12 +151,12 @@ int compare_codes_unified_interface(void)
 
     fout.close();
 
-
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKPiessens;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKPiessens;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGPiessens;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGPiessens;
 
-    PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,wGPiessens);
+    PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,xGPiessens,wGPiessens);
 
     fout.open("Piessens320.dat");
 

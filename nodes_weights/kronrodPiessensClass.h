@@ -203,7 +203,6 @@ namespace Kronrod
             size_t iterationLimit = 50;
 
             // Iterative process for the computation of a Kronrod abscissa.
-            //@TODO fabs() call needs to be replaced with std::abs()
             while (Abs(delta) > machineEpsilon())
             {
                 ++iter;
@@ -327,7 +326,6 @@ namespace Kronrod
             size_t iterationLimit = 50;
 
             //  Iterative process for the computation of a Gaussian abscissa.
-            // @TODO fabs() call needs to be replaced with std::abs()
             while (Abs(delta) > machineEpsilon())
             {
                 ++iter;
@@ -339,7 +337,6 @@ namespace Kronrod
                 // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
                 if (nNodes <= 1)
                 {
-                    //@TODO fabs() call needs to be replaced with std::abs()
                     if (machineEpsilon() < Abs(abscGaussKronrod))
                     {
                         p2 = (Scalar(3.0) * (abscGaussKronrod) * (abscGaussKronrod) - Scalar(1.0)) / Scalar(2.0);
@@ -378,7 +375,7 @@ namespace Kronrod
                     abscGaussKronrod -= delta;
                 }
 
-                // Identify non-convergence of the iterative solver after 50 iterations
+                // Identify non-convergence of the iterative solver after iteration limit.
                 if (iter > iterationLimit)
                 {
                     std::cout << "@abscWeightGauss Newton-Raphson iterative abscissae solver failed."<<std::endl;;
@@ -433,11 +430,12 @@ namespace Kronrod
         static void computeAbscissaeAndWeights(unsigned int nNodes,
             Eigen::Array<Scalar, Eigen::Dynamic, 1> &abscGaussKronrod,
             Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> abscGauss,
             Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGauss)
         {
             Piessens::kronrod(nNodes,abscGaussKronrod,weightGaussKronrod,weightGauss);
+            abscGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(abscGauss.rows());
         }
-
     };
 }
 #endif //NI_KRONRODPIESSENS_CLASS_H
