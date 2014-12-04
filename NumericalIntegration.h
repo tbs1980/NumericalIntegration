@@ -30,7 +30,6 @@ namespace Eigen
     //include <unsupported/Eigen/NumericalIntegration>
 }
 
-//#include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
