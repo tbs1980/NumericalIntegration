@@ -13,7 +13,7 @@ Scalar desiredRelativeError()
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -42,15 +42,15 @@ template<typename Scalar>
 class IntegrandLogPowFunctor
 {
 public:
-    Scalar operator()(const Scalar param) const
+    Scalar operator()(const Scalar& param) const
     {
       using std::pow;
       return pow(param, m_alpha) * log(1/param);
     }
 
-    void setAlpha(const Scalar alpha) {m_alpha = alpha;}
+    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
 
-    static Scalar exact_value_in_01(const Scalar alpha)
+    static Scalar exact_value_in_01(const Scalar& alpha)
     {
       Scalar a1 = alpha+1.;
       return 1./(a1*a1);

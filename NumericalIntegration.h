@@ -5,9 +5,9 @@
 // and original work by Dirk Laurie, Walter Gautschi, with support by work
 // from John Burkardt.
 //
-// Multiprecision templating by Pavel Holoborodko.
-// Code porting and unit tests created by Sreekumar Thaithara Balan,
-// Mark Sauder, and Matt Beall 2014
+// Multiprecision templating by Pavel Holoborodko and
+// code porting, multiprecision templating, and unit tests created by
+// Sreekumar Thaithara Balan, Mark Sauder, and Matt Beall 2014.
 //
 // This Source Code Form is subject to the terms of the Mozilla
 // Public License v. 2.0. If a copy of the MPL was not distributed
@@ -27,7 +27,7 @@ namespace Eigen
  * precision type.
  */
 
- //  include <unsupported/Eigen/NumericalIntegration>
+    //include <unsupported/Eigen/NumericalIntegration>
 }
 
 //#include <cassert>

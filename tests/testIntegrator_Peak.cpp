@@ -13,7 +13,7 @@ Scalar desiredRelativeError()
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -42,7 +42,7 @@ template<typename Scalar>
 class IntegrandPeakFunctor
 {
 public:
-  Scalar operator()(const Scalar param) const
+  Scalar operator()(const Scalar& param) const
   {
     using std::pow;
     return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
@@ -51,9 +51,9 @@ public:
   /**
    * @param alpha A parameter for varying the peak.
    */
-  void setAlpha(const Scalar alpha) {m_alpha = alpha;}
+  void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
 
-  static Scalar integralPeak(const Scalar alpha)
+  static Scalar integralPeak(const Scalar& alpha)
   {
     using std::pow;
     using std::atan;

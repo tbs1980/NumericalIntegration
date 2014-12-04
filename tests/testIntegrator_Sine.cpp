@@ -13,7 +13,7 @@ Scalar desiredRelativeError()
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -39,7 +39,7 @@ template<typename Scalar>
 class IntegrandSineFunctor
 {
 public:
-    Scalar operator()(const Scalar param) const
+    Scalar operator()(const Scalar& param) const
     {
       using std::sin;
       return sin(param);

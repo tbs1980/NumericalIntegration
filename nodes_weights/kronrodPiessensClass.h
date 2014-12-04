@@ -42,6 +42,9 @@ namespace Kronrod
         *    The arrays abcsGaussKronrod, weightGaussKronrod and weightGauss contain the
         *    positive abscissae in decreasing order, and the weights of each abscissa in
         *    the Gauss-Kronrod and Gauss rules, respectively.
+        *    
+        *    Ported to C++/Eigen and templated for multiprecision by Mark Sauder,
+        *    Sreekumar Thaithara Balan, Matt Beall, and R. Jeff Jenkins - September 2014.
         *
         * Input Parameters:
         * \param[in] n, the order of the Gauss rule.
