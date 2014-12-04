@@ -61,7 +61,7 @@ namespace Kronrod {
 
             using std::pow;
             a_out(0) = (b-a)/(a+b+RealType(2.));
-            b_out(0) = pow(RealType(2.),(a+b+RealType(1.)))*Gamma(a+RealType(1.))*Gamma(b+RealType(1.))/Gamma(a+b+RealType(2.));
+            b_out(0) = pow(RealType(2.),(a+b+RealType(1.)))*gamma(a+RealType(1.))*gamma(b+RealType(1.))/gamma(a+b+RealType(2.));
 
             for(IndexType n=1;n<N;++n)
             {
@@ -403,10 +403,10 @@ namespace Kronrod {
         }
 
         static void computeAbscissaeAndWeights(unsigned int nNodes,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> &abscGaussKronrod,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGaussKronrod,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> &abscGauss,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> &weightGauss)
+            Eigen::Array<RealType, Eigen::Dynamic, 1> & abscGaussKronrod,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> & weightGaussKronrod,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> & abscGauss,
+            Eigen::Array<RealType, Eigen::Dynamic, 1> & weightGauss)
         {
             VectorType xGK = VectorType::Zero(2*nNodes+1);
             VectorType wGK = VectorType::Zero(2*nNodes+1);

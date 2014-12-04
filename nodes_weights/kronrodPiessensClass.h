@@ -53,9 +53,9 @@ namespace Kronrod
         */
         static void kronrod(
             unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGauss)
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGauss)
         {
             typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
             unsigned int arraySize = nNodes + 1;
