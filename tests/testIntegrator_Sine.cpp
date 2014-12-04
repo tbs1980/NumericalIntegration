@@ -41,7 +41,8 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar param) const
     {
-        return Sin(param);
+      using std::sin;
+      return sin(param);
     }
 };
 
@@ -82,21 +83,22 @@ int test_sine(void)
 
         Scalar expected = Scalar(2);
 
-        if(Abs(expected - actual) > desiredRelativeError<Scalar>() * Abs(expected)
+        using std::abs;
+        if(abs(expected - actual) > desiredRelativeError<Scalar>() * abs(expected)
             or eigenIntegrator.errorCode() !=0)
         {
-            fout << "\nrule " << i << "\n Abs(expected - actual) =" << Abs(expected - actual)
-                      << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                      << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
+            fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+                      << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
             fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
             success = false;
         }
         else
         {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << Abs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * Abs(expected) << std::endl;
+                fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
                 fout << "Success!\n ";
         }

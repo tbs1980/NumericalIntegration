@@ -71,7 +71,7 @@ public:
   /**
    * \brief This function calculates an approximation I' to a given definite integral I, the
    *        integral of f from lowerLimit to upperLimit, hopefully satisfying
-   *        fabs(I - I') <= max(desiredAbsoluteError, desiredRelativeError * fabs(I)).
+   *        abs(I - I') <= max(desiredAbsoluteError, desiredRelativeError * abs(I)).
    *
    * This function is best suited for integrands without singularities or discontinuities, which
    * are too difficult for non-adaptive quadrature, and, in particular, for integrands with
@@ -122,7 +122,8 @@ public:
     m_errorList[0] = m_estimatedError;
 
     // Test on accuracy.
-    Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * Abs(integral));
+    using std::abs;
+    Scalar errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * abs(integral));
 
     if (m_maxSubintervals == 1)
     {
@@ -195,7 +196,8 @@ public:
 
       if (defAb1 != error1 && defAb2 != error2)
       {
-          if (Abs(m_integralList[maxErrorIndex] - area12) <= Abs(area12) * Scalar(1.e-5)
+          using std::abs;
+          if (abs(m_integralList[maxErrorIndex] - area12) <= abs(area12) * Scalar(1.e-5)
               && error12 >= errorMax * Scalar(.99))
         {
           ++roundOff1;
@@ -209,7 +211,7 @@ public:
       m_integralList[maxErrorIndex] = area1;
       m_integralList[numSubintervalsIndex] = area2;
 
-      errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * Abs(area));
+      errorBound = (std::max)(desiredAbsoluteError, desiredRelativeError * abs(area));
 
       if (errorSum > errorBound)
       {
@@ -225,9 +227,9 @@ public:
         }
         // Set m_error_code in the case of poor integrand behaviour within
         // the integration range.
-        else if ((std::max)(Abs(lower1), Abs(upper2))
+        else if ((std::max)(abs(lower1), abs(upper2))
             <= (Eigen::NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
-            * (Abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
+            * (abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3) ))
         {
           m_errorCode = 3;
         }
@@ -417,11 +419,11 @@ private:
    * \param[in] lowerLimit The lower limit of integration.
    * \param[in] upperLimit The upper limit of integration.
    * \param[in/out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
-   *             fabs(I - I').
+   *             abs(I - I').
    * \param[in/out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
    *             upperLimit.
    * \param[in/out] absDiffIntegral The approximation to the integral of
-   *             fabs(f - I/(upperLimit - lowerLimit)).
+   *             abs(f - I/(upperLimit - lowerLimit)).
    *
    * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
    *          41, 51, 61, 71, 81, 91, 101, 121, 201-point kronrod rule obtained by optimal addition
@@ -561,7 +563,8 @@ private:
 
     // The result of the Kronrod formula.
     Scalar resultKronrod = weightsGaussKronrod[weightsGaussKronrod.size() - 1] * fCenter;
-    absIntegral = Abs(resultKronrod);
+    using std::abs;
+    absIntegral = abs(resultKronrod);
 
     for (DenseIndex j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
     {
@@ -578,7 +581,7 @@ private:
       resultGauss += weightsGauss[j - 1] * funcSum;
       resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-      absIntegral += weightsGaussKronrod[jj] * (Abs(f1) + Abs(f2));
+      absIntegral += weightsGaussKronrod[jj] * (abs(f1) + abs(f2));
     }
 
     for (DenseIndex j = 0; j < weightsGauss.size(); ++j)
@@ -596,14 +599,14 @@ private:
 
       resultKronrod += weightsGaussKronrod[jj] * funcSum;
 
-      absIntegral += weightsGaussKronrod[jj] * (Abs(f1) + Abs(f2));
+      absIntegral += weightsGaussKronrod[jj] * (abs(f1) + abs(f2));
     }
 
     // Approximation to the mean value of f over the interval (lowerLimit, upperLimit),
     // i.e. I / (upperLimit - lowerLimit)
     Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
-    absDiffIntegral = weightsGaussKronrod[7] * (Abs(fCenter - resultMeanKronrod));
+    absDiffIntegral = weightsGaussKronrod[7] * (abs(fCenter - resultMeanKronrod));
 
     DenseIndex size1 = weightsGaussKronrod.size() - 1;
 
@@ -612,14 +615,15 @@ private:
                         * weightsGaussKronrod.head(size1)).sum();
 
     Scalar result = resultKronrod * halfLength;
-    absIntegral *= Abs(halfLength);
-    absDiffIntegral *= Abs(halfLength);
-    estimatedError = Abs((resultKronrod - resultGauss) * halfLength);
+    absIntegral *= abs(halfLength);
+    absDiffIntegral *= abs(halfLength);
+    estimatedError = abs((resultKronrod - resultGauss) * halfLength);
 
     if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
     {
+      using std::pow;
       estimatedError = absDiffIntegral
-        * (std::min)(Scalar(1.), Pow((estimatedError * Scalar(200.) / absDiffIntegral), Scalar(1.5)));
+        * (std::min)(Scalar(1.), pow((estimatedError * Scalar(200.) / absDiffIntegral), Scalar(1.5)));
     }
 
     if (absIntegral
@@ -681,7 +685,7 @@ private:
   int m_maxSubintervals;
 
   /**
-   * \brief Estimate of the modulus of the absolute error, which should equal or exceed fabs(I - I').
+   * \brief Estimate of the modulus of the absolute error, which should equal or exceed abs(I - I').
    */
   Scalar m_estimatedError;
 

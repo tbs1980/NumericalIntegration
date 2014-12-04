@@ -36,6 +36,7 @@ class IntegrandPeakFunctor
 public:
   double operator()(const double param) const
   {
+    using std::pow;
     return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
   }
 
@@ -56,6 +57,9 @@ class IntegrandOscillatesFunctor
 public:
   double operator()(const double param) const
   {
+    using std::sin;
+    using std::cos;
+    using std::pow;
     return cos(pow(2., static_cast<double>(m_alpha)) * sin(param));
   }
 
@@ -76,6 +80,7 @@ class IntegrandInfiniteFunctor
 public:
   float operator()(const float param) const
   {
+    using std::pow;
     return pow(param, 2.) * exp(-param * pow(2, -m_alpha));
   }
 
@@ -90,6 +95,7 @@ private:
 
 double IntegratorTest::integralPeak(const double alpha)
 {
+  using std::pow;
   double factor = pow(4., alpha - 1.);
 
   return atan((4 - M_PI) * factor) + atan(M_PI * factor);
@@ -122,7 +128,7 @@ double IntegratorTest::integralOscillates(const int alpha)
 float IntegratorTest::integralInfinite(const float alpha)
 {
   float e40 = exp(40.);
-
+  using std::pow;
   return (e40 - 841.) * pow(2., 3. * alpha + 1.) / e40;
 }
 
@@ -166,7 +172,8 @@ TEST_F(IntegratorTest, qagPeak)
 
       double expected = integralPeak(alpha);
 
-      EXPECT_LE(fabs(expected - actual), desiredRelativeError<double>() * fabs(expected));
+      using std::abs;
+      EXPECT_LE(abs(expected - actual), desiredRelativeError<double>() * abs(expected));
     }
   }
 }
@@ -189,7 +196,8 @@ TEST_F(IntegratorTest, qagOscillates)
 
       double expected = integralOscillates(alpha);
 
-      EXPECT_LE(fabs(expected - actual), desiredRelativeError<double>() * fabs(expected));
+      using std::abs;
+      EXPECT_LE(abs(expected - actual), desiredRelativeError<double>() * abs(expected));
     }
   }
 }
@@ -209,13 +217,16 @@ TEST_F(IntegratorTest, qagInfinite)
     for (float alpha = 0.; alpha <= 5.; ++alpha)
     {
       integrandInfiniteFunctor.setAlpha(alpha);
+
+      using std::pow;
       float actual = floatIntegrator.quadratureAdaptive(
         integrandInfiniteFunctor, 0., 40. * pow(2., alpha), 0., desiredRelativeError<float>(),
         quadratureRule);
 
       float expected = integralInfinite(alpha);
 
-      EXPECT_LE(fabs(expected - actual), desiredRelativeError<float>() * fabs(expected));
+      using std::abs;
+      EXPECT_LE(abs(expected - actual), desiredRelativeError<float>() * abs(expected));
     }
   }
 }

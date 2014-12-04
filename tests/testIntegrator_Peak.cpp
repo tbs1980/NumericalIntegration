@@ -44,6 +44,7 @@ class IntegrandPeakFunctor
 public:
   Scalar operator()(const Scalar param) const
   {
+    using std::pow;
     return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
   }
 
@@ -54,6 +55,8 @@ public:
 
   static Scalar integralPeak(const Scalar alpha)
   {
+    using std::pow;
+    using std::atan;
     Scalar factor = pow(4., alpha - 1.);
     return atan((4. - M_PI) * factor) + atan(M_PI * factor);
   }
@@ -102,20 +105,21 @@ int test_peak(void)
 
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
 
-            if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
+            using std::abs;
+            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
             {
-                fout << "\nrule " << i << "\n fabs(expected - actual) =" << fabs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * fabs(expected)<<std::endl;
+                fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+                          << desiredRelativeError<Scalar>() * abs(expected)<<std::endl;
 
                 fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
             }
             else
             {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
                 fout << "Success!\n";
                 counter++;

@@ -44,15 +44,16 @@ class IntegrandLogPowFunctor
 public:
     Scalar operator()(const Scalar param) const
     {
-    return pow(param, m_alpha) * log(1/param);
+      using std::pow;
+      return pow(param, m_alpha) * log(1/param);
     }
 
     void setAlpha(const Scalar alpha) {m_alpha = alpha;}
 
     static Scalar exact_value_in_01(const Scalar alpha)
     {
-    Scalar a1 = alpha+1.;
-    return 1./(a1*a1);
+      Scalar a1 = alpha+1.;
+      return 1./(a1*a1);
     }
 
     private:
@@ -99,20 +100,21 @@ int test_logpow(void)
 
             Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
-            if(fabs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * fabs(expected))
+            using std::abs;
+            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
             {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
+                fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
                           << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
                 fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
             }
             else
             {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << fabs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * fabs(expected) << std::endl;
+                fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+                          << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
                 fout << "Success!\n";
                 counter++;

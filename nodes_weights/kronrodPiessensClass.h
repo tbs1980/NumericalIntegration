@@ -107,11 +107,13 @@ namespace Kronrod
             // for the Newton-Raphson iterative solution.  These values are derived
             // from Pythagorean identities to the original code to more closely follow
             // the mathematics of the 1974 CoM paper.
-            Scalar s1 = Sin((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
-            Scalar c1 = Cos((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
+            using std::sin;
+            using std::cos;
+            Scalar s1 = sin((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c1 = cos((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
 
-            Scalar s2 = Sin((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
-            Scalar c2 = Cos((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar s2 = sin((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c2 = cos((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
 
             // Coefficient for Gauss and Kronrod abscissae and weights
             Scalar chebCoeff1 = Scalar(1.0) - Scalar(1.0) / (Scalar(8.0) * aN * aN) + Scalar(1.0) / (Scalar(8.0) * aN * aN * aN);
@@ -203,7 +205,8 @@ namespace Kronrod
             size_t iterationLimit = 50;
 
             // Iterative process for the computation of a Kronrod abscissa.
-            while (Abs(delta) > machineEpsilon())
+            using std::abs;
+            while (abs(delta) > machineEpsilon())
             {
                 ++iter;
 
@@ -326,7 +329,8 @@ namespace Kronrod
             size_t iterationLimit = 50;
 
             //  Iterative process for the computation of a Gaussian abscissa.
-            while (Abs(delta) > machineEpsilon())
+            using std::abs;
+            while (abs(delta) > machineEpsilon())
             {
                 ++iter;
                 p0 = Scalar(1.);
@@ -336,8 +340,9 @@ namespace Kronrod
 
                 // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
                 if (nNodes <= 1)
-                {
-                    if (machineEpsilon() < Abs(abscGaussKronrod))
+                {   
+                    using std::abs;
+                    if (machineEpsilon() < abs(abscGaussKronrod))
                     {
                         p2 = (Scalar(3.0) * (abscGaussKronrod) * (abscGaussKronrod) - Scalar(1.0)) / Scalar(2.0);
                         pd2 = Scalar(3.0) * (abscGaussKronrod);

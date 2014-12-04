@@ -47,27 +47,6 @@ namespace Eigen
 //http://www.wolframalpha.com/input/?i=pi+to+500+decimal+places
 #define NI_M_PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194913
 
-template<typename T>
-T Pow(T base, T exponent)
-{
-    return pow(base,exponent);
-}
-
-float Pow(float base, float exponent)
-{
-    return std::pow(base,exponent);
-}
-
-double Pow(double base, double exponent)
-{
-    return std::pow(base,exponent);
-}
-
-long double Pow(long double base, long double exponent)
-{
-    return std::pow(base,exponent);
-}
-
 // Need to switch between gamma() from mpfrc++ and tgamma() from c++
 template<typename T>
 T Gamma(T x)
@@ -89,71 +68,6 @@ long double Gamma(long double x)
 {
     return tgamma(x);
 }
-
-template<typename T>
-T Sin(T arg)
-{
-    return sin(arg);
-}
-
-float Sin(float arg)
-{
-    return std::sin(arg);
-}
-
-double Sin(double arg)
-{
-    return std::sin(arg);
-}
-
-long double Sin(long double arg)
-{
-    return std::sin(arg);
-}
-
-template<typename T>
-T Cos(T arg)
-{
-    return cos(arg);
-}
-
-float Cos(float arg)
-{
-    return std::cos(arg);
-}
-
-double Cos(double arg)
-{
-    return std::cos(arg);
-}
-
-long double Cos(long double arg)
-{
-    return std::cos(arg);
-}
-
-
-template<typename T>
-T Abs(T arg)
-{
-    return abs(arg);
-}
-
-float Abs(float arg)
-{
-    return std::abs(arg);
-}
-
-double Abs(double arg)
-{
-    return std::abs(arg);
-}
-
-long double Abs(long double arg)
-{
-    return std::abs(arg);
-}
-
 
 #include "nodes_weights/kronrodLaurieGautschi.h"
 #include "nodes_weights/kronrodPiessens.h"

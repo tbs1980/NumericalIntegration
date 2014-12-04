@@ -59,8 +59,9 @@ namespace Kronrod {
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
 
+            using std::pow;
             a_out(0) = (b-a)/(a+b+RealType(2.));
-            b_out(0) = Pow(RealType(2.),(a+b+RealType(1.)))*Gamma(a+RealType(1.))*Gamma(b+RealType(1.))/Gamma(a+b+RealType(2.));
+            b_out(0) = pow(RealType(2.),(a+b+RealType(1.)))*Gamma(a+RealType(1.))*Gamma(b+RealType(1.))/Gamma(a+b+RealType(2.));
 
             for(IndexType n=1;n<N;++n)
             {
@@ -107,7 +108,8 @@ namespace Kronrod {
                 a_out(n)  = (RealType(1.)+a_out(n))/RealType(2.);
             }
 
-            b_out(0) = b_out(0)/Pow(RealType(2),a+b+RealType(1.));
+            using std::pow;
+            b_out(0) = b_out(0)/pow(RealType(2),a+b+RealType(1.));
 
             for(IndexType n=1;n<N;++n)
             {
@@ -421,9 +423,10 @@ namespace Kronrod {
             abscGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
             weightGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
 
+            using std::abs;
             for(unsigned int i=0;i<arraySize;++i)
             {
-                abscGaussKronrod(i) = Abs(xGK(i));
+                abscGaussKronrod(i) = abs(xGK(i));
                 weightGaussKronrod(i) = wGK(i);
             }
 
@@ -431,7 +434,7 @@ namespace Kronrod {
 
             for(unsigned int i=0;i<arraySize/2;++i)
             {
-                abscGauss(i) = Abs(xG(i));
+                abscGauss(i) = abs(xG(i));
                 weightGauss(i) = wG(i);
             }
         }
