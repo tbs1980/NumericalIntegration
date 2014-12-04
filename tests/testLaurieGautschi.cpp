@@ -20,6 +20,7 @@ int compare_codes(void)
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef LaurieGautschiPolicy::IndexType IndexType;
     typedef LaurieGautschiPolicy::VectorType VectorType;
+    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
 
     const IndexType N = 100;
     const int outputIntegers = 256;
@@ -62,7 +63,7 @@ int compare_codes(void)
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKPiessens;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGPiessens;
 
-    Kronrod::kronrod(N, xGKPiessens,  wGKPiessens, wGPiessens);
+    PiessensPolicy::kronrod(N, xGKPiessens,  wGKPiessens, wGPiessens);
 
     for(IndexType i = 0; i < xGKPiessens.rows(); ++i)
     {
