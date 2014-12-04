@@ -12,18 +12,18 @@ protected:
   /**
    * This is the closed form of the integral of integrandPeak. The bounds are 0 to 1.
    */
-  static double integralPeak(const double alpha);
+  static double integralPeak(const double& alpha);
 
   /**
    * This is the closed form of the integral of intregrandOscillates. The bounds are 0 to pi.
    */
-  static double integralOscillates(const int alpha);
+  static double integralOscillates(const int& alpha);
 
   /**
    * This is the closed form of the integral of integrandInfinite. The bounds are 0 to
    * 40*2^alphaInfinite.
    */
-  static float integralInfinite(const float alpha);
+  static float integralInfinite(const float& alpha);
 
   Eigen::Integrator<double> integrator;
 };
@@ -34,16 +34,16 @@ protected:
 class IntegrandPeakFunctor
 {
 public:
-  double operator()(const double param) const
+  double operator()(const double& param) const
   {
     using std::pow;
     return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
   }
 
   /**
-   * @param alpha A parameter for varying the peak.
+   * \param alpha A parameter for varying the peak.
    */
-  void setAlpha(const double alpha) {m_alpha = alpha;}
+  void setAlpha(const double& alpha) {m_alpha = alpha;}
 
 private:
   double m_alpha;
@@ -55,7 +55,7 @@ private:
 class IntegrandOscillatesFunctor
 {
 public:
-  double operator()(const double param) const
+  double operator()(const double& param) const
   {
     using std::sin;
     using std::cos;
@@ -66,7 +66,7 @@ public:
   /**
    * A parameter for varying the oscillation strength.
    */
-  void setAlpha(const double alpha) {m_alpha = alpha;}
+  void setAlpha(const double& alpha) {m_alpha = alpha;}
 
 private:
   double m_alpha;
@@ -78,7 +78,7 @@ private:
 class IntegrandInfiniteFunctor
 {
 public:
-  float operator()(const float param) const
+  float operator()(const float& param) const
   {
     using std::pow;
     return pow(param, 2.) * exp(-param * pow(2, -m_alpha));
@@ -87,13 +87,13 @@ public:
   /**
    * A paramater for varying the upper bound.
    */
-  void setAlpha(const float alpha) {m_alpha = alpha;}
+  void setAlpha(const float& alpha) {m_alpha = alpha;}
 
 private:
   float m_alpha;
 };
 
-double IntegratorTest::integralPeak(const double alpha)
+double IntegratorTest::integralPeak(const double& alpha)
 {
   using std::pow;
   double factor = pow(4., alpha - 1.);
@@ -101,11 +101,45 @@ double IntegratorTest::integralPeak(const double alpha)
   return atan((4 - M_PI) * factor) + atan(M_PI * factor);
 }
 
-/*
+/**
+ * QuadratureRule are the Gauss-Kronrod abscissae and weights of the pre-calculated rules.
+ */
+template <typename Scalar_>
+typename Eigen::Integrator<Scalar_>::QuadratureRule quadratureRules(const size_t& i)
+{
+  static const typename Eigen::Integrator<Scalar_>::QuadratureRule quadratureRules[12] =
+    {
+      Eigen::Integrator<Scalar_>::GaussKronrod15,
+      Eigen::Integrator<Scalar_>::GaussKronrod21,
+      Eigen::Integrator<Scalar_>::GaussKronrod31,
+      Eigen::Integrator<Scalar_>::GaussKronrod41,
+      Eigen::Integrator<Scalar_>::GaussKronrod51,
+      Eigen::Integrator<Scalar_>::GaussKronrod61,
+      Eigen::Integrator<Scalar_>::GaussKronrod71,
+      Eigen::Integrator<Scalar_>::GaussKronrod81,
+      Eigen::Integrator<Scalar_>::GaussKronrod91,
+      Eigen::Integrator<Scalar_>::GaussKronrod101,
+      Eigen::Integrator<Scalar_>::GaussKronrod121,
+      Eigen::Integrator<Scalar_>::GaussKronrod201
+    };
+
+  return quadratureRules[i];
+}
+
+/**
+ * Relative machine precision.
+ */
+template <typename Scalar_>
+Scalar_ desiredRelativeError()
+{
+  return std::numeric_limits<Scalar_>::epsilon() * 50.;
+}
+
+/**
  * The closed form of this integral has the 0th order Bessel function of the first kind as a
  * factor. Literals are used in the absence of a routine for computing this Bessel function.
  */
-double IntegratorTest::integralOscillates(const int alpha)
+double IntegratorTest::integralOscillates(const int& alpha)
 {
   double integrals[11] =
     {
@@ -125,33 +159,11 @@ double IntegratorTest::integralOscillates(const int alpha)
   return integrals[alpha];
 }
 
-float IntegratorTest::integralInfinite(const float alpha)
+float IntegratorTest::integralInfinite(const float& alpha)
 {
   float e40 = exp(40.);
   using std::pow;
   return (e40 - 841.) * pow(2., 3. * alpha + 1.) / e40;
-}
-
-template <typename Scalar_>
-Scalar_ desiredRelativeError()
-{
-  return std::numeric_limits<Scalar_>::epsilon() * 50.;
-}
-
-template <typename Scalar_>
-typename Eigen::Integrator<Scalar_>::QuadratureRule quadratureRules(const size_t i)
-{
-  static const typename Eigen::Integrator<Scalar_>::QuadratureRule quadratureRules[6] =
-    {
-      Eigen::Integrator<Scalar_>::GaussKronrod15,
-      Eigen::Integrator<Scalar_>::GaussKronrod21,
-      Eigen::Integrator<Scalar_>::GaussKronrod31,
-      Eigen::Integrator<Scalar_>::GaussKronrod41,
-      Eigen::Integrator<Scalar_>::GaussKronrod51,
-      Eigen::Integrator<Scalar_>::GaussKronrod61
-    };
-
-  return quadratureRules[i];
 }
 
 TEST_F(IntegratorTest, qagPeak)
