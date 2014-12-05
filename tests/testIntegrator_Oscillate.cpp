@@ -38,6 +38,9 @@ public:
     Scalar m_alpha;
 };
 
+/**
+ * \param epsilon Relative machine precision.
+ */
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -70,10 +73,12 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
  * The closed form of this integral has the 0th order Bessel function of the first kind as a
  * factor. Literals are used in the absence of a routine for computing this Bessel function.
  */
-Scalar IntegratorTest::integralOscillates(const int& alpha)
+template <typename Scalar>
+Scalar integralOscillates(const int& alpha)
 {
-  Scalar integrals[11] =
-    {
+  template <typename Scalar>
+  Array<Scalar, 11, 1> integrationValues =
+    (Array<Scalar, 11, 1>() <<
        2.4039394306344129,
        0.7033736269566008,
       -1.2476829250428461,
@@ -85,87 +90,100 @@ Scalar IntegratorTest::integralOscillates(const int& alpha)
       -0.1151503602390470,
       -0.0718346295951386,
        0.0458999248689193
-    };
+    );
 
-  return integrals[alpha];
+  return integrationValues[alpha];
 }
 
 int test_oscillate(void)
 {
-    std::ofstream fout;
-    fout.open("Oscillatory_integration_test_output.txt");
+  std::ofstream fout;
+  fout.open("Oscillatory_integration_test_output.txt");
 
-    std::cout<<"Testing "<<std::endl;
+  std::cout<<"Testing "<<std::endl;
 
-    //typedef float Scalar;
-    //typedef double Scalar;
-    //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(16);
+  //typedef float Scalar;
+  //typedef double Scalar;
+  //typedef long double Scalar;
+  typedef mpfr::mpreal Scalar;
+  Scalar::set_default_prec(16);
 
-    typedef Eigen::Integrator<Scalar> IntegratorType;
-    typedef IntegrandOscillateFunctor<Scalar> IntegrandOscillateFunctorType;
+  typedef Eigen::Integrator<Scalar> IntegratorType;
+  typedef IntegrandOscillateFunctor<Scalar> IntegrandOscillateFunctorType;
 
-    //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+  //compute the nodes and weights on the fly
+  QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(256);
-    IntegrandOscillateFunctorType IntegrandOscillateFunctor;
+  IntegratorType eigenIntegrator(256);
+  IntegrandOscillateFunctorType integrandOscillateFunctor;
 
-    bool success = true;
-    int counter = 0;
-    const size_t numKeys = 12;
+  bool success = true;
+  int counter = 0;
+  const size_t numRules = 12;
 
-    for (size_t i = 0; i < numKeys; ++i)
+  for (size_t i = 0; i < numRules; ++i)
+  {
+    counter = 0;
+    Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
+
+    for (int alpha = 0; alpha < 11; ++alpha)
     {
-      counter = 0;
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
+      success = true;
+      integrandOscillateFunctor.setAlpha(alpha);
 
-        for (Scalar alpha = 0.; alpha < 18.; ++alpha)
-        {
-            success = true;
-            integrandOscillatesFunctor.setAlpha(alpha);
-            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandOscillatesFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+      Scalar actual = eigenIntegrator.quadratureAdaptive(integrandOscillateFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+      Scalar expected = integralOscillates(alpha);
 
-            Scalar expected = integralOscillates(alpha);
+      using std::abs;
+      if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
+      {
+        fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
+             << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+             << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
-            using std::abs;
-            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
-            {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-
-                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
-                success = false;
-            }
-            else
-            {
-                fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * abs(expected)= "
-                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-                          
-                fout << "Success!\n";
-                counter++;
-            }
-        }
-
-        if(success && counter == 18)    
-        {
-          fout << "\n  Test Succeeded!\n" << std::endl;
-          fout.close();
-          break;
-        }
-        else
-        {
-          fout <<"\n  Test Failed.\n" << std::endl;
-        }
+        fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
+        success = false;
+      }
+      else
+      {
+        fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+                  << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
+                  
+        fout << "Success!\n";
+        counter++;
+      }
     }
+
+    if(success && counter == 18)    
+    {
+      fout << "\n  Test Succeeded!\n" << std::endl;
+      fout.close();
+      break;
+    }
+    else
+    {
+      fout <<"\n  Test Failed.\n" << std::endl;
+    }
+  }
+
+  fout.close();
+
+  if(success && counter == 18)
+  {
+    std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+    return EXIT_SUCCESS;
+  }
+  else
+  {
+    std::cout << std::endl << "  Test Failed.\n" << std::endl;
+    return EXIT_FAILURE;
+  }
 }
 
 int main(void)
 {
-    int ret = EXIT_SUCCESS;
-    ret += test_oscillate();
-    return EXIT_SUCCESS;
+  int ret = EXIT_SUCCESS;
+  ret += test_oscillate();
+  return EXIT_SUCCESS;
 }

@@ -14,26 +14,26 @@ template<typename Scalar>
 class IntegrandLogPowFunctor
 {
 public:
-    Scalar operator()(const Scalar& param) const
-    {
-      using std::pow;
-      using std::log;
-      return pow(param, m_alpha) * log(1/param);
-    }
+  Scalar operator()(const Scalar& param) const
+  {
+    using std::pow;
+    using std::log;
+    return pow(param, m_alpha) * log(1/param);
+  }
 
-    /**
-     * \param alpha A parameter for varying the upper bound.
-     */
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+  /**
+   * \param alpha A parameter for varying the upper bound.
+   */
+  void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
 
-    static Scalar exact_value_in_01(const Scalar& alpha)
-    {
-      Scalar a1 = alpha+1.;
-      return 1./(a1*a1);
-    }
+  static Scalar exact_value_in_01(const Scalar& alpha)
+  {
+    Scalar a1 = alpha+1.;
+    return 1./(a1*a1);
+  }
 
 private:
-    Scalar m_alpha;
+  Scalar m_alpha;
 };
 
 /**
@@ -69,94 +69,93 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 int test_logpow(void)
 {
-    std::ofstream fout;
-    fout.open("LogPow_integration_test_output.txt");
+  std::ofstream fout;
+  fout.open("LogPow_integration_test_output.txt");
 
-    std::cout<<"Testing Int [0->1] x^a*log(1/x) = 1/(a+1)^2"<<std::endl;
+  std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
 
-    //typedef float Scalar;
-    //typedef double Scalar;
-    //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(114);
+  //typedef float Scalar;
+  //typedef double Scalar;
+  //typedef long double Scalar;
+  typedef mpfr::mpreal Scalar;
+  Scalar::set_default_prec(114);
 
-    typedef Eigen::Integrator<Scalar> IntegratorType;
-    typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
+  typedef Eigen::Integrator<Scalar> IntegratorType;
+  typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+  //compute the nodes and weights on the fly
+  QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(256);
-    IntegrandLogPowFunctorType integrandLogPowFunctor;
+  IntegratorType eigenIntegrator(256);
+  IntegrandLogPowFunctorType integrandLogPowFunctor;
 
-    bool success = true;
-    int counter = 0;
-    const size_t numKeys = 12;
+  bool success = true;
+  int counter = 0;
+  const size_t numRules = 12;
 
-    for (size_t i = 0; i < numKeys; ++i)
+  for (size_t i = 0; i < numRules; ++i)
+  {
+  	counter = 0;
+    Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
+
+    for (Scalar alpha = 0.; alpha < 18.; ++alpha)
     {
-    	counter = 0;
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
+      success = true;
+      integrandLogPowFunctor.setAlpha(alpha);
 
-        for (Scalar alpha = 0.; alpha < 18.; ++alpha)
-        {
-            success = true;
-            integrandLogPowFunctor.setAlpha(alpha);
+      Scalar actual = eigenIntegrator.quadratureAdaptive(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+      Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
-            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+      using std::abs;
+      if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
+      {
+        fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
+             << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
+             << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
-            Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
-
-            using std::abs;
-            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
-            {
-                fout << "\nrule " << i << "\n Abs(expected - actual) =" << abs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * Abs(expected)= "
-                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-
-                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
-                success = false;
-            }
-            else
-            {
-                fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
-                          << "\n desiredRelativeError<Scalar>() * abs(expected)= "
-                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-                          
-                fout << "Success!\n";
-                counter++;
-            }
-        }
-
-        if(success && counter == 18)    
-        {
-          fout << "\n  Test Succeeded!\n" << std::endl;
-          fout.close();
-          break;
-        }
-        else
-        {
-          fout <<"\n  Test Failed.\n" << std::endl;
-        }
+        fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
+        success = false;
+      }
+      else
+      {
+        fout << "\nrule " << i << "\n abs(expected - actual) =" << abs(expected - actual)
+             << "\n desiredRelativeError<Scalar>() * abs(expected)= "
+             << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
+                  
+        fout << "Success!\n";
+        counter++;
+      }
     }
 
-    fout.close();
-
-    if(success && counter == 18)
+    if(success && counter == 18)    
     {
-      std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
-      return EXIT_SUCCESS;
+      fout << "\n  Test Succeeded!\n" << std::endl;
+      fout.close();
+      break;
     }
     else
     {
-      std::cout << std::endl << "  Test Failed.\n" << std::endl;
-      return EXIT_FAILURE;
+      fout <<"\n  Test Failed.\n" << std::endl;
     }
+  }
+
+  fout.close();
+
+  if(success && counter == 18)
+  {
+    std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+    return EXIT_SUCCESS;
+  }
+  else
+  {
+    std::cout << std::endl << "  Test Failed.\n" << std::endl;
+    return EXIT_FAILURE;
+  }
 }
 
 int main(void)
 {
-    int ret = EXIT_SUCCESS;
-    ret += test_logpow();
-    return EXIT_SUCCESS;
+  int ret = EXIT_SUCCESS;
+  ret += test_logpow();
+  return EXIT_SUCCESS;
 }
