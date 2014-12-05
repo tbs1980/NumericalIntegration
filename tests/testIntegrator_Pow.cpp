@@ -26,10 +26,12 @@ public:
    */
   void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
 
-  static Scalar exact_value_in_01(const Scalar& alpha)
+  static Scalar integratePow(const Scalar& alpha)
   {
-    Scalar a1 = alpha+1.;
-    return 1./(a1*a1);
+    using std::pow;
+    using std::exp;
+    //return (exp(40.) - 841.) * pow(2., 3. * alpha + 1.) / exp(40.);
+    return (exp(Scalar(40.)) - Scalar(841.)) * pow(2., Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
   }
 
 private:
@@ -67,35 +69,27 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
   return quadratureRules[i];
 }
 
-Scalar IntegratorTest::integralPow(const Scalar& alpha)
-{
-  using std::pow;
-  using std::exp;
-  Scalar e40 = exp(40.);
-  return (e40 - 841.) * pow(2., 3. * alpha + 1.) / e40;
-}
-
 int test_pow(void)
 {
     std::ofstream fout;
     fout.open("Pow_integration_test_output.txt");
 
-    std::cout<<"Testing "<<std::endl;
+    std::cout<<"Testing Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))"<<std::endl;
 
     //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(114);
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
-    typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
+    typedef IntegrandPowFunctor<Scalar> IntegrandPowFunctorType;
 
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
-    IntegrandInfiniteFunctorType integrandInfiniteFunctor;
+    IntegrandPowFunctorType integrandPowFunctor;
 
     bool success = true;
     int counter = 0;
@@ -109,12 +103,12 @@ int test_pow(void)
         for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {
             success = true;
-            integrandInfiniteFunctor.setAlpha(alpha);
+            integrandPowFunctor.setAlpha(alpha);
 
             using std::pow;
-            Scalar actual = floatIntegrator.quadratureAdaptive(integrandPowFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPowFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
 
-            Scalar expected = IntegrandPowFunctorType::exact_value_in_01(alpha);
+            Scalar expected = IntegrandPowFunctorType::integratePow(alpha);
 
             using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
