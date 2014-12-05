@@ -6,6 +6,21 @@
 
 using namespace Eigen;
 
+///////////////////////////// A simple example of sin(x) ///////////////////////
+template<typename Scalar>
+class IntegrandSineFunctor
+{
+public:
+    Scalar operator()(const Scalar& param) const
+    {
+      using std::sin;
+      return sin(param);
+    }
+};
+
+/**
+ * \param epsilon Relative machine precision.
+ */
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -33,19 +48,6 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
   return quadratureRules[i];
 }
-
-///////////////////////////// A simple example of sin(x) ///////////////////////
-template<typename Scalar>
-class IntegrandSineFunctor
-{
-public:
-    Scalar operator()(const Scalar& param) const
-    {
-      using std::sin;
-      return sin(param);
-    }
-};
-
 
 int test_sine(void)
 {

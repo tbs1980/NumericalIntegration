@@ -6,6 +6,39 @@
 
 using namespace Eigen;
 
+////////////////////////// example from Quadpackcpp ///////////////////////////
+/**
+ * Int [0->1] x^alog(1/x) = 1/(a+1)^2
+ */
+template<typename Scalar>
+class IntegrandLogPowFunctor
+{
+public:
+    Scalar operator()(const Scalar& param) const
+    {
+      using std::pow;
+      using std::log;
+      return pow(param, m_alpha) * log(1/param);
+    }
+
+    /**
+     * \param alpha A parameter for varying the upper bound.
+     */
+    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+
+    static Scalar exact_value_in_01(const Scalar& alpha)
+    {
+      Scalar a1 = alpha+1.;
+      return 1./(a1*a1);
+    }
+
+private:
+    Scalar m_alpha;
+};
+
+/**
+ * \param epsilon Relative machine precision.
+ */
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -33,32 +66,6 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
   return quadratureRules[i];
 }
-
-////////////////////////// example from Quadpackcpp ///////////////////////////
-/*
-Int [0->1] x^alog(1/x) = 1/(a+1)^2
-*/
-template<typename Scalar>
-class IntegrandLogPowFunctor
-{
-public:
-    Scalar operator()(const Scalar& param) const
-    {
-      using std::pow;
-      return pow(param, m_alpha) * log(1/param);
-    }
-
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
-
-    static Scalar exact_value_in_01(const Scalar& alpha)
-    {
-      Scalar a1 = alpha+1.;
-      return 1./(a1*a1);
-    }
-
-    private:
-    Scalar m_alpha;
-};
 
 int test_logpow(void)
 {

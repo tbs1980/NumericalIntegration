@@ -6,6 +6,39 @@
 
 using namespace Eigen;
 
+/**
+ * This integrand has a peak of height 4^alphaPeak at x = pi/4.
+ */
+template<typename Scalar>
+class IntegrandPeakFunctor
+{
+public:
+  Scalar operator()(const Scalar& param) const
+  {
+    using std::pow;
+    return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
+  }
+
+  /**
+   * \param alpha A parameter for varying the peak.
+   */
+  void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+
+  static Scalar integralPeak(const Scalar& alpha)
+  {
+    using std::pow;
+    using std::atan;
+    Scalar factor = pow(4., alpha - 1.);
+    return atan((4. - M_PI) * factor) + atan(M_PI * factor);
+  }
+
+private:
+  Scalar m_alpha;
+};
+
+/**
+ * \param epsilon Relative machine precision.
+ */
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
@@ -33,37 +66,6 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
   return quadratureRules[i];
 }
-
-
-/**
- * This integrand has a peak of height 4^alphaPeak at x = pi/4.
- */
-template<typename Scalar>
-class IntegrandPeakFunctor
-{
-public:
-  Scalar operator()(const Scalar& param) const
-  {
-    using std::pow;
-    return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
-  }
-
-  /**
-   * @param alpha A parameter for varying the peak.
-   */
-  void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
-
-  static Scalar integralPeak(const Scalar& alpha)
-  {
-    using std::pow;
-    using std::atan;
-    Scalar factor = pow(4., alpha - 1.);
-    return atan((4. - M_PI) * factor) + atan(M_PI * factor);
-  }
-
-private:
-  Scalar m_alpha;
-};
 
 int test_peak(void)
 {
