@@ -69,8 +69,9 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 Scalar IntegratorTest::integralPow(const Scalar& alpha)
 {
-  Scalar e40 = exp(40.);
   using std::pow;
+  using std::exp;
+  Scalar e40 = exp(40.);
   return (e40 - 841.) * pow(2., 3. * alpha + 1.) / e40;
 }
 
