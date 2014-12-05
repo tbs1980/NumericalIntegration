@@ -27,12 +27,6 @@ public:
      * \param alpha A parameter for varying the oscillation strength.
      */
     void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
-      
-    static Scalar exact_value_in_01(const Scalar& alpha)
-    {
-        Scalar a1 = alpha+1.;
-        return 1./(a1*a1);
-    }
 
 private:
     Scalar m_alpha;
@@ -76,8 +70,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 template <typename Scalar>
 Scalar integralOscillates(const int& alpha)
 {
-  template <typename Scalar>
-  Array<Scalar, 11, 1> integrationValues =
+    Eigen::Array<Scalar,11,1> integrals =
     (Array<Scalar, 11, 1>() <<
          2.4039394306344129,
          0.7033736269566008,
@@ -90,9 +83,9 @@ Scalar integralOscillates(const int& alpha)
         -0.1151503602390470,
         -0.0718346295951386,
          0.0458999248689193
-    );
+    ).finished();
 
-  return integrationValues[alpha];
+    return integrals[alpha];
 }
 
 int test_oscillate(void)
@@ -126,7 +119,7 @@ int test_oscillate(void)
         counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        for (int alpha = 0; alpha < 11; ++alpha)
+        for (Scalar alpha = 0; alpha < 11.; ++alpha)
         {
             success = true;
             integrandOscillateFunctor.setAlpha(alpha);
