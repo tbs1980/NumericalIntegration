@@ -68,10 +68,10 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
  * factor. Literals are used in the absence of a routine for computing this Bessel function.
  */
 template <typename Scalar>
-Scalar integralOscillates(const int& alpha)
+Scalar integralOscillates(const Scalar& alpha)
 {
     Eigen::Array<Scalar,11,1> integrals =
-    (Array<Scalar, 11, 1>() <<
+    (Eigen::Array<Scalar, 11, 1>() <<
          2.4039394306344129,
          0.7033736269566008,
         -1.2476829250428461,
@@ -85,7 +85,7 @@ Scalar integralOscillates(const int& alpha)
          0.0458999248689193
     ).finished();
 
-    return integrals[alpha];
+    return integrals(alpha);
 }
 
 int test_oscillate(void)
@@ -93,13 +93,13 @@ int test_oscillate(void)
     std::ofstream fout;
     fout.open("Oscillatory_integration_test_output.txt");
 
-    std::cout<<"Testing "<<std::endl;
+    std::cout<<"\nTesting Interval [0->Alpha], F(x) = cos(2^alpha * sin(x))\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(16);
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandOscillateFunctor<Scalar> IntegrandOscillateFunctorType;
@@ -107,7 +107,7 @@ int test_oscillate(void)
     //compute the nodes and weights on the fly
     QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
-    IntegratorType eigenIntegrator(256);
+    IntegratorType eigenIntegrator(100);
     IntegrandOscillateFunctorType integrandOscillateFunctor;
 
     bool success = true;
@@ -119,7 +119,7 @@ int test_oscillate(void)
         counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        for (Scalar alpha = 0; alpha < 11.; ++alpha)
+        for (int alpha = 0; alpha < 11.; ++alpha)
         {
             success = true;
             integrandOscillateFunctor.setAlpha(alpha);
