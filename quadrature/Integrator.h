@@ -10,7 +10,6 @@
 namespace Eigen
 {
 
-
 /**
  * \ingroup Quadrature_Module
  *

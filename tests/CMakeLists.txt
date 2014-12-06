@@ -1,4 +1,3 @@
-#ADD_EXECUTABLE(IntegratorTest IntegratorTest.cpp)
 ADD_EXECUTABLE(outputKronrodNodesWeights outputKronrodNodesWeights.cpp)
 ADD_EXECUTABLE(testIntegrator_InfiniteInterval testIntegrator_InfiniteInterval.cpp)
 ADD_EXECUTABLE(testIntegrator_LogPow testIntegrator_LogPow.cpp)
@@ -6,8 +5,6 @@ ADD_EXECUTABLE(testIntegrator_Peak testIntegrator_Peak.cpp)
 ADD_EXECUTABLE(testIntegrator_Sine testIntegrator_Sine.cpp)
 ADD_EXECUTABLE(testLaurieGautschi testLaurieGautschi.cpp)
 
-
-#TARGET_LINK_LIBRARIES(IntegratorTest ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(outputKronrodNodesWeights ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(testIntegrator_InfiniteInterval ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(testIntegrator_LogPow ${ALL_LIBS})
