@@ -16,7 +16,7 @@ ENDIF()
 #		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
 #		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -march=native")
 #	ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-#	
+#
 #	#is the compiler clang?
 #	IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 #		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -pedantic -Wall -Wextra -g")
@@ -114,4 +114,4 @@ ENABLE_TESTING()
 ADD_SUBDIRECTORY(examples)
 #ADD_SUBDIRECTORY(quadrature)
 ADD_SUBDIRECTORY(tests)
-
+add_subdirectory(doc)
