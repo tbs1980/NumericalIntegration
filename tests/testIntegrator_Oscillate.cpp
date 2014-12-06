@@ -93,13 +93,13 @@ int test_oscillate(void)
     std::ofstream fout;
     fout.open("Oscillatory_integration_test_output.txt");
 
-    std::cout<<"\nTesting Interval [0->Alpha], F(x) = cos(2^alpha * sin(x))\n";
+    std::cout<<"\nTesting Interval [0->Pi], F(x) = cos(2^alpha * sin(x))\n";
 
     //typedef float Scalar;
-    typedef double Scalar;
+    //typedef double Scalar;
     //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(256);
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(256);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandOscillateFunctor<Scalar> IntegrandOscillateFunctorType;
@@ -119,13 +119,14 @@ int test_oscillate(void)
         counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        for (int alpha = 0; alpha < 11.; ++alpha)
+        for (size_t j = 0; j < 11.; ++j)
         {
             success = true;
+            Scalar alpha = j;
             integrandOscillateFunctor.setAlpha(alpha);
 
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandOscillateFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-            Scalar expected = integralOscillates(alpha);
+            Scalar expected = integralOscillates(j);
 
             using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected))
