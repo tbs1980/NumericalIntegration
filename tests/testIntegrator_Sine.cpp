@@ -57,16 +57,16 @@ int test_sine(void)
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(117);
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(117);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    //QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
     IntegrandSineFunctorType integrandSineFunctor;

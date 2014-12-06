@@ -406,7 +406,6 @@ private:
         maxErrorIndex = m_errorListIndices[nrMax];
         errorMax = m_errorList[maxErrorIndex];
         return;
-
     }
 
     /**
@@ -507,8 +506,8 @@ private:
 
         case GaussKronrod121:
           return quadratureKronrodHelper(
-            QuadratureKronrod<Scalar>::abscissaeGaussKronrod101,
-            QuadratureKronrod<Scalar>::weightsGaussKronrod101, QuadratureKronrod<Scalar>::weightsGauss101,
+            QuadratureKronrod<Scalar>::abscissaeGaussKronrod121,
+            QuadratureKronrod<Scalar>::weightsGaussKronrod121, QuadratureKronrod<Scalar>::weightsGauss121,
             f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
 
         case GaussKronrod201:
@@ -516,7 +515,6 @@ private:
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod201,
             QuadratureKronrod<Scalar>::weightsGaussKronrod201, QuadratureKronrod<Scalar>::weightsGauss201,
             f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
-
 
         default:
           return 0.;
@@ -707,7 +705,7 @@ private:
      * errorCode = 2 The occurrence of roundoff error is detected, preventing the requested tolerance
      *               from being achieved.
      * errorCode = 3 Extremely bad integrand behaviour occurs at points in the integration interval.
-     * errorCode = 4 Roudoff error on extrapolation
+     * errorCode = 4 Roundoff error on extrapolation
      * errorCode = 5 Divergent integral (or very slowly convergent integral)
      * errorCode = 6 The input is invalid, because (desiredAbsoluteError <= 0 and
      *               desiredRealtiveError < 50 * relativeMachineAccuracy, or

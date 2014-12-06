@@ -75,16 +75,16 @@ int test_peak(void)
     std::cout<<"\nTesting Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(6);
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(6);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    //QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(500);
     IntegrandPeakFunctorType integrandPeakFunctor;

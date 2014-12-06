@@ -75,16 +75,16 @@ int test_logpow(void)
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(114);
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(114);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    //QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
     IntegrandLogPowFunctorType integrandLogPowFunctor;

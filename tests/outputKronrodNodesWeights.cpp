@@ -10,7 +10,7 @@ int test_values()
     //typedef double Scalar;
     //typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    Scalar::set_default_prec(80);
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
     QuadratureKronrodValuesType::computeNodesAndWeights();
@@ -19,7 +19,8 @@ int test_values()
     std::ofstream fout;
 
     fout.open("KronrodNodesAndWeights.txt");
-
+    fout<<std::fixed;
+    
     //--------15--------//
     fout<<"template <typename Scalar>"
         <<"\nArray<Scalar, 8, 1> QuadratureKronrod<Scalar>::abscissaeGaussKronrod15 ="

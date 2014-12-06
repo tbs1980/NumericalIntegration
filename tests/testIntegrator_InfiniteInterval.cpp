@@ -76,16 +76,16 @@ int test_pow(void)
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(256);
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(512);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
     //compute the nodes and weights on the fly
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    //QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     IntegratorType eigenIntegrator(256);
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
