@@ -52,7 +52,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 int test_sine(void)
 {
     std::ofstream fout;
-    fout.open("testOutput/Sine_integration_test_output.txt");
+    fout.open("test/testOutput/Sine_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
 

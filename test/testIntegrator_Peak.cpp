@@ -70,7 +70,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 int test_peak(void)
 {
     std::ofstream fout;
-    fout.open("testOutput/Peak_integration_test_output.txt");
+    fout.open("test/testOutput/Peak_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))\n";
 

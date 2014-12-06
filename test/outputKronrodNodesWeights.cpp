@@ -22,7 +22,7 @@ int test_values()
     QuadratureKronrodValuesType::computeNodesAndWeights();
     
     std::ofstream fout;
-    fout.open("testOutput/KronrodNodesAndWeights.txt");
+    fout.open("test/testOutput/KronrodNodesAndWeights.txt");
     fout<<std::fixed<<std::setprecision(outputDigits);
     
     //--------15--------//

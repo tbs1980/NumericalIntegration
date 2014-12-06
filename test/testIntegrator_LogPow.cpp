@@ -70,7 +70,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 int test_logpow(void)
 {
     std::ofstream fout;
-    fout.open("testOutput/LogPow_integration_test_output.txt");
+    fout.open("test/testOutput/LogPow_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
 

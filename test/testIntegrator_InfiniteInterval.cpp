@@ -71,7 +71,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 int test_pow(void)
 {
     std::ofstream fout;
-    fout.open("testOutput/Infinite_Interval_integration_test_output.txt");
+    fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
 
