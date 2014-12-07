@@ -20,13 +20,13 @@ namespace Kronrod {
      *
      * \TODO Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
      */
-    template<typename _RealType>
+    template<typename _Scalar>
     class LaurieGautschi
     {
     public:
-        typedef _RealType RealType;
-        typedef typename Eigen::Matrix<RealType,Eigen::Dynamic,1>  VectorType;
-        typedef typename Eigen::Matrix<RealType,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
+        typedef _Scalar Scalar;
+        typedef typename Eigen::Matrix<Scalar,Eigen::Dynamic,1>  VectorType;
+        typedef typename Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
         typedef typename VectorType::Index IndexType;
         typedef typename Eigen::SelfAdjointEigenSolver<MatrixType> SelfAdjointEigenSolverType;
 
@@ -49,25 +49,25 @@ namespace Kronrod {
          * \param[in/out] a_out N alpha-coefficients
          * \param[in/out] b_out N beta-coefficients
          */
-        static void r_jacobi(const IndexType N,const RealType a,const RealType b,
+        static void r_jacobi(const IndexType N,const Scalar a,const Scalar b,
             VectorType & a_out, VectorType & b_out)
         {
             //TODO : make use the eigen assert facilities
-            assert(a > RealType(-1));
-            assert(b > RealType(-1));
+            assert(a > Scalar(-1));
+            assert(b > Scalar(-1));
             assert(a_out.rows()==b_out.rows());
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
 
             using std::pow;
-            a_out(0) = (b-a)/(a+b+RealType(2.));
-            b_out(0) = pow(RealType(2.),(a+b+RealType(1.)))*gamma(a+RealType(1.))*gamma(b+RealType(1.))/gamma(a+b+RealType(2.));
+            a_out(0) = (b-a)/(a+b+Scalar(2.));
+            b_out(0) = pow(Scalar(2.),(a+b+Scalar(1.)))*gamma(a+Scalar(1.))*gamma(b+Scalar(1.))/gamma(a+b+Scalar(2.));
 
             for(IndexType n=1;n<N;++n)
             {
-                RealType nab = RealType(2.)*n+a+b;
-                a_out(n) = (b*b - a*a)/(nab*(nab+RealType(2.)));
-                b_out(n) =  RealType(4.)*(n+a)*(n+b)*n*(n+a+b)/(nab*nab*(nab+RealType(1.))*(nab-RealType(1.)));
+                Scalar nab = Scalar(2.)*n+a+b;
+                a_out(n) = (b*b - a*a)/(nab*(nab+Scalar(2.)));
+                b_out(n) =  Scalar(4.)*(n+a)*(n+b)*n*(n+a+b)/(nab*nab*(nab+Scalar(1.))*(nab-Scalar(1.)));
             }
         }
 
@@ -91,12 +91,12 @@ namespace Kronrod {
          * \param[in/out] a_out N alpha-coefficients
          * \param[in/out] b_out N beta-coefficients
          */
-        static void r_jacobi_01(const IndexType N,const RealType a,const RealType b,
+        static void r_jacobi_01(const IndexType N,const Scalar a,const Scalar b,
             VectorType & a_out, VectorType & b_out)
         {
             //TODO : make use the eigen assert facilities
-            assert(a > RealType(-1));
-            assert(b > RealType(-1));
+            assert(a > Scalar(-1));
+            assert(b > Scalar(-1));
             assert(a_out.rows()==b_out.rows());
             assert(a_out.rows() > 0);
             assert(N<=a_out.rows());
@@ -105,15 +105,15 @@ namespace Kronrod {
 
             for(IndexType n=0;n<N;++n)
             {
-                a_out(n)  = (RealType(1.)+a_out(n))/RealType(2.);
+                a_out(n)  = (Scalar(1.)+a_out(n))/Scalar(2.);
             }
 
             using std::pow;
-            b_out(0) = b_out(0)/pow(RealType(2),a+b+RealType(1.));
+            b_out(0) = b_out(0)/pow(Scalar(2),a+b+Scalar(1.));
 
             for(IndexType n=1;n<N;++n)
             {
-                b_out(n) = b_out(n)/RealType(4.);
+                b_out(n) = b_out(n)/Scalar(4.);
             }
 
         }
@@ -172,7 +172,7 @@ namespace Kronrod {
 
             for(IndexType m=0;m<N-2+1;++m)
             {
-                RealType u=0;
+                Scalar u=0;
                 for(IndexType k=floor((m+1)/2);k>=0;--k)
                 {
                     IndexType l=m-k;
@@ -193,7 +193,7 @@ namespace Kronrod {
             {
                 IndexType k=m+1-N;
                 IndexType j=0;
-                RealType u=0;
+                Scalar u=0;
                 for(k=m+1-N;k<floor((m-1)/2)+1;++k)
                 {
                     IndexType l=m-k;
@@ -260,7 +260,7 @@ namespace Kronrod {
 
             //TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            assert( std::abs(b0.sum() - (RealType) (2*N+1)) > 1e-5 );
+            assert( std::abs(b0.sum() - (Scalar) (2*N+1)) > 1e-5 );
 
             MatrixType J=MatrixType::Zero(2*N+1,2*N+1);
 
@@ -359,14 +359,14 @@ namespace Kronrod {
             VectorType a=VectorType::Zero(2*N);
             VectorType b=VectorType::Zero(2*N);
 
-            r_jacobi_01( 2*N, RealType(0), RealType(0), a, b);
+            r_jacobi_01( 2*N, Scalar(0), Scalar(0), a, b);
 
             kronrod(N,a,b,x,w);
 
             for(IndexType i=0;i<x.rows();++i)
             {
-                x(i) = RealType(2.)*x(i) - RealType(1.);
-                w(i) = RealType(2.)*w(i);
+                x(i) = Scalar(2.)*x(i) - Scalar(1.);
+                w(i) = Scalar(2.)*w(i);
             }
         }
 
@@ -391,22 +391,22 @@ namespace Kronrod {
             VectorType a=VectorType::Zero(2*N);
             VectorType b=VectorType::Zero(2*N);
 
-            r_jacobi_01( 2*N, RealType(0), RealType(0), a, b);
+            r_jacobi_01( 2*N, Scalar(0), Scalar(0), a, b);
 
             gauss(N,a,b,x,w);
 
             for(IndexType i=0;i<x.rows();++i)
             {
-                x(i) = RealType(2.)*x(i) - RealType(1.);
-                w(i) = RealType(2.)*w(i);
+                x(i) = Scalar(2.)*x(i) - Scalar(1.);
+                w(i) = Scalar(2.)*w(i);
             }
         }
 
         static void computeAbscissaeAndWeights(unsigned int nNodes,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> & abscGaussKronrod,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> & weightGaussKronrod,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> & abscGauss,
-            Eigen::Array<RealType, Eigen::Dynamic, 1> & weightGauss)
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGauss,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGauss)
         {
             VectorType xGK = VectorType::Zero(2*nNodes+1);
             VectorType wGK = VectorType::Zero(2*nNodes+1);
@@ -418,10 +418,10 @@ namespace Kronrod {
 
             unsigned int arraySize = nNodes + 1;
 
-            abscGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
-            weightGaussKronrod = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize);
-            abscGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
-            weightGauss = Eigen::Array<RealType, Eigen::Dynamic, 1>::Zero(arraySize/2);
+            abscGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            abscGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
+            weightGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
 
             using std::abs;
             for(unsigned int i=0;i<arraySize;++i)
@@ -430,7 +430,7 @@ namespace Kronrod {
                 weightGaussKronrod(i) = wGK(i);
             }
 
-            abscGaussKronrod(arraySize-1) = RealType(0);
+            abscGaussKronrod(arraySize-1) = Scalar(0);
 
             for(unsigned int i=0;i<arraySize/2;++i)
             {

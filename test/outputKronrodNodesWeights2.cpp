@@ -28,6 +28,7 @@ int test_values()
     std::string gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};
     std::string kronrodRule[12] = {15, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 201};
 
+    // @TODO Create 12x4 array to hold these values 
     std::string gaussKronrodAbscissaeNames[12];
     std::string gausskronrodWeightsNames[12];
     std::string gaussAbscissaeNames[12];
@@ -153,6 +154,7 @@ int test_values()
 
             for(int i=0;i<N+1;++i)
             {
+                // @TODO The next line needs to be replaced with functional code
                 fout<<"\t"<<QuadratureKronrodValuesType::abscissaeGaussKronrod15(i);
                 
                 if(i==N)
@@ -182,6 +184,7 @@ int test_values()
 
             for(int i=0;i<(N+1)/2;++i)
             {
+                // @TODO The next line needs to be replaced with functional code
                 fout<<"\t"<<QuadratureKronrodValuesType::abscissaeGauss15(i);
                 
                 if(i==(N+1)/2 - 1)
