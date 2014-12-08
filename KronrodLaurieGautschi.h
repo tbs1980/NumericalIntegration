@@ -61,13 +61,13 @@ namespace Kronrod {
 
             using std::pow;
             alphaOut(0) = (beta-alpha)/(alpha+beta+Scalar(2.));
-            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.)))*gamma(alpha+Scalar(1.))*gamma(beta+Scalar(1.))/gamma(alpha+beta+Scalar(2.));
+            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * Gamma(alpha+Scalar(1.)) * Gamma(beta+Scalar(1.)) / Gamma(alpha+beta+Scalar(2.));
 
             for(IndexType n=1;n<N;++n)
             {
                 Scalar nAlphaBeta = Scalar(2.)*n+alpha+beta;
-                alphaOut(n) = (beta*beta - alpha*alpha)/(nAlphaBeta*(nAlphaBeta+Scalar(2.)));
-                betaOut(n) =  Scalar(4.)*(n+alpha)*(n+beta)*n*(n+alpha+beta)/(nAlphaBeta*nAlphaBeta*(nAlphaBeta+Scalar(1.))*(nAlphaBeta-Scalar(1.)));
+                alphaOut(n) = (beta*beta - alpha*alpha) / (nAlphaBeta*(nAlphaBeta+Scalar(2.)));
+                betaOut(n) =  Scalar(4.)*(n+alpha)*(n+beta)*n*(n+alpha+beta) / (nAlphaBeta*nAlphaBeta*(nAlphaBeta+Scalar(1.))*(nAlphaBeta-Scalar(1.)));
             }
         }
 
