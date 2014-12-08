@@ -96,7 +96,7 @@ int test_pow(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(256);
+    IntegratorType eigenIntegrator(512);
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;

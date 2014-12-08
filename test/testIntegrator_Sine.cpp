@@ -77,7 +77,7 @@ int test_sine(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(256);
+    IntegratorType eigenIntegrator(512);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;

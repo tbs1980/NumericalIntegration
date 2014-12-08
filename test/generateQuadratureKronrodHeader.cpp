@@ -12,7 +12,7 @@ int test_values()
      */
 
     // Set the number of output digits
-    int outputDigits = 256;
+    int outputDigits = 80;
     // Set this flag to 1 for LaurieGautschi Polity, or 0 for PiessensPolicy;
     bool laurieGautschiOrPiessensPolicyFlag = 1;
     
