@@ -1,6 +1,20 @@
 # NumericalIntegration
 
-Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method capable of multiprecision calculation of Gauss Kronrod nodes/weights utilizing Laurie/Gautschi and Piessens'/Patterson's methods for the desired number of nodes/ruleset for the quadrature calculations.
+Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method capable of multiprecision calculation of Gauss Kronrod nodes/weights utilizing Laurie/Gautschi and Piessens'/Patterson's methods for the desired number of nodes/ruleset for the quadrature calculations.  Considerations have also been also paid in this effort to allow the future integration of the additional QUADPACK routines.
+
+# Gauss-Kronrod Node/Weight Calculations
+
+C++ functionality has been created for the calculation of Gauss-Kronrod Quadrature Weights and Abscissa based on previous work by Dirk Laurie, Walter Gautschi, and Robert Piessens', et. al.  This work has also been templated/extended to allow multiple precision by Pavel Holoborodko, Sreekumar Thaitara Balan, Mark Sauder, and Matt Beall.  Additional contribution to the Piessens' method for calculations of the nodes/weights was provided by John Burkardt.
+
+Laurie's (a.k.a. Golub-Welsch), algorithm as implemented is outlined in the the following publication:
+	Calculation of Gauss-Kronrod Quadrature Rules, Dirk P. Laurie
+	Mathematics of Computation, Volume 66, Number 219, July 1997, Pages 1133 {1145
+	S 0025-5718(97)00861-2:
+
+Walter Gautschi's OPQ Matlab library can be found at: https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html, and the work cited by the above: 
+	Orthogonal Polynomials, Quadrature, and Approximation: Computational Methods and Software (in Matlab), can be found at: https://www.cs.purdue.edu/homes/wxg/Madrid.pdf
+
+Note: Functions and variable names has been adapted in many instances to be more descriptive or to match convention in associated journal publications.
 
 ## Requirements
 
