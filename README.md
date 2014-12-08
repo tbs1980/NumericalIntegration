@@ -12,7 +12,9 @@ Laurie's (a.k.a. Golub-Welsch), algorithm as implemented is outlined in the foll
 	Mathematics of Computation, Volume 66, Number 219, July 1997, Pages 1133-1145
 	S 0025-5718(97)00861-2:
 
-Walter Gautschi's OPQ Matlab library can be found at: https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html, and the work cited by the above: 
+Walter Gautschi's OPQ Matlab library and the work cited above can be found at: 
+
+	https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html, 
 	Orthogonal Polynomials, Quadrature, and Approximation: Computational Methods and Software (in Matlab), can be found at: https://www.cs.purdue.edu/homes/wxg/Madrid.pdf
 
 Note: Functions and variable names has been adapted in many instances to be more descriptive or to match convention in associated journal publications.
