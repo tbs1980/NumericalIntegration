@@ -10,7 +10,7 @@ int test_values()
      * \details The level of precision in the calculations requires greater precision
      *          than the number of the digits written to file to avoid roundoff errors.
      */
-    int outputDigits = 80;
+    int outputDigits = 30;
 
     //typedef float Scalar;
     //typedef double Scalar;
@@ -107,8 +107,7 @@ int test_values()
     fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n";
     for (size_t i=0; i<12; ++i)
     {
-        fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n"
-             << "\t\t\tQuadratureKronrod::computeForRule<" << gaussRule[i] << ">(" 
+        fout << "\t\t\tQuadratureKronrod::computeForRule<" << gaussRule[i] << ">(" 
              << gaussKronrodAbscissaeNames[i] << ", " << gaussKronrodWeightsNames[i] << ", "
              << gaussAbscissaeNames[i] << ", " << gaussWeightsNames[i] << ");\n";
     }
@@ -226,7 +225,7 @@ int test_values()
         //Abscissae Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
-                << gaussKronrodAbscissaeNames[i] << kronrodRule << " =\n"
+                << gaussKronrodAbscissaeNames[i]<< " =\n"
              << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
@@ -242,7 +241,7 @@ int test_values()
         // Weights Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
-                << gaussKronrodWeightsNames[i] << kronrodRule << " =\n"
+                << gaussKronrodWeightsNames[i] << " =\n"
              << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
@@ -258,7 +257,7 @@ int test_values()
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
-                << gaussAbscissaeNames[i] << kronrodRule << " =\n"
+                << gaussAbscissaeNames[i] << " =\n"
              << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
@@ -274,7 +273,7 @@ int test_values()
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
-                << gaussWeightsNames[i] << kronrodRule << " =\n"
+                << gaussWeightsNames[i] << " =\n"
              << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
