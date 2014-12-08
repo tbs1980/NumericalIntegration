@@ -1,11 +1,11 @@
-ADD_EXECUTABLE(generateQuadratureKronrodHeader generateQuadratureKronrodHeader.cpp)
+ADD_EXECUTABLE(generateQuadratureGaussKronrod generateQuadratureGaussKronrod.cpp)
 ADD_EXECUTABLE(testIntegrator_InfiniteInterval testIntegrator_InfiniteInterval.cpp)
 ADD_EXECUTABLE(testIntegrator_LogPow testIntegrator_LogPow.cpp)
 ADD_EXECUTABLE(testIntegrator_Peak testIntegrator_Peak.cpp)
 ADD_EXECUTABLE(testIntegrator_Sine testIntegrator_Sine.cpp)
 ADD_EXECUTABLE(testNodesAndWeightsByCompare testNodesAndWeightsByCompare.cpp)
 
-TARGET_LINK_LIBRARIES(generateQuadratureKronrodHeader ${ALL_LIBS})
+TARGET_LINK_LIBRARIES(generateQuadratureGaussKronrod ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(testIntegrator_InfiniteInterval ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(testIntegrator_LogPow ${ALL_LIBS})
 TARGET_LINK_LIBRARIES(testIntegrator_Peak ${ALL_LIBS})

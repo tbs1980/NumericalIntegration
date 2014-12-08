@@ -26,7 +26,7 @@ int test_values()
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
     std::ofstream fout;
-    fout.open("test/testOutput/QuadratureKronrod.h");
+    fout.open("test/testOutput/QuadratureGaussKronrod.h");
     fout<<std::fixed<<std::setprecision(outputDigits);
 
     int gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};

@@ -68,10 +68,8 @@ long double Gamma(long double x)
 	return tgamma(x);
 }
 
-#include "KronrodLaurieGautschi.h"
-#include "KronrodPiessens.h"
-
-#include "QuadratureKronrod.h"
+#include "GaussKronrodNodesWeights.h"
+#include "QuadratureGaussKronrod.h"
 #include "Integrator.h"
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
