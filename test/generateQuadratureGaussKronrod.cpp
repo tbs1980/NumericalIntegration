@@ -26,7 +26,8 @@ int test_values()
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
     std::ofstream fout;
-    fout.open("test/testOutput/QuadratureGaussKronrod.h");
+    std::string fileNameAndLocation = "test/testOutput/QuadratureGaussKronrod.h";
+    fout.open(fileNameAndLocation);
     fout<<std::fixed<<std::setprecision(outputDigits);
 
     int gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};
@@ -305,7 +306,7 @@ int test_values()
     fout << "#endif // EIGEN_QUADRATURE_KRONROD_H\n";
 
     fout.close();
-    std::cout << "\n  Kronrod Nodes and Weights written to file \"test/testOutput/QuadratureKronrod.h\"\n\n.";
+    std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n\n.";
 
     return EXIT_SUCCESS;
 }
