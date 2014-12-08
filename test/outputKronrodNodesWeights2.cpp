@@ -10,8 +10,12 @@ int test_values()
      * \details The level of precision in the calculations requires greater precision
      *          than the number of the digits written to file to avoid roundoff errors.
      */
-    int outputDigits = 30;
 
+    // Set the number of output digits
+    int outputDigits = 256;
+    // Set this flag to 1 for LaurieGautschi Polity, or 0 for PiessensPolicy;
+    bool laurieGautschiOrPiessensPolicyFlag = 1;
+    
     //typedef float Scalar;
     //typedef double Scalar;
     //typedef long double Scalar;
@@ -115,12 +119,21 @@ int test_values()
     fout << "\n\t\t\tcompute = false;\n\t\t}\n\t}\n\n"
          << "\ttemplate <int N>\n"
          << "\tstatic void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,\n"
-         << "\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t\t{\n"
+         << "\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t{\n"
          << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
-         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n"
-         << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-         << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n"
-         << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
+         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
+    
+    if(laurieGautschiOrPiessensPolicyFlag)
+    {
+        fout << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }else
+    {
+        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }    
+    
+    fout << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
          << "\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t{\n\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\tgaussWeights(i) = wG(i);\n\t\t}\n\t}\n};\n\n"
          << "template <typename Scalar>\nbool QuadratureKronrod<Scalar>::compute = true;\n\n";
 
@@ -230,13 +243,13 @@ int test_values()
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "  " << gaussKronrodAbscissae(j);
-            if(j == kronrodSize - 1)
+            fout << "    " << gaussKronrodAbscissae(j);
+            if(j !=kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << ").finished();\n\n";
+        fout << "    ).finished();\n\n";
 
         // Weights Gauss Kronrod
         fout << "template <typename Scalar>\n"
@@ -246,13 +259,13 @@ int test_values()
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "  " << kronrodWeights(j);
-            if(j == kronrodSize - 1)
+            fout << "    " << kronrodWeights(j);
+            if(j != kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << ").finished();\n\n";
+        fout << "    ).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
@@ -262,13 +275,13 @@ int test_values()
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "  " << gaussAbscissae(j);
-            if(j == gaussSize - 1)
+            fout << "    " << gaussAbscissae(j);
+            if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << ").finished();\n\n";
+        fout << "    ).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
@@ -278,15 +291,18 @@ int test_values()
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "  " << gaussWeights(j);
-            if(j == gaussSize - 1)
+            fout << "    " << gaussWeights(j);
+            if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << ").finished();\n\n";
+        fout << "    ).finished();\n\n";
 
     }
+
+    fout << "}\n";
+    fout << "#endif // EIGEN_QUADRATURE_KRONROD_H\n";
 
     fout.close();
     std::cout << "\n  Kronrod Nodes and Weights written to file \"test/testOutput/QuadratureKronrod.h\"\n\n.";
