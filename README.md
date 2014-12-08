@@ -6,9 +6,10 @@ Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method ca
 
 C++ functionality has been created for the calculation of Gauss-Kronrod Quadrature Weights and Abscissa based on previous work by Dirk Laurie, Walter Gautschi, and Robert Piessens', et. al.  This work has also been templated/extended to allow multiple precision by Pavel Holoborodko, Sreekumar Thaitara Balan, Mark Sauder, and Matt Beall.  Additional contribution to the Piessens' method for calculations of the nodes/weights was provided by John Burkardt.
 
-Laurie's (a.k.a. Golub-Welsch), algorithm as implemented is outlined in the the following publication:
+Laurie's (a.k.a. Golub-Welsch), algorithm as implemented is outlined in the following publication:
+
 	Calculation of Gauss-Kronrod Quadrature Rules, Dirk P. Laurie
-	Mathematics of Computation, Volume 66, Number 219, July 1997, Pages 1133 {1145
+	Mathematics of Computation, Volume 66, Number 219, July 1997, Pages 1133-1145
 	S 0025-5718(97)00861-2:
 
 Walter Gautschi's OPQ Matlab library can be found at: https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html, and the work cited by the above: 
@@ -42,3 +43,4 @@ For example,
 
 	$ cmake ../ -DEIGEN3_INCLUDE_DIR=/arxiv/libraries/ubuntu/gcc/eigen-3.2.1/include/eigen3 -DGMP_ROOT=/arxiv/libraries/ubuntu/gcc/gmp-6.0.0 -DMPFR_ROOT=/arxiv/libraries/ubuntu/gcc/mpfr-3.1.2 -DMPFRCPP_ROOT=/arxiv/libraries/ubuntu/gcc/mpfrc++-3.5.9
 	$ make
+
