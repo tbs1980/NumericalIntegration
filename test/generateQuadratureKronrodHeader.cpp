@@ -96,10 +96,10 @@ int test_values()
     
     for (size_t i=0; i<12; ++i)
     {
-        fout << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << "\n"
-             << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << "\n"
-             << "\tstatic Array<Scalar, " << gaussRule[i]/2 + 1 << ", 1> " << gaussAbscissaeNames[i] << "\n"
-             << "\tstatic Array<Scalar, " << gaussRule[i]/2 + 1 << ", 1> " << gaussWeightsNames[i] << "\n\n";
+        fout << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << ";\n"
+             << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << ";\n"
+             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussAbscissaeNames[i] << ";\n"
+             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
     }
 
     fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
