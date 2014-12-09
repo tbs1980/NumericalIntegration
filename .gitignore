@@ -31,4 +31,4 @@
 *.sh
 
 build/
-#gtest-1.7.0/
+test/testOutput

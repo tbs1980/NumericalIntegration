@@ -28,10 +28,10 @@ The capabilities of this library have been greatly expanded through multiprecisi
 
 ## Requirements
 
-	* [Eigen library](http://eigen.tuxfamily.org/index.php?title=Main_Page )
-	* [The GNU Multiple Precision Arithmetic Library](https://gmplib.org/ )
-	* [The GNU MPFR Library](http://www.mpfr.org/ )
-	* [MPFR C++](http://www.holoborodko.com/pavel/mpfr/ )
+	* [Eigen library] (http://eigen.tuxfamily.org/index.php?title=Main_Page )
+	* [The GNU Multiple Precision Arithmetic Library] (https://gmplib.org/ )
+	* [The GNU MPFR Library] (http://www.mpfr.org/ )
+	* [MPFR C++] (http://www.holoborodko.com/pavel/mpfr/ )
 
 ## Compilation
 A compile script has been added to the top level directory, simply run: ./compile.sh

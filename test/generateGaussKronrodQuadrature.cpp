@@ -19,20 +19,20 @@ int test_values()
 
     // Set the number of output digits
     int outputDigits = 80;
+    
     // Set this flag to 1 for LaurieGautschi Polity, or 0 for PiessensPolicy;
     bool laurieGautschiOrPiessensPolicyFlag = 1;
-    
-    //typedef float Scalar;
-    //typedef double Scalar;
-    //typedef long double Scalar;
+
     typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(outputDigits*2);
+    // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
+    Scalar::set_default_prec(outputDigits*4);
+    
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
 
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
     std::ofstream fout;
-    std::string fileNameAndLocation = "test/testOutput/QuadratureGaussKronrod.h";
+    std::string fileNameAndLocation = "test/testOutput/GaussKronrodQuadrature.h";
     fout.open(fileNameAndLocation);
     fout<<std::fixed<<std::setprecision(outputDigits);
 

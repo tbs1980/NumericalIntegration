@@ -1,6 +1,6 @@
 cd build
-make generateQuadratureGaussKronrod
+make generateGaussKronrodQuadrature
 cd ..
-./build/bin/generateQuadratureGaussKronrod
-cp ./test/testOutput/QuadratureGaussKronrod.h ./QuadratureGaussKronrod.h
+./build/bin/generateGaussKronrodQuadrature
+cp ./test/testOutput/GaussKronrodQuadrature.h ./GaussKronrodQuadrature.h
 
