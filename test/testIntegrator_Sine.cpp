@@ -95,7 +95,7 @@ int test_sine(void)
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(NI_M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2);
 
         using std::abs;

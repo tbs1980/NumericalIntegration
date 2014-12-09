@@ -548,11 +548,11 @@ namespace Kronrod {
             // the mathematics of the 1974 CoM paper.
             using std::sin;
             using std::cos;
-            Scalar s1 = sin((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
-            Scalar c1 = cos((NI_M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar s1 = sin((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c1 = cos((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
 
-            Scalar s2 = sin((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
-            Scalar c2 = cos((NI_M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar s2 = sin((M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
+            Scalar c2 = cos((M_PI) / (Scalar(2.) * aN + Scalar(1.0) ));
 
             // Coefficient for Gauss and Kronrod abscissae and weights
             Scalar chebCoeff1 = Scalar(1.0) - Scalar(1.0) / (Scalar(8.0) * aN * aN) + Scalar(1.0) / (Scalar(8.0) * aN * aN * aN);
