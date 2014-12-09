@@ -69,7 +69,7 @@ long double Gamma(long double x)
 }
 
 #include "GaussKronrodNodesWeights.h"
-#include "QuadratureGaussKronrod.h"
+#include "GaussKronrodQuadrature.h"
 #include "Integrator.h"
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
