@@ -1,3 +1,10 @@
+/**
+ * \file testIntegrator_LogPow.cpp
+ * This file is a unit test for Integrator.h and its' associated files.
+ * The test function is a decaying function which begins at positive 
+ * infinity and appraoches the final asymptotic value rapidly.
+ */
+
 #include <NumericalIntegration.h>
 
 #include <iostream>

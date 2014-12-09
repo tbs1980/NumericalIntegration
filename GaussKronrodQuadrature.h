@@ -1,5 +1,6 @@
 /**
  * \file QuadratureKronrod.h
+ * This file contains pre-calculated, tabulated values for Gauss-Kronrod quadrature nodes and weights.
  * \sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package
  *     for Automatic Integration, Springer Verlag, 1983.
  */

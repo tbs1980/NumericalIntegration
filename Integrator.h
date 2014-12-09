@@ -1,5 +1,6 @@
 /**
  * \file Integrator.h
+ * This file contains routines for numerical integration using Gauss-Kronrod quadrature.
  * \sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package
  *     for Automatic Integration, Springer Verlag, 1983.
  */

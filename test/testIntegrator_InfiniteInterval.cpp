@@ -1,3 +1,10 @@
+/**
+ * \file testIntegrator_InfiniteInterval.cpp
+ * This file is a unit test for Integrator.h and its' associated files.
+ * The test is an asymptotic function which decays rapidly toward zero
+ * with an infinitely diminishing tail.
+ */
+
 #include <NumericalIntegration.h>
 
 #include <iostream>

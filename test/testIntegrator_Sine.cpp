@@ -1,3 +1,9 @@
+/**
+ * \file testIntegrator_Sine.cpp
+ * This file is a unit test for Integrator.h and its' associated files.
+ * The test is an (oscillatory) Sine function from zero to pi.
+ */
+
 #include <NumericalIntegration.h>
 
 #include <iostream>

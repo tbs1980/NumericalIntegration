@@ -1,4 +1,11 @@
-#include <NumericalIntegration.h>
+/**
+ * \file testIntegrator_Peak.cpp
+ * This file is a unit test for Integrator.h and its' associated files.
+ * The test function peak varies with the parameter alpha to create an
+ * increasingly sharp point at the abscissa equal to pi/4.
+ */
+
+ #include <NumericalIntegration.h>
 
 #include <iostream>
 #include <fstream>
@@ -107,7 +114,7 @@ int test_peak(void)
         counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        for (Scalar alpha = 0.; alpha < 18.; ++alpha)
+        for (Scalar alpha = 0.; alpha < 5.; ++alpha)
         {
             success = true;
             integrandPeakFunctor.setAlpha(alpha);

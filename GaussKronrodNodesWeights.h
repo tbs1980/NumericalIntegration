@@ -1,4 +1,5 @@
 /**
+* \file GaussKronrodNodesWeights.h
 * The functions contained in this file calculate the Gauss-Kronrod nodes and weights
 * using the Laurie/Gautschi method.
 */

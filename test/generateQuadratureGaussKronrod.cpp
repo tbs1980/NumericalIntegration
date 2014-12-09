@@ -1,3 +1,9 @@
+/**
+ * \file generateQuadratureGaussKronrod.cpp
+ * This file will generate a replacement for the file GaussKronrodQuadrature.h 
+ * at the level of precision specified by the user.
+ */
+
 #include <NumericalIntegration.h>
 
 #include <iostream>
@@ -33,7 +39,6 @@ int test_values()
     int gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};
     int kronrodRule[12] = {15, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 201};
 
-    // @TODO Create 12x4 array to hold these values 
     std::string gaussKronrodAbscissaeNames[12];
     std::string gaussKronrodWeightsNames[12];
     std::string gaussAbscissaeNames[12];
@@ -302,8 +307,7 @@ int test_values()
 
     }
 
-    fout << "}\n";
-    fout << "#endif // EIGEN_QUADRATURE_KRONROD_H\n";
+    fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H\n";
 
     fout.close();
     std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n\n.";
