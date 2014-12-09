@@ -114,7 +114,7 @@ int test_peak(void)
         counter = 0;
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        for (Scalar alpha = 0.; alpha < 5.; ++alpha)
+        for (Scalar alpha = 0.; alpha < 18.; ++alpha)
         {
             success = true;
             integrandPeakFunctor.setAlpha(alpha);
