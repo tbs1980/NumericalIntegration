@@ -26,9 +26,12 @@ namespace Eigen
  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal
  * precision type.
  */
- // \code
- //	include <unsupported/Eigen/NumericalIntegration>
- // \endcode
+ 
+ /**
+  *\code
+  *	include <unsupported/Eigen/NumericalIntegration>
+  *\endcode
+  */
 }
 
 #include <cmath>

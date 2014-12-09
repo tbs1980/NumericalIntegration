@@ -22,6 +22,8 @@ class IntegrandPeakFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
+        //RealScalar pi = NumTraits<RealScalar>::Pi();
         using std::pow;
         return pow(4., -m_alpha) / (pow(param - M_PI / 4., 2.) + pow(16., -m_alpha));
     }

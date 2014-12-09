@@ -1,22 +1,22 @@
-/*
-* An example illustrating the use of numerical integration module in Eigen.
-*/
+/**
+ *\file Integration.cpp
+ * An example illustrating the use of numerical integration module in Eigen.
+ */
 
-// @TODO We may need to put all the code some common directory
 #include <NumericalIntegration.h>
 
 #include <iostream>
 #include <iomanip>
 
-/* 
-*  We consider the example from:
-*
-*       http://www.gnu.org/software/gsl/manual/html_node/Numerical-integration-examples.html
-*
-*       int_0^1 x^{-1/2} log(x) dx = -4
-*
-*  The integrator expects the user to provide a functor as shown below.
-*/
+/** 
+ *  We consider the example from:
+ *
+ *       http://www.gnu.org/software/gsl/manual/html_node/Numerical-integration-examples.html
+ *
+ *       int_0^1 x^{-1/2} log(x) dx = -4
+ *
+ *  The integrator expects the user to provide a functor as shown below.
+ */
 
 template<typename Scalar>
 class IntegrandExampleFunctor

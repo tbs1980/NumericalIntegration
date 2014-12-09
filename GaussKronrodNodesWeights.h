@@ -546,6 +546,10 @@ namespace Kronrod {
             // for the Newton-Raphson iterative solution.  These values are derived
             // from Pythagorean identities to the original code to more closely follow
             // the mathematics of the 1974 CoM paper.
+
+            // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
+            //RealScalar pi = NumTraits<RealScalar>::Pi();
+
             using std::sin;
             using std::cos;
             Scalar s1 = sin((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));

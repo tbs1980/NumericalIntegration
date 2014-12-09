@@ -95,6 +95,8 @@ int test_sine(void)
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
+        // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
+        //RealScalar pi = NumTraits<RealScalar>::Pi();
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2);
 
