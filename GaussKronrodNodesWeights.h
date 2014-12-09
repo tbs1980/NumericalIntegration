@@ -62,8 +62,9 @@ namespace Kronrod {
             assert(N <= alphaOut.rows());
 
             using std::pow;
+            using std::tgamma;
             alphaOut(0) = (beta-alpha)/(alpha+beta+Scalar(2.));
-            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * Gamma(alpha+Scalar(1.)) * Gamma(beta+Scalar(1.)) / Gamma(alpha+beta+Scalar(2.));
+            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * tgamma(alpha+Scalar(1.)) * tgamma(beta+Scalar(1.)) / tgamma(alpha+beta+Scalar(2.));
 
             for(IndexType n=1;n<N;++n)
             {
