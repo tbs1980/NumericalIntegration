@@ -23,9 +23,9 @@ public:
     Scalar operator()(const Scalar& param) const
     {
         using std::pow;
-        return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        //return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
@@ -37,9 +37,9 @@ public:
     {
         using std::pow;
         using std::atan;
-        return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
+        //return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
+        return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
     }
 
 private:
@@ -84,32 +84,31 @@ int test_peak(void)
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
-    // \details Float precision will not suffice to properly carry out this test. 
-    typedef double Scalar;
+    //typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
+    //typedef double Scalar;
     //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(500); // The number of subintervals must be increased for very high precision.
+    typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    Scalar::set_default_prec(300);
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
-    IntegratorType eigenIntegrator(10000);
+    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased to roughly 100X the precision requested.
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    int counter = 0;
+    const Scalar alphaLimit = 15.;
     const size_t numRules = 12;
 
-    for (size_t i = 0; i < numRules; ++i)
+    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
     {
-        counter = 0;
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
+        success = true;
+        integrandPeakFunctor.setAlpha(alpha);
 
-        for (Scalar alpha = 0.; alpha < 15.; ++alpha)
+        for (size_t i = 0; i < numRules; ++i)
         {
-            success = true;
-            integrandPeakFunctor.setAlpha(alpha);
+            Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPeakFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
@@ -118,12 +117,21 @@ int test_peak(void)
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {
-                fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
-                     << "\n desiredRelativeError<Scalar>() * abs(expected) = "
-                     << desiredRelativeError<Scalar>() * abs(expected)<<std::endl;
-
-                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
+
+                if(i == numRules-1)
+                {
+                    fout << "\nPeak Test could not pass Alpha = " << alpha
+                         << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                         << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
+                         << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
+                          
+                    fout << "errorCode = " << eigenIntegrator.errorCode() << "\nTest aborted after Fail";
+
+                    std::cout << "\nTest aborted after failing for Alpha = " << alpha
+                              << "\n\tTest Failed.\n" << std::endl;
+                    return EXIT_FAILURE;
+                }
             }
             else
             {
@@ -132,33 +140,24 @@ int test_peak(void)
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
                 fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
+                fout << "alpha = " << alpha << std::endl;
                 fout << "Success!\n";
-                counter++;
+                success = true;
+                break;
             }
-        }
-
-        if(success && counter == 15)    
-        {
-            fout << "\n  Test Succeeded!\n" << std::endl;
-            fout.close();
-            break;
-        }
-        else
-        {
-            fout <<"\n  Test Failed.\n" << std::endl;
         }
     }
 
     fout.close();
 
-    if(success && counter == 15)
+    if(success)
     {
-        std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+        std::cout << std::endl << "\tTest Succeeded!\n" << std::endl;
         return EXIT_SUCCESS;
     }
     else
     {
-        std::cout << std::endl << "  Test Failed.\n" << std::endl;
+        std::cout << "\tTest Failed.\n" << std::endl;
         return EXIT_FAILURE;
     }
 }

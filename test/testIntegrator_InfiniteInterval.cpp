@@ -82,7 +82,7 @@ int test_pow(void)
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
-    //typedef float Scalar;
+    //ypedef float Scalar;
     typedef double Scalar;
     //typedef long double Scalar;
     //typedef mpfr::mpreal Scalar;
@@ -95,69 +95,67 @@ int test_pow(void)
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;
-    int counter = 0;
+    const Scalar alphaLimit = 18.;
     const size_t numRules = 12;
 
-    for (size_t i = 0; i < numRules; ++i)
+    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
     {
-        counter = 0;
-        Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
-
-        for (Scalar alpha = 0.; alpha < 18.; ++alpha)
+        success = true;
+        integrandInfiniteFunctor.setAlpha(alpha);
+        
+        for (size_t i = 0; i < numRules; ++i)
         {
-            success = true;
-            integrandInfiniteFunctor.setAlpha(alpha);
+            Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
             using std::pow;
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandInfiniteFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-
             Scalar expected = IntegrandInfiniteFunctorType::integrateInfinite(alpha);
 
             using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {
-                fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
-                     << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
-                     << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-
-                fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
                 success = false;
+
+                if(i == numRules-1)
+                {
+                    fout << "\nPeak Test could not pass Alpha = " << alpha
+                         << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                         << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
+                         << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
+                          
+                    fout << "errorCode = " << eigenIntegrator.errorCode() << "\nTest aborted after Fail";
+
+                    std::cout << "\nTest aborted after failing for Alpha = " << alpha
+                              << "\n\tTest Failed.\n" << std::endl;
+                    return EXIT_FAILURE;
+                }
             }
             else
             {
                 fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
-                     << "\n desiredRelativeError<Scalar>() * abs(expected) = "
+                     << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-                
+                          
                 fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
+                fout << "alpha = " << alpha << std::endl;
                 fout << "Success!\n";
-                counter++;
+                success = true;
+                break;
             }
-        }
-
-        if(success && counter == 18)    
-        {
-            fout << "\n  Test Succeeded!\n" << std::endl;
-            fout.close();
-            break;
-        }
-        else
-        {
-            fout <<"\n  Test Failed.\n" << std::endl;
         }
     }
 
     fout.close();
 
-    if(success && counter == 18)
+    if(success)
     {
-        std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+        std::cout << std::endl << "\tTest Succeeded!\n" << std::endl;
         return EXIT_SUCCESS;
     }
     else
     {
-        std::cout << std::endl << "  Test Failed.\n" << std::endl;
+        std::cout << "\tTest Failed.\n" << std::endl;
         return EXIT_FAILURE;
     }
 }

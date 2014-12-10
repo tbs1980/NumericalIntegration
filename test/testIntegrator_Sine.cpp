@@ -65,7 +65,7 @@ int test_sine(void)
     //typedef float Scalar;
     typedef double Scalar;
     //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
+    //typedef mpfr::mpreal Scalar;  // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
     //Scalar::set_default_prec(500);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
@@ -111,13 +111,13 @@ int test_sine(void)
 
         if(success)
         {
-            fout << "\n  Test Succeeded!\n" << std::endl;
+            fout << "\n\tTest Succeeded!\n" << std::endl;
             fout.close();
             break;
         }
         else
         {
-            fout <<"\n  Test Failed.\n" << std::endl;
+            fout <<"\n\tTest Failed.\n" << std::endl;
         }
     }
 
@@ -125,12 +125,12 @@ int test_sine(void)
 
     if (success)
     {
-        std::cout << std::endl << "  Test Succeeded!\n" << std::endl;
+        std::cout << std::endl << "\tTest Succeeded!\n" << std::endl;
         return EXIT_SUCCESS;
     }
     else
     {
-        std::cout << std::endl << "  Test Failed.\n" << std::endl;
+        std::cout << std::endl << "\tTest Failed.\n" << std::endl;
         return EXIT_FAILURE;
     }
 }
