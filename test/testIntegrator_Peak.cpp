@@ -24,8 +24,8 @@ public:
     {
         using std::pow;
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        return pow(Scalar(4.), -m_alpha) / (pow(param - NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
-        //return pow(Scalar(4.), -m_alpha) / (pow(param - Scalar(M_PI) / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        //return pow(Scalar(4.), -m_alpha) / (pow(param - NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        return pow(Scalar(4.), -m_alpha) / (pow(param - Scalar(M_PI) / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
@@ -84,13 +84,13 @@ int test_peak(void)
     std::cout<<"\nTesting Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))\n";
 
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
     
-    
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(6);
-    
+    /**
+     * typedef mpfr::mpreal Scalar;
+     * Scalar::set_default_prec(6);
+     */
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
