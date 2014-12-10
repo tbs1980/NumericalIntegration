@@ -91,31 +91,31 @@ public:
     template <typename FunctionType>
     Scalar quadratureAdaptive(
         const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
-        const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(1.e-8),
+        const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
         const QuadratureRule quadratureRule = 1)
     {
-        if ((desiredAbsoluteError <= 0. && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
+        if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
             || m_maxSubintervals < 1)
         {
             m_errorCode = 6;
-            return 0.;
+            return Scalar(0.);
         }
 
         m_errorCode = 0;
         m_numEvaluations = 0;
         m_lowerList[0] = lowerLimit;
         m_upperList[0] = upperLimit;
-        m_integralList[0] = 0.;
-        m_errorList[0] = 0.;
+        m_integralList[0] = Scalar(0.);
+        m_errorList[0] = Scalar(0.);
         m_errorListIndices[0] = 0;
         m_errorListIndices[1] = 1;
 
-        Scalar defAbs;
-        Scalar resAbs;
+        Scalar absDiff;
+        Scalar absResult;
 
         // First approximation to the integral
         Scalar integral = quadratureKronrod(
-          f, lowerLimit, upperLimit, m_estimatedError, defAbs, resAbs, quadratureRule);
+          f, lowerLimit, upperLimit, m_estimatedError, absDiff, absResult, quadratureRule);
 
         m_numSubintervals = 1;
         m_integralList[0] = integral;
@@ -129,15 +129,15 @@ public:
         {
             m_errorCode = 1;
         }
-        else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * 50. * defAbs
+        else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.) * absDiff
             && m_estimatedError > errorBound)
         {
             m_errorCode = 2;
         }
 
         if (m_errorCode != 0
-            || (m_estimatedError <= errorBound && m_estimatedError != resAbs)
-            || m_estimatedError == 0.)
+            || (m_estimatedError <= errorBound && m_estimatedError != absResult)
+            || m_estimatedError == Scalar(0.))
         {
             if (quadratureRule == GaussKronrod15)
             {
@@ -179,13 +179,13 @@ public:
 
             Scalar error1;
             Scalar error2;
-            Scalar defAb1;
-            Scalar defAb2;
+            Scalar absDiff1;
+            Scalar absDiff2;
 
             const Scalar area1 = quadratureKronrod(
-            f, lower1, upper1, error1, resAbs, defAb1, quadratureRule);
+            f, lower1, upper1, error1, absResult, absDiff1, quadratureRule);
             const Scalar area2 = quadratureKronrod(
-            f, lower2, upper2, error2, resAbs, defAb2, quadratureRule);
+            f, lower2, upper2, error2, absResult, absDiff2, quadratureRule);
 
             // Improve previous approximations to integral and error and test for accuracy.
             ++(m_numEvaluations);
@@ -194,7 +194,7 @@ public:
             errorSum += error12 - errorMax;
             area += area12 - m_integralList[maxErrorIndex];
 
-            if (defAb1 != error1 && defAb2 != error2)
+            if (absDiff1 != error1 && absDiff2 != error2)
             {
                 using std::abs;
                 if (abs(m_integralList[maxErrorIndex] - area12) <= abs(area12) * Scalar(1.e-5)
@@ -265,7 +265,7 @@ public:
             }
         }
 
-        integral = 0.;
+        integral = Scalar(0.);
 
         for (int k = 0; k < m_numSubintervals; ++k)
         {
@@ -420,7 +420,7 @@ private:
      *             abs(I - I').
      * \param[in/out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
      *             upperLimit.
-     * \param[in/out] absDiffIntegral The approximation to the integral of
+     * \param[in/out] absDifffIntegral The approximation to the integral of
      *             abs(f - I/(upperLimit - lowerLimit)).
      *
      * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
@@ -440,7 +440,7 @@ private:
     template <typename FunctionType>
     Scalar quadratureKronrod(
         const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
-        Scalar& estimatedError, Scalar& absIntegral, Scalar& absDiffIntegral,
+        Scalar& estimatedError, Scalar& absIntegral, Scalar& absDifffIntegral,
         const QuadratureRule quadratureRule)
     {
         switch (quadratureRule)
@@ -449,76 +449,76 @@ private:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod15,
             QuadratureKronrod<Scalar>::weightsGaussKronrod15, QuadratureKronrod<Scalar>::weightsGauss15,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod21:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod21,
             QuadratureKronrod<Scalar>::weightsGaussKronrod21, QuadratureKronrod<Scalar>::weightsGauss21,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod31:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod31,
             QuadratureKronrod<Scalar>::weightsGaussKronrod31, QuadratureKronrod<Scalar>::weightsGauss31,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod41:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod41,
             QuadratureKronrod<Scalar>::weightsGaussKronrod41, QuadratureKronrod<Scalar>::weightsGauss41,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod51:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod51,
             QuadratureKronrod<Scalar>::weightsGaussKronrod51, QuadratureKronrod<Scalar>::weightsGauss51,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod61:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod61,
             QuadratureKronrod<Scalar>::weightsGaussKronrod61, QuadratureKronrod<Scalar>::weightsGauss61,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod71:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod71,
             QuadratureKronrod<Scalar>::weightsGaussKronrod71, QuadratureKronrod<Scalar>::weightsGauss71,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod81:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod81,
             QuadratureKronrod<Scalar>::weightsGaussKronrod81, QuadratureKronrod<Scalar>::weightsGauss81,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod91:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod91,
             QuadratureKronrod<Scalar>::weightsGaussKronrod91, QuadratureKronrod<Scalar>::weightsGauss91,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod101:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod101,
             QuadratureKronrod<Scalar>::weightsGaussKronrod101, QuadratureKronrod<Scalar>::weightsGauss101,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod121:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod121,
             QuadratureKronrod<Scalar>::weightsGaussKronrod121, QuadratureKronrod<Scalar>::weightsGauss121,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         case GaussKronrod201:
           return quadratureKronrodHelper(
             QuadratureKronrod<Scalar>::abscissaeGaussKronrod201,
             QuadratureKronrod<Scalar>::weightsGaussKronrod201, QuadratureKronrod<Scalar>::weightsGauss201,
-            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDiffIntegral, quadratureRule);
+            f, lowerLimit, upperLimit, estimatedError, absIntegral, absDifffIntegral, quadratureRule);
 
         default:
-          return 0.;
+          return Scalar(0.);
         }
     }
 
@@ -528,7 +528,7 @@ private:
     Scalar quadratureKronrodHelper(
         Array<Scalar, numKronrodRows, 1> abscissaeGaussKronrod, Array<Scalar, numKronrodRows, 1> weightsGaussKronrod,
         Array<Scalar, numGaussRows, 1> weightsGauss, const FunctionType& f, const Scalar lowerLimit,
-        const Scalar upperLimit, Scalar& estimatedError, Scalar& absIntegral, Scalar& absDiffIntegral,
+        const Scalar upperLimit, Scalar& estimatedError, Scalar& absIntegral, Scalar& absDifffIntegral,
         const QuadratureRule quadratureRule)
         {
         // Half-length of the interval.
@@ -598,24 +598,24 @@ private:
         // i.e. I / (upperLimit - lowerLimit)
         Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
-        absDiffIntegral = weightsGaussKronrod[7] * (abs(fCenter - resultMeanKronrod));
+        absDifffIntegral = weightsGaussKronrod[7] * (abs(fCenter - resultMeanKronrod));
 
         DenseIndex size1 = weightsGaussKronrod.size() - 1;
 
-        absDiffIntegral += (((f1Array.head(size1) - resultMeanKronrod).abs()
+        absDifffIntegral += (((f1Array.head(size1) - resultMeanKronrod).abs()
                             + (f2Array.head(size1) - resultMeanKronrod).abs())
                             * weightsGaussKronrod.head(size1)).sum();
 
         Scalar result = resultKronrod * halfLength;
         absIntegral *= abs(halfLength);
-        absDiffIntegral *= abs(halfLength);
+        absDifffIntegral *= abs(halfLength);
         estimatedError = abs((resultKronrod - resultGauss) * halfLength);
 
-        if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
+        if (absDifffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
         {
             using std::pow;
-            estimatedError = absDiffIntegral
-                * (std::min)(Scalar(1.), pow((estimatedError * Scalar(200.) / absDiffIntegral), Scalar(1.5)));
+            estimatedError = absDifffIntegral
+                * (std::min)(Scalar(1.), pow((estimatedError * Scalar(200.) / absDifffIntegral), Scalar(1.5)));
         }
 
         if (absIntegral

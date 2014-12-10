@@ -25,7 +25,7 @@ public:
     {
         using std::pow;
         using std::log;
-        return pow(param, m_alpha) * log(1/param);
+        return pow(param, m_alpha) * log(1./param);
     }
 
     /**
@@ -35,8 +35,8 @@ public:
 
     static Scalar exact_value_in_01(const Scalar& alpha)
     {
-        Scalar a1 = alpha+1.;
-        return 1./(a1*a1);
+        Scalar a1 = alpha + Scalar(1.);
+        return Scalar(1.)/(a1*a1);
     }
 
 private:
@@ -94,10 +94,10 @@ int test_logpow(void)
     //typedef long double Scalar;
     
     /**
-    *typedef mpfr::mpreal Scalar;
-    *Scalar::set_default_prec(113);
-    *QuadratureKronrod<Scalar>::computeNodesAndWeights();
-    */
+     * typedef mpfr::mpreal Scalar;
+     * Scalar::set_default_prec(113);
+     * QuadratureKronrod<Scalar>::computeNodesAndWeights();
+     */
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
@@ -124,11 +124,10 @@ int test_logpow(void)
 
             using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || isnan(abs((Scalar)(expected - actual)))
-                || eigenIntegrator.errorCode() !=0)
+                || isnan(abs((Scalar)(expected - actual))))
             {
-            fout << "\nrule " << i << "\n Abs(expected - actual) = " << abs(expected - actual)
-                 << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
+            fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                 << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
             fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
@@ -139,7 +138,8 @@ int test_logpow(void)
             fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
-                      
+            
+            fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
             fout << "Success!\n";
             counter++;
             }
