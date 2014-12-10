@@ -68,13 +68,13 @@ int test_sine(void)
     
     /**
      * typedef mpfr::mpreal Scalar;
-     * Scalar::set_default_prec(117);
+     * Scalar::set_default_prec(500);
      */
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(10000);
+    IntegratorType eigenIntegrator(1000);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
@@ -86,8 +86,8 @@ int test_sine(void)
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
-        //RealScalar pi = NumTraits<RealScalar>::Pi();
+        // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
+        //Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2);
 
