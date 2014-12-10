@@ -104,7 +104,7 @@ int test_peak(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
-    IntegratorType eigenIntegrator(512);
+    IntegratorType eigenIntegrator(100);
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;

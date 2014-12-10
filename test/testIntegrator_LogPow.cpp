@@ -25,7 +25,7 @@ public:
     {
         using std::pow;
         using std::log;
-        return pow(param, m_alpha) * log(1./param);
+        return pow(param, m_alpha) * log(1/param);
     }
 
     /**
@@ -35,8 +35,8 @@ public:
 
     static Scalar exact_value_in_01(const Scalar& alpha)
     {
-        Scalar a1 = alpha + Scalar(1.);
-        return Scalar(1.)/(a1*a1);
+        Scalar a1 = alpha + 1;
+        return 1/(a1*a1);
     }
 
 private:
@@ -90,8 +90,8 @@ int test_logpow(void)
      */
      
     //typedef float Scalar;
-    typedef double Scalar;
-    //typedef long double Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
     
     /**
      * typedef mpfr::mpreal Scalar;
@@ -102,7 +102,7 @@ int test_logpow(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(512);
+    IntegratorType eigenIntegrator(100);
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;

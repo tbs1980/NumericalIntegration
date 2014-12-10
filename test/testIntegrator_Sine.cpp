@@ -71,8 +71,8 @@ int test_sine(void)
      */
      
     //typedef float Scalar;
-    typedef double Scalar;
-    //typedef long double Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
     
     /**
      * typedef mpfr::mpreal Scalar;
@@ -83,7 +83,7 @@ int test_sine(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(512);
+    IntegratorType eigenIntegrator(100);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;

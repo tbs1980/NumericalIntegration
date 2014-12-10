@@ -196,7 +196,6 @@ public:
 
             if (absDiff1 != error1 && absDiff2 != error2)
             {
-                using std::abs;
                 if (abs(m_integralList[maxErrorIndex] - area12) <= abs(area12) * Scalar(1.e-5)
                   && error12 >= errorMax * Scalar(.99))
                 {
@@ -530,14 +529,16 @@ private:
         Array<Scalar, numGaussRows, 1> weightsGauss, const FunctionType& f, const Scalar lowerLimit,
         const Scalar upperLimit, Scalar& estimatedError, Scalar& absIntegral, Scalar& absDiffIntegral,
         const QuadratureRule quadratureRule)
-        {
+    {
         // Half-length of the interval.
         const Scalar halfLength = (upperLimit - lowerLimit) * Scalar(.5);
 
         // Midpoint of the interval.
         const Scalar center = (lowerLimit + upperLimit) * Scalar(.5);
-
         const Scalar fCenter = f(center);
+
+        DenseIndex size1 = weightsGaussKronrod.size() - 1;
+        DenseIndex size2 = weightsGauss.size() - 1;
 
         Array<Scalar, numKronrodRows - 1, 1> f1Array;
         Array<Scalar, numKronrodRows - 1, 1> f2Array;
@@ -550,11 +551,12 @@ private:
         }
         else
         {
-            resultGauss = weightsGauss[weightsGauss.size() - 1] * fCenter;
+            resultGauss = weightsGauss[size2] * fCenter;
         }
 
         // The result of the Kronrod formula.
-        Scalar resultKronrod = weightsGaussKronrod[weightsGaussKronrod.size() - 1] * fCenter;
+        Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;
+        
         using std::abs;
         absIntegral = abs(resultKronrod);
 
@@ -598,9 +600,7 @@ private:
         // i.e. I / (upperLimit - lowerLimit)
         Scalar resultMeanKronrod = resultKronrod * Scalar(.5);
 
-        absDiffIntegral = weightsGaussKronrod[7] * (abs(fCenter - resultMeanKronrod));
-
-        DenseIndex size1 = weightsGaussKronrod.size() - 1;
+        absDiffIntegral = weightsGaussKronrod[size1] * (abs(fCenter - resultMeanKronrod));
 
         absDiffIntegral += (((f1Array.head(size1) - resultMeanKronrod).abs()
                             + (f2Array.head(size1) - resultMeanKronrod).abs())

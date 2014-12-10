@@ -91,8 +91,8 @@ int test_pow(void)
      */
      
     //typedef float Scalar;
-    typedef double Scalar;
-    //typedef long double Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
     
     /**
      * typedef mpfr::mpreal Scalar;
@@ -103,7 +103,7 @@ int test_pow(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(512);
+    IntegratorType eigenIntegrator(100);
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;
