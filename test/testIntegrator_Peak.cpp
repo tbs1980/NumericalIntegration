@@ -23,9 +23,9 @@ public:
     Scalar operator()(const Scalar& param) const
     {
         using std::pow;
-        //return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        //return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
@@ -37,9 +37,9 @@ public:
     {
         using std::pow;
         using std::atan;
-        //return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
+        return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
+        //return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
     }
 
 private:
@@ -85,16 +85,16 @@ int test_peak(void)
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
     //typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
-    //typedef double Scalar;
+    typedef double Scalar;
     //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    Scalar::set_default_prec(300);
+    //typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    //Scalar::set_default_prec(300);
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
-    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased to roughly 100X the precision requested.
+    IntegratorType eigenIntegrator(10000);  // \detail The number of subintervals must be increased to roughly 100X the precision requested.
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;

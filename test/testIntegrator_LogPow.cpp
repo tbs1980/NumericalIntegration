@@ -90,7 +90,7 @@ int test_logpow(void)
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(10000);
+    IntegratorType eigenIntegrator(1000);   // \detail The number of subintervals must be increased to roughly 100X the precision requested.
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
