@@ -361,17 +361,17 @@ private:
         // errorlist(m_errorListIndices(nrMax+1)).
         if (start <= bottomEnd)
         {
-          for (i = start; i <= bottomEnd; ++i)
-          {
-            succeed = m_errorListIndices[i];
-
-            if (errorMaximum >= m_errorList[succeed])
+            for (i = start; i <= bottomEnd; ++i)
             {
-                break;
-            }
+                succeed = m_errorListIndices[i];
 
-            m_errorListIndices[i - 1] = succeed;
-          }
+                if (errorMaximum >= m_errorList[succeed])
+                {
+                    break;
+                }
+
+                m_errorListIndices[i - 1] = succeed;
+            }
         }
 
         if (start > bottomEnd)
@@ -386,20 +386,21 @@ private:
         // Insert errorMin by traversing the list bottom-up.
         m_errorListIndices[i - 1] = maxErrorIndex;
 
+        int tempIndex = bottomEnd;
         for (int j = i; j <= bottomEnd; ++j)
         {
-            succeed = m_errorListIndices[bottomEnd];
+            succeed = m_errorListIndices[tempIndex];
 
             if (m_errorList[m_numSubintervals - 1] < m_errorList[succeed])
             {
-                m_errorListIndices[bottomEnd + 1] = m_numSubintervals - 1;
+                m_errorListIndices[tempIndex + 1] = m_numSubintervals - 1;
                 maxErrorIndex = m_errorListIndices[nrMax];
                 errorMax = m_errorList[maxErrorIndex];
                 return;
             }
 
-            m_errorListIndices[bottomEnd + 1] = succeed;
-            --bottomEnd;
+            m_errorListIndices[tempIndex + 1] = succeed;
+            --tempIndex;
         }
 
         m_errorListIndices[i] = m_numSubintervals - 1;

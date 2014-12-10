@@ -81,29 +81,20 @@ int test_pow(void)
     fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
-
-    /**
-     * When using Multiprecision mpreal types beyond quad precision, it is important to either call
-     * computeNodesAndWeights() to calculate nodes and weights on the fly, or to repopulate the
-     * QuadratureKronrod.h tabulated array values by first changing the setprecision and output 
-     * precision values in outputKronrodNodesWeights.cpp to greater than the value of precision
-     * required for the subseuent integration calculations desired.
-     */
      
     //typedef float Scalar;
-    //typedef double Scalar;
-    typedef long double Scalar;
+    typedef double Scalar;
+    //typedef long double Scalar;
     
     /**
      * typedef mpfr::mpreal Scalar;
-     * Scalar::set_default_prec(161);
-     * //QuadratureKronrod<Scalar>::computeNodesAndWeights();
-    */
+     * Scalar::set_default_prec(500);
+     */
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(100);
+    IntegratorType eigenIntegrator(1000);
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;

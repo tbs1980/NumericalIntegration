@@ -49,7 +49,7 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+    return Eigen::NumTraits<Scalar>::epsilon() * 50.;
 }
 
 template <typename Scalar>
@@ -80,29 +80,19 @@ int test_logpow(void)
     fout.open("test/testOutput/LogPow_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
-
-    /**
-     * When using Multiprecision mpreal types beyond quad precision, it is important to either call
-     * computeNodesAndWeights() to calculate nodes and weights on the fly, or to repopulate the
-     * QuadratureKronrod.h tabulated array values by first changing the setprecision and output 
-     * precision values in outputKronrodNodesWeights.cpp to greater than the value of precision
-     * required for the subseuent integration calculations desired.
-     */
      
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
+    //typedef long double Scalar;
     
-    /**
-     * typedef mpfr::mpreal Scalar;
-     * Scalar::set_default_prec(113);
-     * QuadratureKronrod<Scalar>::computeNodesAndWeights();
-     */
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(500);
+    
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(100);
+    IntegratorType eigenIntegrator(10000);
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;

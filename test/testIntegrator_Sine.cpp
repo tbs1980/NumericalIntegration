@@ -61,29 +61,20 @@ int test_sine(void)
     fout.open("test/testOutput/Sine_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
-
-    /**
-     * When using Multiprecision mpreal types beyond quad precision, it is important to either call
-     * computeNodesAndWeights() to calculate nodes and weights on the fly, or to repopulate the
-     * QuadratureKronrod.h tabulated array values by first changing the setprecision and output 
-     * precision values in outputKronrodNodesWeights.cpp to greater than the value of precision
-     * required for the subseuent integration calculations desired.
-     */
      
     //typedef float Scalar;
-    //typedef double Scalar;
-    typedef long double Scalar;
+    typedef double Scalar;
+    //typedef long double Scalar;
     
     /**
      * typedef mpfr::mpreal Scalar;
      * Scalar::set_default_prec(117);
-     * //QuadratureKronrod<Scalar>::computeNodesAndWeights();
      */
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(100);
+    IntegratorType eigenIntegrator(10000);
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;

@@ -51,7 +51,7 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+    return Eigen::NumTraits<Scalar>::epsilon() * 50.;
 }
 
 template <typename Scalar>
@@ -83,14 +83,6 @@ int test_peak(void)
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/(x-pi/4)^2 + 16^-alpha = atan( (4-pi)4^(alpha-1) )+atan(pi-4^(alpha-1))\n";
 
-    /**
-     * When using Multiprecision mpreal types beyond quad precision, it is important to either call
-     * computeNodesAndWeights() to calculate nodes and weights on the fly, or to repopulate the
-     * QuadratureKronrod.h tabulated array values by first changing the setprecision and output 
-     * precision values in outputKronrodNodesWeights.cpp to greater than the value of precision
-     * required for the subseuent integration calculations desired.
-     */
-     
     //typedef float Scalar;
     typedef double Scalar;
     //typedef long double Scalar;
@@ -98,13 +90,12 @@ int test_peak(void)
     /**
      * typedef mpfr::mpreal Scalar;
      * Scalar::set_default_prec(6);
-     * QuadratureKronrod<Scalar>::computeNodesAndWeights();
      */
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
-    IntegratorType eigenIntegrator(100);
+    IntegratorType eigenIntegrator(10000);
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
