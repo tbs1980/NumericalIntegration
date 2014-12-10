@@ -121,7 +121,7 @@ int test_pow(void)
                 {
                     fout << "\nPeak Test could not pass Alpha = " << alpha
                          << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
-                         << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
+                         << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
                     fout << "errorCode = " << eigenIntegrator.errorCode() << "\nTest aborted after Fail";
@@ -134,7 +134,7 @@ int test_pow(void)
             else
             {
                 fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
-                     << "\n desiredRelativeError<Scalar>() * Abs(expected) = "
+                     << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
                 fout << "errorCode = " << eigenIntegrator.errorCode() << std::endl;
