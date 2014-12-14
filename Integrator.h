@@ -82,7 +82,7 @@ public:
      * \param[in] upperLimit The upper limit of integration.
      * \param[in] desiredAbsoluteError The absolute accuracy requested.
      * \param[in] desiredRelativeError The relative accuracy requested.
-     *            If desiredAbsoluteError <= 0 and desiredRelativeError < 5 * machinePrecision,
+     *            If desiredAbsoluteError <= 0 and desiredRelativeError < 50 * machinePrecision,
      *            the routine will end with errorCode = 6.
      * \param[in] quadratureRule The local Gauss-Kronrod quadrature rule to use.
      *
@@ -129,7 +129,7 @@ public:
         {
             m_errorCode = 1;
         }
-        else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * Scalar(5.) * absDiff
+        else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.) * absDiff
             && m_estimatedError > errorBound)
         {
             m_errorCode = 2;
@@ -620,10 +620,10 @@ private:
         }
 
         if (absIntegral
-            > (std::numeric_limits<Scalar>::min)() / (Eigen::NumTraits<Scalar>::epsilon() * Scalar(5.) ))
+            > (std::numeric_limits<Scalar>::min)() / (Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.) ))
         {
             estimatedError = (std::max)(
-                Eigen::NumTraits<Scalar>::epsilon() * static_cast<Scalar>(5.) * absIntegral,
+                Eigen::NumTraits<Scalar>::epsilon() * static_cast<Scalar>(50.) * absIntegral,
                 estimatedError);
         }
 
@@ -710,7 +710,7 @@ private:
      * errorCode = 4 Roundoff error on extrapolation
      * errorCode = 5 Divergent integral (or very slowly convergent integral)
      * errorCode = 6 The input is invalid, because (desiredAbsoluteError <= 0 and
-     *               desiredRealtiveError < 5 * relativeMachineAccuracy, or
+     *               desiredRealtiveError < 50 * relativeMachineAccuracy, or
      *               m_maxSubintervals < 1.
      * errorCode = 7 Applies to (D)QAWF only - limiting number of cycles has been attained
      *

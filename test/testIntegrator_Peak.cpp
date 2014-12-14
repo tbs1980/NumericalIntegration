@@ -88,7 +88,7 @@ int test_peak(void)
     typedef double Scalar;
     //typedef long double Scalar;
     //typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    //Scalar::set_default_prec(500);
+    //Scalar::set_default_prec(350);
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
