@@ -82,7 +82,7 @@ int test_pow(void)
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
-    //ypedef float Scalar;
+    //typedef float Scalar;
     typedef double Scalar;
     //typedef long double Scalar;
     //typedef mpfr::mpreal Scalar;
