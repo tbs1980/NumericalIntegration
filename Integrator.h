@@ -89,7 +89,7 @@ public:
      * \returns The approximation to the integral.
      */
     template <typename FunctionType>
-    Scalar quadratureAdaptive(
+    Scalar adaptiveQuadrature(
         const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
         const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
         const QuadratureRule quadratureRule = 1)
@@ -288,14 +288,14 @@ public:
     /**
      * \brief Returns the estimated absolute error from the last integration.
      *
-     * \returns The value returned will only be valid after calling quadratureAdaptive at least once.
+     * \returns The value returned will only be valid after calling adaptiveQuadrature at least once.
      */
     inline Scalar estimatedError() const {return m_estimatedError;}
 
     /**
      * \brief Returns the error code.
      *
-     * \returns The value returned will only be valid after calling quadratureAdaptive at least once.
+     * \returns The value returned will only be valid after calling adaptiveQuadrature at least once.
      */
     inline int errorCode() const {return m_errorCode;}
 

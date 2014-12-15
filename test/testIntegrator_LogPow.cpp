@@ -106,7 +106,7 @@ int test_logpow(void)
         {
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
             
-            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+            Scalar actual = eigenIntegrator.adaptiveQuadrature(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
             using std::abs;

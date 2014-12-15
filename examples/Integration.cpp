@@ -66,7 +66,7 @@ int main(void)
     Scalar desRelErr = Eigen::NumTraits<Scalar>::epsilon() * 50.;
 
     //integrate
-    Scalar result = eigIntgtor.quadratureAdaptive(inFctr, Scalar(0.),Scalar(1.), desAbsErr, desRelErr, quadratureRule);
+    Scalar result = eigIntgtor.adaptiveQuadrature(inFctr, Scalar(0.),Scalar(1.), desAbsErr, desRelErr, quadratureRule);
 
     //expected result
     Scalar expected = Scalar(-4.);
