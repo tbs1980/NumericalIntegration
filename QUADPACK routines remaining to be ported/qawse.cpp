@@ -1,9 +1,7 @@
 /**
  * \file
- * \brief This function calculates an approximation I' to a given definite integeral I, the
- *        integeral of f*w from the lowerLimit to upperLimit, (where w shows a singular behaviour
- *        at the end points see parameter quadratureRule), hopefully satisfying
- *        abs(I - I') <= max(desireabsoluteError, desiredRelativeError * abs(I)).
+ * \brief This function calculates an approximation I' to a given definite integeral I, the integeral of f*w from the lowerLimit to upperLimit, (where w shows a singular behaviour
+ *        at the end points see parameter quadratureRule), hopefully satisfying abs(I - I') <= max(desireabsoluteError, desiredRelativeError * abs(I)).
  *
  * \details This file contains routines for numerical integeration for inegrands with singularities or discontinuities using Curtis-Clenshaw quadrature.
  *          This routine is better suited than quadratureAdaptive() for integerands with singularities or discontinuities.

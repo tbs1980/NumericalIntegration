@@ -1,25 +1,22 @@
 /**
-* subroutine qcheb(x,fValue,chebyshevDegree12,chebyshevDegree24)
-*
-* keywords - Chebyshev series expansion, fast fourm_errorCode transform
-*
-* purpose - This routine computes the chebyshev series expansion of degrees 12 and 24 of a function using a
-*            fast fourm_errorCode transform method f(x) = sum(k=1,..,13) (chebyshevDegree12(k)*t(k-1,x)),
-*            f(x) = sum(k=1,..,25) (chebyshevDegree24(k)*t(k-1,x)), where t(k,x) is the chebyshev polynomial of degree k.
-*
-* description - Chebyshev series expansion
-*
-*   x      - Vector of dimension 11 containing the values cos(k*M_PI/24), from k = 1 to 11
-*
-*   fValue - Vector of dimension 25 containing the function values at the points
-*            (upperLimit+lowerLimit+(upperLimit-lowerLimit)*cos(k*M_PI/24))/2, from k = 0 to 24,
-*            where (lowerLimit, upperLimit) is the approximation interval. fValue(1) and fValue(25)
-*            are divided by two (these values are destroyed at output).
-*
-*   chebyshevDegree12 - Vector of dimension 13 containing the Chebyshev coefficients for degree 12
-*
-*   chebyshevDegree24 - Vector of dimension 25 containing the Chebyshev coefficients for degree 24
-*/
+ * \file
+ * \brief - This routine computes the chebyshev series expansion of degrees 12 and 24 of a function using a
+ *          fast fourm_errorCode transform method f(x) = sum(k=1,..,13) (chebyshevDegree12(k)*t(k-1,x)),
+ *          f(x) = sum(k=1,..,25) (chebyshevDegree24(k)*t(k-1,x)), where t(k,x) is the chebyshev polynomial of degree k.
+ *
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] x - Vector of dimension 11 containing the values cos(k*M_PI/24), from k = 1 to 11
+ * \param[] fValue - Vector of dimension 25 containing the function values at the points
+ *            (upperLimit+lowerLimit+(upperLimit-lowerLimit)*cos(k*M_PI/24))/2, from k = 0 to 24,
+ *            where (lowerLimit, upperLimit) is the approximation interval. fValue(1) and fValue(25)
+ *            are divided by two (these values are destroyed at output).
+ * \param[] chebyshevDegree12 - Vector of dimension 13 containing the Chebyshev coefficients for degree 12
+ * \param[] chebyshevDegree24 - Vector of dimension 25 containing the Chebyshev coefficients for degree 24
+ *
+ * \returns The approximation to the integeral.
+ */
+ 
     chebyshevDegree12(13);
     chebyshevDegree24(25);
 

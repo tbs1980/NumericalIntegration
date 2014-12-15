@@ -1,42 +1,28 @@
 /**
-* subroutine qk15w(f,w,p1,p2,p3,p4,kp,lowerLimit, upperLimit,integral,m_estimatedError,absIntegral,m_estimatedError)
-* purpose - To compute i = integeral of f*w over (lowerLimit, upperLimit), with error estimate
-*           j = integeral of abs(f*w) over (lowerLimit, upperLimit)
-* description - integeration rules
-*
-*   p1, p2, p3, p4 - Parameters in the weight function*
-*
-*   kp - Key for indicating the type of weight function
-*
-*   absIntegral - Approximation to the integeral of abs(f)
-*
-*   m_estimatedError - Approximation to the integeral of abs(f-i/(upperLimit-lowerLimit))
-*
-*   The abscissae and weights are given for the interval (-1,1).
-*   Because of symmetry only the positive abscissae and their corresponding weights are given.
-*
-*   xgk - Abscissae of the 15-point gauss-kronrod rule xgk(2), xgk(4), ... abscissae of the 7-point Gauss rule
-*           xgk(1), xgk(3), ... abscissae which are optimally added to the 7-point gauss rule
-*
-*   wgk - Weights of the 15-point gauss-kronrod rule
-*
-*   wg - Weights of the 7-point gauss rule
-*
-*   center  - mid point of the interval
-*
-*   halfLength  - half-length of the interval
-*
-*   absc*  - abscissa
-*
-*   fValue*  - function value
-*
-*   resultGauss   - integral of the 7-point gauss formula
-*
-*   resultKronrod   - integral of the 15-point kronrod formula
-*
-*   resultKronrodh  - Approximation to the mean value of f*w over (lowerLimit, upperLimit),
-*            i.e. to i/(upperLimit-lowerLimit)
-*/
+ * \file
+ * \brief - Integeration rules for computing i = integeral of f*w over (lowerLimit, upperLimit), with error estimate j = integeral of abs(f*w) over (lowerLimit, upperLimit).
+ *
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \details - The abscissae and weights are given for the interval (-1,1). Because of symmetry only the positive abscissae and their corresponding weights are given.
+ *
+ * \param[] p1, p2, p3, p4 - Parameters in the weight function*
+ * \param[] kp - Key for indicating the type of weight function
+ * \param[] absIntegral - Approximation to the integeral of abs(f)
+ * \param[] m_estimatedError - Approximation to the integeral of abs(f-i/(upperLimit-lowerLimit))
+ * \param[] xgk - Abscissae of the 15-point gauss-kronrod rule xgk(2), xgk(4), ... abscissae of the 7-point Gauss rule. xgk(1), xgk(3), ... abscissae which are optimally added to the 7-point gauss rule
+ * \param[] wgk - Weights of the 15-point gauss-kronrod rule
+ * \param[] wg - Weights of the 7-point gauss rule
+ * \param[] center  - mid point of the interval
+ * \param[] halfLength  - half-length of the interval
+ * \param[] absc*  - abscissa
+ * \param[] fValue*  - function value
+ * \param[] resultGauss   - integral of the 7-point gauss formula
+ * \param[] resultKronrod   - integral of the 15-point kronrod formula
+ * \param[] resultKronrodh  - Approximation to the mean value of f*w over (lowerLimit, upperLimit), i.e. to i/(upperLimit-lowerLimit)
+ *
+ * \returns The approximation to the integeral.
+ */
                        
     Scalar a;
     Scalar absc;

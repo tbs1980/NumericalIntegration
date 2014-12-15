@@ -1,38 +1,25 @@
 /**
-* subroutine qelg(n,epstab,integral,m_estimatedError,res3la,numberOfExtrapolations)
-* keywords  epsilon algorithm, convergence acceleration, extrapolationPerformed
-*
-* purpose - The routine determines the m_maxSubintervals of a given sequence of approximations, by means of the epsilon algorithm of
-*           P. Wynn. an estimate of the absolute error is also given. The condensed epsilon table is computed. Only those
-*           elements needed for the computation of the next diagonal are preserved.
-*
-* description - epsilon algorithm
-*
-*   n - epstab(n) contains the new element in the
-*                       first column of the epsilon table.
-*
-*   epstab - Vector of dimension 52 containing the elements of the two lower diagonals of the triangular epsilon table. 
-*            The elements are numbered starting at the right-hand corner of the triangle.
-*
-*   integral - Integraling approximation to the integeral
-*
-*   m_estimatedError - Estimate of the absolute error computed from integral and the 3 previous integrals
-*
-*   res3la - Vector of dimension 3 containing the m_numSubintervals 3 integrals
-*
-*   numberOfExtrapolations - Number of calls to the routine (should be zero at first call)
-*
-*
-*   e0-e3 - The 4 elements on which the computation of a new element in the epsilon table is based
-*
-*   newelm - Number of elements to be computed in the new diagonal
-*
-*   error - Error = abs(e1-e0)+abs(e2-e1)+abs(new-e2)
-*
-*   integral - the element in the new diagonal with least value of error
-*
-*   limexp is the maximum number of elements the epsilon table can contain. if this number is reached, the upper diagonal of the epsilon table is deleted.
-*/
+ * \file
+ * \brief - The routine determines the m_maxSubintervals of a given sequence of approximations, by means of the epsilon algorithm of
+ *          P. Wynn. an estimate of the absolute error is also given. The condensed epsilon table is computed. Only those
+ *          elements needed for the computation of the next diagonal are preserved.  THis algortihm allows convergence acceleration for extrapolation.
+ *
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] n - epstab(n) contains the new element in the first column of the epsilon table.
+ * \param[] epstab - Vector of dimension 52 containing the elements of the two lower diagonals of the triangular epsilon table. The elements are numbered starting at the right-hand corner of the triangle.
+ * \param[] integral - Integraling approximation to the integeral
+ * \param[] m_estimatedError - Estimate of the absolute error computed from integral and the 3 previous integrals
+ * \param[] res3la - Vector of dimension 3 containing the m_numSubintervals 3 integrals
+ * \param[] numberOfExtrapolations - Number of calls to the routine (should be zero at first call)
+ * \param[] e0-e3 - The 4 elements on which the computation of a new element in the epsilon table is based
+ * \param[] newelm - Number of elements to be computed in the new diagonal
+ * \param[] error - Error = abs(e1-e0)+abs(e2-e1)+abs(new-e2)
+ * \param[] integral - the element in the new diagonal with least value of error
+ * \param[] limexp is the maximum number of elements the epsilon table can contain. if this number is reached, the upper diagonal of the epsilon table is deleted.
+ *
+ * \returns The approximation to the integeral.
+ */
 
     real m_estimatedError,delta1,delta2,delta3,r1mach,Eigen::NumTraits<Scalar>::epsilon(),epsinfiniteBoundsKey,epstab,error,err1,err2,err3,e0,e1,e1abs,e2,e3,(std::numeric_limits<Scalar>::max)(),res,integral,res3la,ss,tol1,tol2,tol3
     integer i,ib,ib2,ie,indx,k1,k2,k3,limexp,n,newelm,numberOfExtrapolations,num

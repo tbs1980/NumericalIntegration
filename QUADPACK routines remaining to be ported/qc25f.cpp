@@ -1,50 +1,32 @@
 /**
-* subroutine qc25f(f,lowerLimit, upperLimit,omega,integer,nrMoments,maxp1,keyMomentsComputed,integral,m_estimatedError,m_numEvaluations,absIntegral,m_estimatedError,momentsComputed,chebyshevMoments)
-* keywords  Integeration rules for functions with cos or sin factor, clenshaw-curtis, gauss-kronrod
-* purpose - Computes the integeral i=integeral of f(x) over (lowerLimit, upperLimit) where 
-*           w(x) = cos(omega*x) or (wx)=sin(omega*x) and to compute j=integeral of abs(f) 
-*           over (lowerLimit, upperLimit). for smallestIntervalLength value of omega or smallestIntervalLength intervals 
-*           (lowerLimit, upperLimit) 15-point Gauss-Kronrod rule used. 
-*           Otherwise generalized Clenshaw-Curtis is used
-*
-* description - integeration rules for functions with cos or sin factor
-*
-*   omega  - A parameter in the weight function
-*
-*   integer - indicates which weight function is to be used: if integer = 1, w(x) = cos(omega*x), and  if integer = 2, w(x) = sin(omega*x)
-*
-*   nrMoments  - The length of interval (lowerLimit, upperLimit) is equal to the length of the original integeration interval divided by
-*                2^nrMoments (we suppose that the routine is used in an adaptive integeration process, otherwise set nrMoments = 0).
-*                nrMoments must be zero at the first call.
-*
-*   maxp1  - Gives an upper finiteBound on the number of chebyshev moments which can be stored, 
-*            i.e. for the intervals of lengths abs(bupperLimit-lowerLimita)*2**(-l), for l = 0 to maxp1-2.
-*
-*   keyMomentsComputed - key which is one when the moments for the current interval have been computed
-*
-*   momentsComputed - for each interval length we need to compute the Chebyshev moments. momentsComputed counts the number of
-*                     intervals for which these moments have already been computed. if nrMoments < momentsComputed or keyMomentsComputed = 1, the
-*                     Chebyshev moments for the interval (lowerLimit, upperLimit) have already been computed and stored, otherwise we
-*                     compute them and we increase momentsComputed.
-*
-*   chebyshevMoments -  array of dimension at least (maxp1,25) containing the modified chebyshev moments for the first momentsComputed interval lengths
-*
-*   fValue   - value of the function f at the points (upperLimit-lowerLimit)*0.5*cos(k*M_PI/12) + (upperLimit+lowerLimit)*0.5, from k = 0 to 24
-*
-*   chebyshevDegree12 - coefficients of the chebyshev series expansion of degree 12, for the function f, in the interval (lowerLimit, upperLimit)
-*
-*   chebyshevDegree24 - coefficients of the chebyshev series expansion of degree 24, for the function f, in the interval (lowerLimit, upperLimit)
-*
-*   integralCosineChebyshevDegree12 - approximation to the integeral of 
-*           cos(0.5*(upperLimit-lowerLimit)*omega*x)*f(0.5*(upperLimit-lowerLimit)*x+0.5*(upperLimit+lowerLimit))
-*           over (-1,+1), using the chebyshev series expansion of degree 12
-*
-*   integralCosineChebyshevDegree24 - approximation to the same integeral, using the chebyshev series expansion of degree 24
-*
-*   integralSineChebyshevDegree12 - the analogue of integralCosineChebyshevDegree12 for the sine
-*
-*   integralSineChebyshevDegree24 - the analogue of integralCosineChebyshevDegree24 for the sine
-*/
+ * \file
+ * \brief - Computes the integeral i=integeral of f(x) over (lowerLimit, upperLimit) where w(x) = cos(omega*x) or (wx)=sin(omega*x) and to compute j=integeral of abs(f) 
+ *          over (lowerLimit, upperLimit). for smallestIntervalLength value of omega or smallestIntervalLength intervals (lowerLimit, upperLimit) 15-point Gauss-Kronrod rule used. 
+ *          Otherwise generalized Clenshaw-Curtis is used. 
+ * \details - This routine is useful for functions with cos or sin factor and utilizes clenshaw-curtis and gauss-kronrod integeration of the integrand. 
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] omega  - A parameter in the weight function
+ * \param[] integer - indicates which weight function is to be used: if integer = 1, w(x) = cos(omega*x), and  if integer = 2, w(x) = sin(omega*x)
+ * \param[] nrMoments  - The length of interval (lowerLimit, upperLimit) is equal to the length of the original integeration interval divided by
+ *                2^nrMoments (we suppose that the routine is used in an adaptive integeration process, otherwise set nrMoments = 0). nrMoments must be zero at the first call.
+ * \param[] maxp1  - Gives an upper finiteBound on the number of chebyshev moments which can be stored, i.e. for the intervals of lengths abs(bupperLimit-lowerLimita)*2**(-l), for l = 0 to maxp1-2.
+ * \param[] keyMomentsComputed - key which is one when the moments for the current interval have been computed
+ * \param[] momentsComputed - for each interval length we need to compute the Chebyshev moments. momentsComputed counts the number of
+ *                     intervals for which these moments have already been computed. if nrMoments < momentsComputed or keyMomentsComputed = 1, the
+ *                     Chebyshev moments for the interval (lowerLimit, upperLimit) have already been computed and stored, otherwise we compute them and we increase momentsComputed.
+ * \param[] chebyshevMoments -  array of dimension at least (maxp1,25) containing the modified chebyshev moments for the first momentsComputed interval lengths
+ * \param[] fValue   - value of the function f at the points (upperLimit-lowerLimit)*0.5*cos(k*M_PI/12) + (upperLimit+lowerLimit)*0.5, from k = 0 to 24
+ * \param[] chebyshevDegree12 - coefficients of the chebyshev series expansion of degree 12, for the function f, in the interval (lowerLimit, upperLimit)
+ * \param[] chebyshevDegree24 - coefficients of the chebyshev series expansion of degree 24, for the function f, in the interval (lowerLimit, upperLimit)
+ * \param[] integralCosineChebyshevDegree12 - approximation to the integeral of 
+ *           cos(0.5*(upperLimit-lowerLimit)*omega*x)*f(0.5*(upperLimit-lowerLimit)*x+0.5*(upperLimit+lowerLimit)) over (-1,+1), using the chebyshev series expansion of degree 12
+ * \param[] integralCosineChebyshevDegree24 - approximation to the same integeral, using the chebyshev series expansion of degree 24
+ * \param[] integralSineChebyshevDegree12 - the analogue of integralCosineChebyshevDegree12 for the sine
+ * \param[] integralSineChebyshevDegree24 - the analogue of integralCosineChebyshevDegree24 for the sine
+ *
+ * \returns The approximation to the integeral.
+ */
 
     Scalar ac;
     Scalar an;

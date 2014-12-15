@@ -1,33 +1,25 @@
 /**
-* subroutine qc25c(f,lowerLimit, upperLimit,c,integral,m_estimatedError,ruleKey,m_numEvaluations)
-* keywords  25-point Clenshaw-Curtis integeration
-*
-* purpose - Compute i = integeral of f*w over (lowerLimit, upperLimit) with error estimate, where w(x) = 1/(x-c)
-* description - Integeration rules for the computation of Cauchy principal value integerals
-*
-*        parameters
-*
-*   c - parameter in the weight function*
-*
-*   integral - Approximation to the integeral integral is computed by using a generalized
-*              clenshaw-curtis method if c lies within ten percent of the integeration interval. 
-*              In the other case the 15-point kronrod rule obtained by optimal addition of 
-*              abscissae to the 7-point gauss rule, is applied.
-*
-*   m_estimatedError - estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
-*
-*   ruleKey   - key which is decreased by 1 if the 15-point gauss-kronrod scheme has been used
-*
-*   m_numEvaluations  - number of integerand evaluations
-*
-*   The vector x contains the values cos(k*M_PI/24), k = 1, ..., 11, to be used for the chebyshev series expansion of f
-*
-*   fValue   - value of the function f at the points cos(k*M_PI/24),  k = 0, ..., 24
-*   chebyshevDegree12 - chebyshev series expansion coefficients, for the function f, of degree 12
-*   chebyshevDegree24 - chebyshev series expansion coefficients, for the function f, of degree 24
-*   integeral12  - approximation to the integeral corresponding to the use of chebyshevDegree12
-*   integeral24  - approximation to the integeral corresponding to the use of chebyshevDegree24
-*/
+ * \file
+ * \brief - This routine computes i = integeral of f*w over (lowerLimit, upperLimit) with error estimate, where w(x) = 1/(x-c).  It epmploys integeration rules for the computation of Cauchy principal value integerals.
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] c - parameter in the weight function*
+ *
+ * \param[] integral - Approximation to the integeral integral is computed by using a generalized clenshaw-curtis method if c lies within ten percent of the integeration interval. 
+ *              In the other case the 15-point kronrod rule obtained by optimal addition of abscissae to the 7-point gauss rule, is applied.
+ *
+ * \param[] m_estimatedError - estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
+ * \param[] ruleKey   - key which is decreased by 1 if the 15-point gauss-kronrod scheme has been used
+ * \param[] m_numEvaluations  - number of integerand evaluations
+ * \param[] The vector x contains the values cos(k*M_PI/24), k = 1, ..., 11, to be used for the chebyshev series expansion of f
+ * \param[] fValue   - value of the function f at the points cos(k*M_PI/24),  k = 0, ..., 24
+ * \param[] chebyshevDegree12 - chebyshev series expansion coefficients, for the function f, of degree 12
+ * \param[] chebyshevDegree24 - chebyshev series expansion coefficients, for the function f, of degree 24
+ * \param[] integeral12  - approximation to the integeral corresponding to the use of chebyshevDegree12
+ * \param[] integeral24  - approximation to the integeral corresponding to the use of chebyshevDegree24
+ *
+ * \returns The approximation to the integeral.
+ */
 
     fValue(25),
     chebyshevDegree12(13),

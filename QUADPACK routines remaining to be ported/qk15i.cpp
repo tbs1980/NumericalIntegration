@@ -1,57 +1,35 @@
 /**
-* subroutine qk15i(f,finiteBound,infiniteBoundsKey,lowerLimit, upperLimit,integral,m_estimatedError,absIntegral,m_estimatedError)
-*
-* keywords  15-point transformed gauss-kronrod rules
-*
-* purpose  the original (infinite-bounded integeration range is mapped to the interval (0,1) and (lowerLimit, upperLimit) is a part of (0,1).
-*            it is the purpose to compute i = integeral of transformed integerand over (lowerLimit, upperLimit),
-*            j = integeral of abs(transformed integerand) over (lowerLimit, upperLimit).
-* description - integeration rule
-*
-*   finiteBound - Finite finiteBound of original integeration range (set to zero if infiniteBoundsKey = +2)
-*
-*   infiniteBoundsKey - If infiniteBoundsKey = -1, the original interval is (-infiniteBoundsKey,finiteBound),
-*         If infiniteBoundsKey = +1, the original interval is (finiteBound,+infiniteBoundsKey),
-*         If infiniteBoundsKey = +2, the original interval is (-infiniteBoundsKey,+infiniteBoundsKey) and the integeral is computed 
-*           as the sum of two integerals, one over (-infiniteBoundsKey,0) and one over (0,+infiniteBoundsKey).
-*
-*   integral - Approximation to the integeral i. Integral is computed by applying the 15-point
-*              kronrod rule(resultKronrod) obtained by optimal addition of abscissae to the 7-point gauss rule(resultGauss).
-*
-*   m_estimatedError - Estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
-*
-*   absIntegral - real approximation to the integeral j
-*
-*   m_estimatedError - Approximation to the integeral of abs((transformed integerand)-i/(upperLimit-lowerLimit)) 
-*                     over (lowerLimit, upperLimit). 
-*
-*   The abscissae and weights are supplied for the interval (-1,1).  because of symmetry only the positive abscissae and
-*       their corresponding weights are given.
-*
-*   xgk - Abscissae of the 15-point Kronrod rule xgk(2), xgk(4), ... abscissae of the 7-point Gauss rule
-*           xgk(1), xgk(3), ...  abscissae which are optimally added to the 7-point gauss rule
-*
-*   wgk - weights of the 15-point kronrod rule
-*
-*   wg - weights of the 7-point gauss rule, corresponding to the abscissae xgk(2), xgk(4), ...
-*        wg(1), wg(3), ... are set to zero.
-*
-*   center  - mid point of the interval
-*
-*   halfLength  - half-length of the interval
-*
-*   absc*  - abscissa
-*
-*   tabsc* - transformed abscissa
-*
-*    fValue*  - function value
-*
-*    resultGauss   - integral of the 7-point gauss formula
-*
-*    resultKronrod   - integral of the 15-point kronrod formula
-*
-*    resultKronrodh  - approximation to the mean value of the transformed integerand over (lowerLimit, upperLimit), i.e. to i/(upperLimit-lowerLimit)
-*/
+ * \file
+ * \brief - Integeration rules for computing i = integeral of f*w over (lowerLimit, upperLimit), with error estimate j = integeral of abs(f*w) over (lowerLimit, upperLimit).
+ *          The original (infinite-bounded integeration range is mapped to the interval (0,1) and (lowerLimit, upperLimit) is a part of (0,1).
+ *          it is the purpose to compute i = integeral of transformed integerand over (lowerLimit, upperLimit), j = integeral of abs(transformed integerand) over (lowerLimit, upperLimit).
+ *
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \details - 15-point transformed gauss-kronrod rules. The abscissae and weights are given for the interval (-1,1). Because of symmetry only the positive abscissae and their corresponding weights are given.
+ *
+ * \param[] finiteBound - Finite bound of original integeration range (set to zero if infiniteBoundsKey = +2)
+ * \param[] infiniteBoundsKey - If infiniteBoundsKey = -1, the original interval is (-infiniteBoundsKey,finiteBound),
+ *          If infiniteBoundsKey = +2, the original interval is (-infiniteBoundsKey,+infiniteBoundsKey) and the integeral is computed as the sum of two integerals, one over (-infiniteBoundsKey,0) and one over (0,+infiniteBoundsKey).
+ * \param[] integral - Approximation to the integeral i. Integral is computed by applying the 15-point kronrod rule(resultKronrod) obtained by optimal addition of abscissae to the 7-point gauss rule(resultGauss).
+ * \param[] m_estimatedError - Estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
+ * \param[] absIntegral - real approximation to the integeral j
+ * \param[] m_estimatedError - Approximation to the integeral of abs((transformed integerand)-i/(upperLimit-lowerLimit)) over (lowerLimit, upperLimit). 
+ * \param[] The abscissae and weights are supplied for the interval (-1,1).  because of symmetry only the positive abscissae and their corresponding weights are given.
+ * \param[] xgk - Abscissae of the 15-point Kronrod rule xgk(2), xgk(4), ... abscissae of the 7-point Gauss rule xgk(1), xgk(3), ...  abscissae which are optimally added to the 7-point gauss rule
+ * \param[] wgk - weights of the 15-point kronrod rule
+ * \param[] wg - weights of the 7-point gauss rule, corresponding to the abscissae xgk(2), xgk(4), ... wg(1), wg(3), ... are set to zero.
+ * \param[] center  - mid point of the interval
+ * \param[] halfLength  - half-length of the interval
+ * \param[] absc*  - abscissa
+ * \param[] tabsc* - transformed abscissa
+ * \param[] fValue*  - function value
+ * \param[] resultGauss   - integral of the 7-point gauss formula
+ * \param[] resultKronrod   - integral of the 15-point kronrod formula
+ * \param[] resultKronrodh  - approximation to the mean value of the transformed integerand over (lowerLimit, upperLimit), i.e. to i/(upperLimit-lowerLimit)
+ *
+ * \returns The approximation to the integeral.
+ */
 
     real a,absc,absc1,absc2,m_estimatedError,b,finiteBound,center,dinfiniteBoundsKey,r1mach,,f,fc,fsum,fValue1,fValue2,fv1,fv2,halfLength,absIntegral,m_estimatedError,resultGauss,resultKronrod,resultKronrodh,integral,tabsc1,tabsc2,,wg,wgk,xgk
     int infiniteBoundsKey;

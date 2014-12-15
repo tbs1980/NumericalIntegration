@@ -19,6 +19,7 @@
  *
  * \returns The approximation to the integeral.
  */
+ 
       real a,aa,m_estimatedError,m_lowerList,area,area1,area12,area2,a1,a2,b,bb,m_upperList,b1,b2,c,r1mach,m_errorList,Eigen::NumTraits<Scalar>::epsilon(),desiredAbsoluteError,desiredRelativeError,errorBound,errorMax,error1,error2,errorSum,f,integral,m_integralList,(std::numeric_limits<Scalar>::min)()
       integer m_errorCode,m_errorListIndices,roundOff1,roundOff2,k,ruleKeye,m_numSubintervals,m_maxSubintervals,maxErrorIndex,nEval,m_numEvaluations,maxNumberOfIntegrals
 

@@ -1,54 +1,36 @@
 /**
-* subroutine qng(f,lowerLimit, upperLimit,desiredAbsoluteError,desiredRelativeError,integral,m_estimatedError,m_numEvaluations,m_errorCode)
-* Keywords  automatic integerator, smooth integerand, non-adaptive, gauss-kronrod(patterson)
-* Purpose   the routine calculates an approximation integral to a
-*           given definite integeral i = integeral of f over (lowerLimit, upperLimit),
-*           hopefully satisfying following claim for accuracy
-*           abs(i-integral) <= max(desiredAbsoluteError,desiredRelativeError*abs(i)).
-* Description - Non-adaptive integeration routine.
-*
-*   The following data statements contain the abscissae and weights of the integeration rules used.
-*
-*   x1 - Abscissae common to the 10, 21, 43 and 87 point rule
-*
-*   x2 - Abscissae common to the 10, 21, 43 and 87 point rule
-*
-*   x3 - Abscissae common to the 10, 21, 43 and 87 point rule
-*
-*   x4 - Abscissae of the 87-point rule
-*
-*   w10 - Weights of the 10-point formula
-*
-*   w21a - Weights of the 21-point formula for abscissae x1
-*
-*   w21b - Weights of the 21-point formula for abscissae x2
-*
-*   w43a - Weights of the 43-point formula for abscissae x1, x3
-*
-*   w43b - Weights of the 43-point formula for abscissae x3
-*
-*   w87a - Weights of the 87-point formula forabscissae x1, x2, x3
-*
-*   w87b - Weights of the 87-point formula for abscissae x4
-*
-*   absc   - abscissa
-*
-*   fValue   - function value
-*
-*   savfun - array of function values which have already been computed
-*
-*   res10  - 10-point gauss integral
-*
-*   res21  - 21-point kronrod integral
-*
-*   res43  - 43-point integral
-*
-*   res87  - 87-point integral
-*
-*   absIntegral - approximation to the integeral of abs(f)
-*
-*   m_estimatedError - approximation to the integeral of abs(f-i/(upperLimit-lowerLimit))
-*/ 
+ * \file
+ * \brief - The routine calculates an approximation integral to a given definite integeral i = integeral of f over (lowerLimit, upperLimit),
+ *          hopefully satisfying following claim for accuracy abs(i-integral) <= max(desiredAbsoluteError,desiredRelativeError*abs(i)).
+ *
+ * \details - This routine is a non-adaptive, gauss-kronrod(patterson) type, automatic integeration routine for use with smooth integerands.
+ *
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] The following data statements contain the abscissae and weights of the integeration rules used.
+ * \param[] x1 - Abscissae common to the 10, 21, 43 and 87 point rule
+ * \param[] x2 - Abscissae common to the 10, 21, 43 and 87 point rule
+ * \param[] x3 - Abscissae common to the 10, 21, 43 and 87 point rule
+ * \param[] x4 - Abscissae of the 87-point rule
+ * \param[] w10 - Weights of the 10-point formula
+ * \param[] w21a - Weights of the 21-point formula for abscissae x1
+ * \param[] w21b - Weights of the 21-point formula for abscissae x2
+ * \param[] w43a - Weights of the 43-point formula for abscissae x1, x3
+ * \param[] w43b - Weights of the 43-point formula for abscissae x3
+ * \param[] w87a - Weights of the 87-point formula for abscissae x1, x2, x3
+ * \param[] w87b - Weights of the 87-point formula for abscissae x4
+ * \param[] absc - abscissa
+ * \param[] fValue - function value
+ * \param[] savfun - array of function values which have already been computed
+ * \param[] res10 - 10-point gauss integral
+ * \param[] res21 - 21-point kronrod integral
+ * \param[] res43 - 43-point integral
+ * \param[] res87 - 87-point integral
+ * \param[] absIntegral - approximation to the integeral of abs(f)
+ * \param[] m_estimatedError - approximation to the integeral of abs(f-i/(upperLimit-lowerLimit))
+ *
+ * \returns The approximation to the integeral.
+ */ 
 
     absc,
     center,

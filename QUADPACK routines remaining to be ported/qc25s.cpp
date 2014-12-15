@@ -1,62 +1,36 @@
 /**
-* subroutine qc25s(f,lowerLimit, upperLimit,bl,br,alphlowerLimit, beta,ri,rj,rg,rh,integral,m_estimatedError,m_estimatedError,integer,nEval)
-*
-* keywords - 25-point Clenshaw-Curtis Integeration
-*
-* purpose - To compute i = integeral of f*w over (bl,br), with error estimate, where the weight function w has a singular
-*            behaviour of algebraico-logarithmic type at the points lowerLimit and/or upperLimit. (bl,br) is a part of (lowerLimit, upperLimit).
-*
-* description - Integeration rules for integerands having algebraico-logarithmic end point singularities
-*
-*   bl - lower m_maxSubintervals of integeration, bl >= a
-*
-*   br - upper m_maxSubintervals of integeration, br <= b
-*
-*   alpha - Parameter in the weight function
-*
-*   beta - Parameter in the weight function
-*
-*   ri,rj,rg,rh - Modified chebyshev moments for the application of the generalized clenshaw-curtis method (computed in subroutine dqmomo)
-*
-*   integral - Approximation to the integeral integral is computed by using a generalized
-*              Clenshaw-Curtis method if b1 = a or br = b. In all other cases the 15-point kronrod
-*              rule is applied, obtained by optimal addition of abscissae to the 7-point gauss rule.
-*
-*   m_estimatedError - real
-*                    estimate of the modulus of the absolute error,
-*                    which should equal or exceed abs(i-integral)*
-*
-*   m_estimatedError - real
-*                    approximation to the integeral of abs(f*w-i/(upperLimit-lowerLimit))*
-*
-*   integer - integer
-*                    which determines the weight function
-*                    = 1   w(x) = (x-a)**alpha*(b-x)**beta
-*                    = 2   w(x) = (x-a)**alpha*(b-x)**beta*log(x-a)
-*                    = 3   w(x) = (x-a)**alpha*(b-x)**beta*log(b-x)
-*                    = 4   w(x) = (x-a)**alpha*(b-x)**beta*log(x-a)*
-*                                 log(b-x)
-*
-*   nEval - Number of integerand evaluations
-*
-*   fValue - value of the function f at the points
-*                    (br-bl)*0.5*cos(k*M_PI/24)+(br+bl)*0.5
-*                    k = 0, ..., 24
-*
-*   chebyshevDegree12 - coefficients of the chebyshev series expansion
-*                    of degree 12, for the function f, in the
-*                    interval (bl,br)
-*
-*   chebyshevDegree24 - coefficients of the chebyshev series expansion
-*                    of degree 24, for the function f, in the
-*                    interval (bl,br)
-*
-*   integeral12 - approximation to the integeral obtained from chebyshevDegree12
-*
-*   integeral24 - approximation to the integeral obtained from chebyshevDegree24
-*
-*   qwgts - external function subprogram defining the four possible weight functions
-*/
+ * \file
+ * \brief - To compute i = integeral of f*w over (bl,br), with error estimate, where the weight function w has a singular
+ *          behaviour of algebraico-logarithmic type at the points lowerLimit and/or upperLimit. (bl,br) is a part of (lowerLimit, upperLimit).
+ *          The routine employs 25-point Clenshaw-Curtis Integeration. 
+ * \details - This routine contains the integeration rules for integerands having algebraico-logarithmic end point singularities
+ * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
+ *
+ * \param[] bl - lower m_maxSubintervals of integeration, bl >= a
+ * \param[] br - upper m_maxSubintervals of integeration, br <= b
+ * \param[] alpha - Parameter in the weight function
+ * \param[] beta - Parameter in the weight function
+ * \param[] ri,rj,rg,rh - Modified chebyshev moments for the application of the generalized clenshaw-curtis method (computed in subroutine dqmomo)
+ * \param[] integral - Approximation to the integeral integral is computed by using a generalized
+ *              Clenshaw-Curtis method if b1 = a or br = b. In all other cases the 15-point kronrod
+ *              rule is applied, obtained by optimal addition of abscissae to the 7-point gauss rule.
+ * \param[] m_estimatedError - estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)*
+ * \param[] m_estimatedError - approximation to the integeral of abs(f*w-i/(upperLimit-lowerLimit))*
+ * \param[] integer - which determines the weight function
+ *                    = 1   w(x) = (x-a)**alpha*(b-x)**beta
+ *                    = 2   w(x) = (x-a)**alpha*(b-x)**beta*log(x-a)
+ *                    = 3   w(x) = (x-a)**alpha*(b-x)**beta*log(b-x)
+ *                    = 4   w(x) = (x-a)**alpha*(b-x)**beta*log(x-a)*log(b-x)
+ * \param[] nEval - Number of integerand evaluations
+ * \param[] fValue - value of the function f at the points (br-bl)*0.5*cos(k*M_PI/24)+(br+bl)*0.5 k = 0, ..., 24
+ * \param[] chebyshevDegree12 - coefficients of the chebyshev series expansion of degree 12, for the function f, in the interval (bl,br)
+ * \param[] chebyshevDegree24 - coefficients of the chebyshev series expansion of degree 24, for the function f, in the interval (bl,br)
+ * \param[] integeral12 - approximation to the integeral obtained from chebyshevDegree12
+ * \param[] integeral24 - approximation to the integeral obtained from chebyshevDegree24
+ * \param[] qwgts - external function subprogram defining the four possible weight functions
+ *
+ * \returns The approximation to the integeral.
+ */
 
     Scalar lowerLimit,m_estimatedError,alphlowerLimit, upperLimit,betlowerLimit, upperLimitl,br,center,chebyshevDegree12,chebyshevDegree24,dc,f,factor,fix,fValue,halfLength,absIntegral,m_estimatedError,integral,integeral12,integeral24,rg,rh,ri,rj,u,qwgts,x
     int i;
