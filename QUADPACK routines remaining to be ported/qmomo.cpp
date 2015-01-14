@@ -1,13 +1,13 @@
 /**
  * \file
- * \brief - This routine computes modified chebsyshev moments. the k-th modified Chebyshev moment is defined as the integeral over
+ * \brief - This routine computes modified Chebsyshev moments. The k-th modified Chebyshev moment is defined as the integeral over
  *          (-1,1) of w(x)*t(k,x), where t(k,x) is the chebyshev polynomial of degree k.
  *
  * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
  *
  * \param[] alpha - parameter in the weight function w(x), alpha > (-1)
  * \param[] beta - parameter in the weight function w(x), beta > (-1)
- * \param[] ri - vector of dimension 25.  ri(k) is the integeral over (-1,1) of pow((1+x), alpha) * t(k-1,x) from k = 1 to 25.
+ * \param[] ri - vector of dimension 25. ri(k) is the integeral over (-1,1) of pow((1+x), alpha) * t(k-1,x) from k = 1 to 25.
  * \param[] rj - vector of dimension 25. rj(k) is the integeral over (-1,1) of pow((1-x), beta) * t(k-1,x) from k = 1 to 25.
  * \param[] rg - vector of dimension 25. rg(k) is the integeral over (-1,1) of pow((1+x),alpha) * log((1+x)/2) * t(k-1,x) from k = 1 to 25.
  * \param[] rh - vector of dimension 25. rh(k) is the integeral over (-1,1) of pow((1-x),beta) * log((1-x)/2) * t(k-1,x) from k = 1 to 25.

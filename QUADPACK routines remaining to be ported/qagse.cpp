@@ -5,6 +5,7 @@
  *
  * \details - This function is an adaptive quadrature routine for the computation of definite integerals inclusive of simgularities.
  *            It is a general-purpose, globally-adaptive, extrapolative, automatic integerator for functions with end point singularities.
+ *
  * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
  *
  * \param[] desiredAbsoluteError - Absolute accuracy requested
@@ -12,7 +13,7 @@
  * \param[] integral - Approximation to the integeral
  * \param[] m_estimatedError - Estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
  * \param[] maxErrorIndex - Pointer to the interval with largest error estimate
- * \param[] errorMax - m_errorList(maxErrorIndex)
+ * \param[] errorMax - list(maxErrorIndex)
  * \param[] errorLast - Error on the interval currently subdivided (before that subdivision has taken place)
  * \param[] area - sum of the integerals over the subintervals
  * \param[] errorSum - sum of the errors over the subintervals
@@ -28,7 +29,7 @@
  */
 
 template <typename FunctionType>
-Scalar adaptiveQuadratureForSingularities(
+Scalar adaptiveQuadratureForEndPointSingularities(
         const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
         const Scalar desireabsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
         const QuadratureRule quadratureRule = 1)
@@ -108,8 +109,8 @@ Scalar adaptiveQuadratureForSingularities(
     errorBound = (std::max)(desiredAbsoluteError,desiredRelativeError*dResult)
     m_numSubintervals = 1
     m_integralList(1) = integral
-    m_errorList(1) = m_estimatedError
-    m_errorListIndices(1) = 1
+    list(1) = m_estimatedError
+    listIndices(1) = 1
     if(m_estimatedError <= 100.*Eigen::NumTraits<Scalar>::epsilon()*absDiff && m_estimatedError > errorBound) m_errorCode = 2
     if(m_maxSubintervals == 1) m_errorCode = 1
     if(m_errorCode != 0 || (m_estimatedError <= errorBound && m_estimatedError != absIntegral) || m_estimatedError == 0.) go to 140
@@ -174,20 +175,20 @@ Scalar adaptiveQuadratureForSingularities(
     m_lowerList(m_numSubintervals) = a2
     m_upperList(maxErrorIndex) = b1
     m_upperList(m_numSubintervals) = b2
-    m_errorList(maxErrorIndex) = error1
-    m_errorList(m_numSubintervals) = error2
+    list(maxErrorIndex) = error1
+    list(m_numSubintervals) = error2
     go to 30
 20  m_lowerList(maxErrorIndex) = a2
     m_lowerList(m_numSubintervals) = a1
     m_upperList(m_numSubintervals) = b1
     m_integralList(maxErrorIndex) = area2
     m_integralList(m_numSubintervals) = area1
-    m_errorList(maxErrorIndex) = error2
-    m_errorList(m_numSubintervals) = error1
+    list(maxErrorIndex) = error2
+    list(m_numSubintervals) = error1
 
     // Call subroutine qpsrt to maintain the descending ordering in the list of error estimates and select the 
     // subinterval with maxNumberOfIntegrals-th largest error estimate (to be bisected next).
-30  call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,m_errorList,m_errorListIndices,maxNumberOfIntegrals)
+30  call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,list,listIndices,maxNumberOfIntegrals)
 
     // jump out of do-loop
     if(errorSum <= errorBound) go to 115
@@ -212,8 +213,8 @@ Scalar adaptiveQuadratureForSingularities(
     upperBound = m_numSubintervals
     if(m_numSubintervals > (2+m_maxSubintervals/2)) upperBound = m_maxSubintervals+3-m_numSubintervals
     do 50 k = id,upperBound
-      maxErrorIndex = m_errorListIndices(maxNumberOfIntegrals)
-      errorMax = m_errorList(maxErrorIndex)
+      maxErrorIndex = listIndices(maxNumberOfIntegrals)
+      errorMax = list(maxErrorIndex)
     // jump out of do-loop
     if(abs(m_upperList(maxErrorIndex)-m_lowerList(maxErrorIndex)) > smallestIntervalLength) go to 90
     maxNumberOfIntegrals = maxNumberOfIntegrals+1
@@ -238,8 +239,8 @@ Scalar adaptiveQuadratureForSingularities(
     // Prepare bisection of the smallestIntervalLengthest interval.
 70  if(numberElementsList2 == 1) extrapolationAllowed = .true.
     if(m_errorCode == 5) go to 100
-    maxErrorIndex = m_errorListIndices(1)
-    errorMax = m_errorList(maxErrorIndex)
+    maxErrorIndex = listIndices(1)
+    errorMax = list(maxErrorIndex)
     maxNumberOfIntegrals = 1
     extrapolationPerformed = .false.
     smallestIntervalLength = smallestIntervalLength*0.5

@@ -38,7 +38,14 @@
     int isym;
     int nEval
 
-    chebyshevDegree12(13),chebyshevDegree24(25),fValue(25),rg(25),rh(25),ri(25),rj(25),x(11)
+    chebyshevDegree12(13);
+    chebyshevDegree24(25);
+    fValue(25);
+    rg(25);
+    rh(25);
+    ri(25);
+    rj(25);
+    x(11);
 
     // The vector x contains the values cos(k*M_PI/24) k = 1, ..., 11, to be used for the computation of the Chebyshev series expansion of f.
     data x

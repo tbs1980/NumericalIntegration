@@ -20,7 +20,7 @@
  * \param[in] level - Vector of dimension at least m_maxSubintervals, containing the subdivision levels of the subinterval, i.e. if (alowerLimit, upperLimitb) is a subinterval of (p1,p2) where p1 as well as p2 is a user-provided break point or integeration m_maxSubintervals, then (alowerLimit, upperLimitb) has level l if abs(bupperLimit-lowerLimita) = abs(p2-p1)*2**(-l).
  * \param[in] ndin - Vector of dimension at least singularityPointsPlus2, after first integeration over the intervals (singularityPoints(i)),singularityPoints(i+1), from i = 0 to singularityPointsPlus2-2, the error estimates over some of the intervals may have been increased artificially, in order to put their subdivision forward. if this happens for the subinterval numbered k, ndin(k) is put to 1, otherwise ndin(k) = 0.
  * \param[in] maxErrorIndex - pointer to the interval with largest error estimate
- * \param[in] errorMax - m_errorList(maxErrorIndex)
+ * \param[in] errorMax - list(maxErrorIndex)
  * \param[in] errorLast - error on the interval currently subdivided (before that subdivision has taken place)
  * \param[in] area      - sum of the integerals over the subintervals
  * \param[in] errorSum    - sum of the errors over the subintervals
@@ -59,7 +59,7 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
     Scalar absDiff2;
     Scalar dResult;
     Scalar r1mach;
-    Scalar m_errorList;
+    Scalar list;
     Scalar desiredAbsoluteError;
     Scalar desiredRelativeError;
     Scalar errorLargest;
@@ -121,8 +121,8 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
     m_lowerList(1) = lowerLimit;
     m_upperList(1) = upperLimit;
     m_integralList(1) = 0.;
-    m_errorList(1) = 0.;
-    m_errorListIndices(1) = 0;
+    list(1) = 0.;
+    listIndices(1) = 0;
     level(1) = 0;
     nsingularityPoints = singularityPointsPlus2-2;
 
@@ -175,17 +175,17 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
         if(error1 == approximateIntegralResult && error1 != 0.) ndin(i) = 1
         absIntegral = absIntegral+absDiff
         level(i) = 0
-        m_errorList(i) = error1
+        list(i) = error1
         m_lowerList(i) = lowerLimit1
         m_upperList(i) = upperLimit1
         m_integralList(i) = area1
-        m_errorListIndices(i) = i
+        listIndices(i) = i
         lowerLimit1 = upperLimit1
    50 continue
       errorSum = 0.
       do 55 i = 1,nint
-        if(ndin(i) == 1) m_errorList(i) = m_estimatedError
-        errorSum = errorSum+m_errorList(i)
+        if(ndin(i) == 1) list(i) = m_estimatedError
+        errorSum = errorSum+list(i)
    55 continue
 
     // Test on accuracy.
@@ -197,23 +197,23 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
       if(nint == 1) go to 80
       do 70 i = 1,nsingularityPoints
         lowerBound = i+1
-        ind1 = m_errorListIndices(i)
+        ind1 = listIndices(i)
         do 60 j = lowerBound,nint
-          ind2 = m_errorListIndices(j)
-          if(m_errorList(ind1) > m_errorList(ind2)) go to 60
+          ind2 = listIndices(j)
+          if(list(ind1) > list(ind2)) go to 60
           ind1 = ind2
           k = j
    60   continue
-        if(ind1 == m_errorListIndices(i)) go to 70
-        m_errorListIndices(k) = m_errorListIndices(i)
-        m_errorListIndices(i) = ind1
+        if(ind1 == listIndices(i)) go to 70
+        listIndices(k) = listIndices(i)
+        listIndices(i) = ind1
    70 continue
       if(m_maxSubintervals < singularityPointsPlus2) m_errorCode = 1
    80 if(m_errorCode != 0 || m_estimatedError <= errorBound) go to 999
 
       m_integralList2(1) = integral
-      maxErrorIndex = m_errorListIndices(1)
-      errorMax = m_errorList(maxErrorIndex)
+      maxErrorIndex = listIndices(1)
+      errorMax = list(maxErrorIndex)
       area = integral
       maxNumberOfIntegrals = 1
       numberOfExtrapolations = 0
@@ -294,16 +294,16 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
             m_upperList[numSubintervalsIndex] = upper1;
             m_integralList[maxErrorIndex] = area2;
             m_integralList[numSubintervalsIndex] = area1;
-            m_errorList[maxErrorIndex] = error2;
-            m_errorList[numSubintervalsIndex] = error1;
+            list[maxErrorIndex] = error2;
+            list[numSubintervalsIndex] = error1;
         }
         else
         {
             m_lowerList[numSubintervalsIndex] = lower2;
             m_upperList[maxErrorIndex] = upper1;
             m_upperList[numSubintervalsIndex] = upper2;
-            m_errorList[maxErrorIndex] = error1;
-            m_errorList[numSubintervalsIndex] = error2;
+            list[maxErrorIndex] = error1;
+            list[numSubintervalsIndex] = error2;
         }
 
     // Call subroutine qpsrt to maintain the descending ordering in the list of error estimates and select the
@@ -335,8 +335,8 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
         upperBound = m_numSubintervals
         if(m_numSubintervals > (2+m_maxSubintervals/2)) upperBound = m_maxSubintervals+3-m_numSubintervals
         do 130 k = id,upperBound
-          maxErrorIndex = m_errorListIndices(maxNumberOfIntegrals)
-          errorMax = m_errorList(maxErrorIndex)
+          maxErrorIndex = listIndices(maxNumberOfIntegrals)
+          errorMax = list(maxErrorIndex)
     // jump out of do-loop
           if(level(maxErrorIndex)+1 <= levmax) go to 160
           maxNumberOfIntegrals = maxNumberOfIntegrals+1
@@ -363,8 +363,8 @@ Scalar adaptiveQuadratureForSingularitiesAtKnownPoints(
     // Prepare bisection of the smallestIntervalLengthest interval.
   150   if(numberElementsList2 == 1) extrapolationAllowed = .true.
         if(m_errorCode >= 5) go to 170
-  155   maxErrorIndex = m_errorListIndices(1)
-        errorMax = m_errorList(maxErrorIndex)
+  155   maxErrorIndex = listIndices(1)
+        errorMax = list(maxErrorIndex)
         maxNumberOfIntegrals = 1
         extrapolationPerformed = .false.
         levmax = levmax+1

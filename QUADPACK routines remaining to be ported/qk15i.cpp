@@ -8,9 +8,9 @@
  *
  * \details - 15-point transformed gauss-kronrod rules. The abscissae and weights are given for the interval (-1,1). Because of symmetry only the positive abscissae and their corresponding weights are given.
  *
- * \param[] finiteBound - Finite bound of original integeration range (set to zero if infiniteBoundsKey = +2)
- * \param[] infiniteBoundsKey - If infiniteBoundsKey = -1, the original interval is (-infiniteBoundsKey,finiteBound),
- *          If infiniteBoundsKey = +2, the original interval is (-infiniteBoundsKey,+infiniteBoundsKey) and the integeral is computed as the sum of two integerals, one over (-infiniteBoundsKey,0) and one over (0,+infiniteBoundsKey).
+ * \param[] finiteBound - Finite bound of original integeration range (set to zero if infiniteBoundKey = +2)
+ * \param[] infiniteBoundKey - If infiniteBoundKey = -1, the original interval is (-infiniteBoundKey,finiteBound),
+ *          If infiniteBoundKey = +2, the original interval is (-infiniteBoundKey,+infiniteBoundKey) and the integeral is computed as the sum of two integerals, one over (-infiniteBoundKey,0) and one over (0,+infiniteBoundKey).
  * \param[] integral - Approximation to the integeral i. Integral is computed by applying the 15-point kronrod rule(resultKronrod) obtained by optimal addition of abscissae to the 7-point gauss rule(resultGauss).
  * \param[] m_estimatedError - Estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
  * \param[] absIntegral - real approximation to the integeral j
@@ -31,8 +31,8 @@
  * \returns The approximation to the integeral.
  */
 
-    real a,absc,absc1,absc2,m_estimatedError,b,finiteBound,center,dinfiniteBoundsKey,r1mach,,f,fc,fsum,fValue1,fValue2,fv1,fv2,halfLength,absIntegral,m_estimatedError,resultGauss,resultKronrod,resultKronrodh,integral,tabsc1,tabsc2,,wg,wgk,xgk
-    int infiniteBoundsKey;
+    real a,absc,absc1,absc2,m_estimatedError,b,finiteBound,center,dinfiniteBoundKey,r1mach,,f,fc,fsum,fValue1,fValue2,fv1,fv2,halfLength,absIntegral,m_estimatedError,resultGauss,resultKronrod,resultKronrodh,integral,tabsc1,tabsc2,,wg,wgk,xgk
+    int infiniteBoundKey;
     int j;
     int min0;
 
@@ -80,13 +80,13 @@
 
       Eigen::NumTraits<Scalar>::epsilon() = r1mach(4)
       (std::numeric_limits<Scalar>::min)() = r1mach(1)
-      dinfiniteBoundsKey = min0(1,infiniteBoundsKey)
+      dinfiniteBoundKey = min0(1,infiniteBoundKey)
 
       center = 0.5*(lowerLimit+upperLimit)
       halfLength = 0.5*(upperLimit-lowerLimit)
-      tabsc1 = finiteBound+dinfiniteBoundsKey*(1.-center)/center
+      tabsc1 = finiteBound+dinfiniteBoundKey*(1.-center)/center
       fValue1 = f(tabsc1)
-      if(infiniteBoundsKey == 2) fValue1 = fValue1+f(-tabsc1)
+      if(infiniteBoundKey == 2) fValue1 = fValue1+f(-tabsc1)
       fc = (fValue1/center)/center
 
     // Compute the 15-point kronrod approximation to the integeral, and estimate the error.
@@ -97,12 +97,12 @@
         absc = halfLength*xgk(j)
         absc1 = center-absc
         absc2 = center+absc
-        tabsc1 = finiteBound+dinfiniteBoundsKey*(1.-absc1)/absc1
-        tabsc2 = finiteBound+dinfiniteBoundsKey*(1.-absc2)/absc2
+        tabsc1 = finiteBound+dinfiniteBoundKey*(1.-absc1)/absc1
+        tabsc2 = finiteBound+dinfiniteBoundKey*(1.-absc2)/absc2
         fValue1 = f(tabsc1)
         fValue2 = f(tabsc2)
-        if(infiniteBoundsKey == 2) fValue1 = fValue1+f(-tabsc1)
-        if(infiniteBoundsKey == 2) fValue2 = fValue2+f(-tabsc2)
+        if(infiniteBoundKey == 2) fValue1 = fValue1+f(-tabsc1)
+        if(infiniteBoundKey == 2) fValue2 = fValue2+f(-tabsc2)
         fValue1 = (fValue1/absc1)/absc1
         fValue2 = (fValue2/absc2)/absc2
         fv1(j) = fValue1

@@ -2,8 +2,7 @@
  * \file
  * \brief - This routine calculates an approximate integral to a Cauchy principal value i = integeral of f*w over (lowerLimit, upperLimit)
  *          (w(x) = 1/(x-c), (c != a, c != b), hopefully satisfying following claim for accuracy abs(i-integral) <= max(desiredAbsoluteError,desiredRelativeError*abs(i))
- * \details - This function allows for the computation of a Cauchy principal value.
- *            It is a special-purpose, Cauchy principal value, Clenshaw-Curtis method automatic integerator.
+ * \details - This function allows for the computation of a Cauchy principal value employing a Clenshaw-Curtis method automatic integerator.
  * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
  *
  * \param[in] c - Parameter in the weight function, c != a, c != b if c = a or c = b, the routine will end with m_errorCode = 6.
@@ -12,7 +11,7 @@
  * \param[in] integral - Approximation to the integeral
  * \param[in] m_estimatedError - Estimate of the modulus of the absolute error, which should equal or exceed abs(i-integral)
  * \param[in] maxErrorIndex - pointer to the interval with largest error estimate
- * \param[in] errorMax - m_errorList(maxErrorIndex)
+ * \param[in] errorMax - list(maxErrorIndex)
  * \param[in] area - sum of the integerals over the subintervals
  * \param[in] errorSum - sum of the errors over the subintervals
  * \param[in] errorBound - requested accuracy max(desiredAbsoluteError,desiredRelativeError*abs(integral))
@@ -20,36 +19,65 @@
  * \returns The approximation to the integeral.
  */
  
-      real a,aa,m_estimatedError,m_lowerList,area,area1,area12,area2,a1,a2,b,bb,m_upperList,b1,b2,c,r1mach,m_errorList,Eigen::NumTraits<Scalar>::epsilon(),desiredAbsoluteError,desiredRelativeError,errorBound,errorMax,error1,error2,errorSum,f,integral,m_integralList,(std::numeric_limits<Scalar>::min)()
-      integer m_errorCode,m_errorListIndices,roundOff1,roundOff2,k,ruleKeye,m_numSubintervals,m_maxSubintervals,maxErrorIndex,nEval,m_numEvaluations,maxNumberOfIntegrals
+ template <typename FunctionType>
+Scalar adaptiveQuadratureForCauchyPrincipalValue(
+        const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
+        const Scalar desireabsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
+        const QuadratureRule quadratureRule = 1)
+{
+    if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
+        || m_maxSubintervals < 1)
+    {
+        m_errorCode = 6;
+        return Scalar(0.);
+    }
 
-      dimension m_lowerList(m_maxSubintervals),m_upperList(m_maxSubintervals),m_integralList(m_maxSubintervals),m_errorList(m_maxSubintervals),m_errorListIndices(m_maxSubintervals)
+    m_errorCode = 0;
+    m_numEvaluations = 0;
+    m_numSubintervals = 0;
+    m_lowerList[0] = lowerLimit;
+    m_upperList[0] = upperLimit;
+    m_integralList[0] = Scalar(0.);
+    list[0] = Scalar(0.);
+    listIndices[0] = 0;
+    listIndices[1] = 1;
 
-      m_errorCode = 6
-      m_numEvaluations = 0
-      m_numSubintervals = 0
-      m_lowerList(1) = a
-      m_upperList(1) = b
-      m_integralList(1) = 0.
-      m_errorList(1) = 0.
-      m_errorListIndices(1) = 0
-      integral = 0.
-      m_estimatedError = 0.
-      if(c == a || c == b || (desiredAbsoluteError <= 0 && desiredRelativeError < (std::max)(5.*Eigen::NumTraits<Scalar>::epsilon(), 0.5e-14))) go to 999
+    Scalar integral = 0.;
+    Scalar absDiff = 0.;
+    Scalar m_estimatedError = 0.;
+    Scalar absIntegral = 0.;
+      real a,aa,m_estimatedError,m_lowerList,area,area1,area12,area2,a1,a2,b,bb,m_upperList,b1,b2,c,r1mach,list,Eigen::NumTraits<Scalar>::epsilon(),desiredAbsoluteError,desiredRelativeError,errorBound,errorMax,error1,error2,errorSum,f,integral,m_integralList,(std::numeric_limits<Scalar>::min)()
+      integer m_errorCode,listIndices,roundOff1,roundOff2,k,ruleKeye,m_numSubintervals,m_maxSubintervals,maxErrorIndex,nEval,m_numEvaluations,maxNumberOfIntegrals
+
+    list(m_maxSubintervals);
+    listIndices(m_maxSubintervals);
+
+    m_estimatedError = 0.;
+
+    if(c == a || c == b || (desiredAbsoluteError <= 0 && desiredRelativeError < 50. * Eigen::NumTraits<Scalar>::epsilon())
+    {
+        m_errorCode = 6;
+        return Scalar(0.);
+    }
+
 
     //first approximation to the integeral
-      aa=a
-      bb=b
-      if (a <= b) go to 10
-      aa=b
-      bb=a
-10    m_errorCode=0
-      ruleKeye = 1
-      call qc25c(f,alowerLimit, upperLimitb,c,integral,m_estimatedError,ruleKeye,m_numEvaluations)
+      aa=lowerLimit;
+      bb=upperLimit;
+
+    if (lowerLimit > upperLimit)
+    {
+        aa=upperLimit;
+        bb=lowerLimit;
+    }
+
+      ruleKeye = 1;
+      call qc25c(f,alowerLimit, upperLimit,c,integral,m_estimatedError,ruleKeye,m_numEvaluations);
+      
       m_numSubintervals = 1
       m_integralList(1) = integral
-      m_errorList(1) = m_estimatedError
-      m_errorListIndices(1) = 1
+      list(1) = m_estimatedError
+      listIndices(1) = 1
       m_lowerList(1) = a
       m_upperList(1) = b
 
@@ -114,20 +142,20 @@
         m_lowerList(m_numSubintervals) = a2
         m_upperList(maxErrorIndex) = b1
         m_upperList(m_numSubintervals) = b2
-        m_errorList(maxErrorIndex) = error1
-        m_errorList(m_numSubintervals) = error2
+        list(maxErrorIndex) = error1
+        list(m_numSubintervals) = error2
         go to 30
    20   m_lowerList(maxErrorIndex) = a2
         m_lowerList(m_numSubintervals) = a1
         m_upperList(m_numSubintervals) = b1
         m_integralList(maxErrorIndex) = area2
         m_integralList(m_numSubintervals) = area1
-        m_errorList(maxErrorIndex) = error2
-        m_errorList(m_numSubintervals) = error1
+        list(maxErrorIndex) = error2
+        list(m_numSubintervals) = error1
 
     // call subroutine qpsrt to maintain the descending ordering in the list of error estimates and select the
     // subinterval with maxNumberOfIntegrals-th largest error estimate (to be bisected next).
-   30    call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,m_errorList,m_errorListIndices,maxNumberOfIntegrals)
+   30    call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,list,listIndices,maxNumberOfIntegrals)
     // jump out of do-loop
         if(m_errorCode != 0 || errorSum <= errorBound) go to 50
    40 continue

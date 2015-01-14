@@ -1,7 +1,7 @@
 /**
  * \file
- * \brief - The routine calculates an approximation integral to a given fourm_errorCode integal
- *           i = integeral of f(x)*w(x) over (a,infiniteBoundsKey) where w(x) = cos(omega*x) or w(x) = sin(omega*x),
+ * \brief - The routine calculates an approximation integral to a given Fourier integral
+ *           i = integeral of f(x)*w(x) over (lowerLimit,infiniteBoundKey) where w(x) = cos(omega*x) or w(x) = sin(omega*x),
  *           hopefully satisfying following claim for accuracy abs(i-integral) <= desiredAbsoluteError.
  *
  * \details This routine is a special-purpose automatic integerator for integeration between zeros with dqawoe with convergence acceleration with dqelg. 
@@ -12,12 +12,12 @@
  * \param[] integer - Indicates which weight function is to be used: if integer = 1, w(x) = cos(omega*x), and  if integer = 2, w(x) = sin(omega*x)
  *             If integer != 1 && integer != 2, the routine will end with m_errorCode = 6.
  * \param[] desiredAbsoluteError - Absolute accuracy requested, desiredAbsoluteError > 0.  If desiredAbsoluteError <= 0, the routine will end with m_errorCode = 6.
- * \param[] limlst - limlst gives an upper finiteBound on the number of cycles, limlst >= 1. If limlst < 3, the routine will end with m_errorCode = 6.
+ * \param[] limlist - limlist gives an upper finiteBound on the number of cycles, limlist >= 1. If limlist < 3, the routine will end with m_errorCode = 6.
  * \param[] m_maxSubintervals - Gives an upper finiteBound on the number of subintervals allowed in the partition of each cycle, m_maxSubintervals >= 1 each cycle, m_maxSubintervals >= 1.
  * \param[] maxp1 - gives an upper finiteBound on the number of Chebyshev moments which can be stored, i.e. for the intervals of lengths abs(upperLimit-lowerLimit)*2**(-l), l=0,1, ..., maxp1-2, maxp1 >= 1
- * \param[] rslst - Vector of dimension at least limlst rslst(k) contains the integeral contribution over the interval (a+(k-1)c,a+kc) where c = (2*int(abs(omega))+1)*M_PI/abs(omega), from k = 1, to list.  Note that, if omega = 0, rslst(1) contains the value of the integeral over (a,infiniteBoundsKey).
- * \param[] erlst - vector of dimension at least limlst erlst(k) contains the error estimate corresponding with rslst(k).
- * \param[] lst - number of subintervals needed for the integeration.  If omega = 0 then lst is set to 1.
+ * \param[] rslist - Vector of dimension at least limlist rslist(k) contains the integeral contribution over the interval (a+(k-1)c,a+kc) where c = (2*int(abs(omega))+1)*M_PI/abs(omega), from k = 1, to list.  Note that, if omega = 0, rslist(1) contains the value of the integeral over (a,infiniteBoundKey).
+ * \param[] erlist - vector of dimension at least limlist erlist(k) contains the error estimate corresponding with rslist(k).
+ * \param[] list - number of subintervals needed for the integeration.  If omega = 0 then list is set to 1.
  * \param[] chebyshevMoments - array of dimension at least (maxp1,25), providing space for the chebyshev moments needed within the cycles
  * \param[] c1, c2 - end points of subinterval (of length cycle)
  * \param[] cycle - (2*int(abs(omega))+1)*M_PI/abs(omega)
@@ -29,6 +29,41 @@
  * \returns The approximation to the integeral.
  */
 
+template <typename FunctionType>
+Scalar adaptiveQuadratureForFourierIntegrals(
+        const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
+        const Scalar desireabsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
+        const QuadratureRule quadratureRule = 1)
+{
+    if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
+        || (integer != 1 && integer != 2)
+        || limlist < 3 
+        || leniw < (limlist+2) 
+        || lenw < (leniw * 2 + maxp1 * 25)
+        || m_maxSubintervals < 1
+        || maxp1 < 1 
+        || m_errorCode !0)
+
+    {
+        std::cout << "Abnormal return.  m_errorCode = " << m_errorCode << std::endl;
+        m_errorCode = 6;
+        return Scalar(0.);
+    }
+
+
+    m_errorCode = 0;
+    m_numEvaluations = 0;
+    m_lowerList[0] = lowerLimit;
+    m_upperList[0] = upperLimit;
+    m_integralList[0] = Scalar(0.);
+    list[0] = Scalar(0.);
+    listIndices[0] = 0;
+    listIndices[1] = 1;
+
+    Scalar integral = 0.;
+    Scalar absDiff = 0.;
+    Scalar m_estimatedError = 0.;
+    Scalar absIntegral = 0.;
     Scalar lowerLimit;
     Scalar m_estimatedError;
     Scalar desiredAbsoluteError;
@@ -39,74 +74,71 @@
     int m_errorCode;
     int integer;
     int leniw;
-    int m_maxSubintervals;
-    int limlst;
-    int lvl;
-    int lst;
-    int l1;
-    int l2;
-    int l3;
-    int l4;
-    int l5;
-    int l6;
+    int limlist;
+    int list;
     int maxp1;
-    int m_numEvaluations;
 
     iwork(leniw);
     work(lenw);
 
-    // Check validity of limlst, leniw, maxp1 and lenw.
-    m_errorCode = 6;
+    Scalar integral = 0.;
+    
+    m_errorCode = 0;
+    m_maxSubintervals = (leniw-limlist) / 2;
     m_numEvaluations = 0;
     m_numSubintervals = 0;
-    integral = 0.;
     m_estimatedError = 0.;
 
-    m_maxSubintervals = (leniw-limlst)/2
-    l1 = limlst+1
-    l2 = limlst+l1
-    l3 = m_maxSubintervals+l2
-    l4 = m_maxSubintervals+l3
-    l5 = m_maxSubintervals+l4
-    l6 = m_maxSubintervals+l5
-    ll2 = m_maxSubintervals+l1
+    int l1 = limlist + 1;
+    int l2 = limlist + l1;
+    int l3 = m_maxSubintervals+l2;
+    int l4 = m_maxSubintervals+l3;
+    int l5 = m_maxSubintervals+l4;
+    int l6 = m_maxSubintervals+l5;
+    int ll2 = m_maxSubintervals+l1;
+    int lvl = 0;
 
-qawfe(f, a, omega, integer, desiredAbsoluteError, limlst, maxp1, integral, m_estimatedError, work(1), work(l1), iwork(1), lst, work(l2), work(l3), work(l4), work(l5), iwork(l1), iwork(ll2), work(l6))
-{
-    lvl = 0;
+    real a,absoluteEpsilon,m_estimatedError,m_lowerList,m_upperList,chebyshevMoments,errorCorrection,cycle,c1,c2,dl,dla,drl,list,ep,eps,desiredAbsoluteError,desiredAbsoluteError,erlist,errorSum,fact,omega,p,M_PI,p1,partialIntegral,resultEpsilon,integral,res3la,m_integralList,rslist,r1mach,(std::numeric_limits<Scalar>::min)()
 
-    if(limlst < 3 || leniw < (limlst+2) || maxp1 < 1 || lenw < (leniw * 2 + maxp1 * 25) || (m_errorCode !0)
-    {
-        std::cout << "Abnormal return.  m_errorCode = " << m_errorCode << std::endl;
-        return
-    }
+    int ktmin,
+    int l,
+    int list = 0;
+    ll,
+    maxp1,
+    nEval,
+    nnlog,
+    numberOfExtrapolations,
+    numberElementsList2
 
-    real a,absoluteEpsilon,m_estimatedError,m_lowerList,m_upperList,chebyshevMoments,errorCorrection,cycle,c1,c2,dl,dla,drl,m_errorList,ep,eps,desiredAbsoluteError,desiredAbsoluteError,erlst,errorSum,fact,omega,p,M_PI,p1,partialIntegral,resultEpsilon,integral,res3la,m_integralList,rslst,r1mach,(std::numeric_limits<Scalar>::min)()
-
-    integer m_errorCode,m_errorCodeList,integer,m_errorListIndices,ktmin,l,lst,m_maxSubintervals,ll,maxp1,nEval,m_numEvaluations,nnlog,numberOfExtrapolations,numberElementsList2
-
-    dimension m_lowerList(m_maxSubintervals),m_upperList(m_maxSubintervals),chebyshevMoments(maxp1,25),m_errorList(m_maxSubintervals),erlst(limlst),m_errorCodeList(limlst),m_errorListIndices(m_maxSubintervals),nnlog(m_maxSubintervals),partialIntegral(52),res3la(3),m_integralList(m_maxSubintervals),rslst(limlst)
+    chebyshevMoments(maxp1,25);
+    erlist(limlist);
+    nnlog(m_maxSubintervals);
+    partialIntegral(52);
+    res3la(3);
+    rslist(limlist);
 
     // The dimension of  partialIntegral  is determined by the value of limexp in subroutine qelg (partialIntegral must be of dimension (limexp+2) at least).
-    data p/0.9 ;
+    Scalar p / 0.9;
 
-      integral = 0.
-      m_estimatedError = 0.
-      m_numEvaluations = 0
-      lst = 0
-      m_errorCode = 0
-      if((integer != 1 && integer != 2) || desiredAbsoluteError <= 0. || 
-     *  limlst < 3) m_errorCode = 6
-      if(m_errorCode == 6) go to 999
-      if(omega != 0.) go to 10
+    integral = 0.;
+    m_estimatedError = 0.;
+    m_numEvaluations = 0;
+    m_errorCode = 0;
 
-  // integeration by qagie if omega is zero
-      if(integer == 1) call qagie(f,0.,1,desiredAbsoluteError,0.,m_maxSubintervals,integral,m_estimatedError,m_numEvaluations,m_errorCode,m_lowerList,m_upperList,m_integralList,m_errorList,m_errorListIndices,m_numSubintervals)
-      rslst(1) = integral
-      erlst(1) = m_estimatedError
-      m_errorCodeList(1) = m_errorCode
-      lst = 1
-      go to 999
+    if(omega == 0.)
+    {
+        // integeration by qagie if omega is zero
+        if(integer == 1) 
+        {
+            call qagie(f,0.,1,desiredAbsoluteError,0.,m_maxSubintervals,integral,m_estimatedError,m_numEvaluations,m_errorCode,m_lowerList,m_upperList,m_integralList,list,listIndices,m_numSubintervals)
+        }
+
+        rslist(1) = integral;
+        erlist(1) = m_estimatedError;
+        m_errorCodeList(1) = m_errorCode;
+        list = 1;
+        return integral;
+    }
 
    10 l = abs(omega)
       dl = 2*l+1
@@ -129,46 +161,46 @@ qawfe(f, a, omega, integer, desiredAbsoluteError, limlst, maxp1, integral, m_est
       errorSum = 0.
 
   // Main loop for the integration
-      do 50 lst = 1,limlst
+      do 50 list = 1,limlist
 
   // integerate over current subinterval.
-        dla = lst
+        dla = list
         desiredAbsoluteError = eps*fact
-        call qawoe(f,c1,c2,omega,integer,desiredAbsoluteError,0.,m_maxSubintervals,lst,maxp1,rslst(lst),erlst(lst),nEval,m_errorCodeList(lst),m_numSubintervals,m_lowerList,m_upperList,m_integralList,m_errorList,m_errorListIndices,nnlog,momentsComputed,chebyshevMoments)
+        call qawoe(f,c1,c2,omega,integer,desiredAbsoluteError,0.,m_maxSubintervals,list,maxp1,rslist(list),erlist(list),nEval,m_errorCodeList(list),m_numSubintervals,m_lowerList,m_upperList,m_integralList,list,listIndices,nnlog,momentsComputed,chebyshevMoments)
         m_numEvaluations = m_numEvaluations+nEval
         fact = fact*p
-        errorSum = errorSum+erlst(lst)
-        drl = 5.*abs(rslst(lst))
+        errorSum = errorSum+erlist(list)
+        drl = 5.*abs(rslist(list))
 
     // test on accuracy with partial sum
-        if(errorSum+drl <= desiredAbsoluteError && lst >= 6) go to 80
-        errorCorrection = (std::max)(errorCorrection,erlst(lst))
-        if(m_errorCodeList(lst) != 0) eps = (std::max)(ep,errorCorrection*p1)
-        if(m_errorCodeList(lst) != 0) m_errorCode = 7
-        if(m_errorCode == 7 && (errorSum+drl) <= errorCorrection*0.1e+02 && lst > 5) go to 80
+        if(errorSum+drl <= desiredAbsoluteError && list >= 6) go to 80
+        errorCorrection = (std::max)(errorCorrection,erlist(list))
+        if(m_errorCodeList(list) != 0) eps = (std::max)(ep,errorCorrection*p1)
+        if(m_errorCodeList(list) != 0) m_errorCode = 7
+        if(m_errorCode == 7 && (errorSum+drl) <= errorCorrection*10. && list > 5) go to 80
         numberElementsList2 = numberElementsList2+1
-        if(lst > 1) go to 20
-        partialIntegral(1) = rslst(1)
+        if(list > 1) go to 20
+        partialIntegral(1) = rslist(1)
         go to 40
-   20   partialIntegral(numberElementsList2) = partialIntegral(ll)+rslst(lst)
-        if(lst == 2) go to 40
+   20   partialIntegral(numberElementsList2) = partialIntegral(ll)+rslist(list)
+        if(list == 2) go to 40
 
     // test on maximum number of subintervals
-        if(lst == limlst) m_errorCode = 1
+        if(list == limlist) m_errorCode = 1
 
     // perform new extrapolationPerformed
         call qelg(numberElementsList2,partialIntegral,resultEpsilon,absoluteEpsilon,res3la,numberOfExtrapolations)
 
-    // test whether extrapolationPerformedolated integral is infiniteBoundsKeyluenced by roundoff
+    // test whether extrapolationPerformedolated integral is infiniteBoundKeyluenced by roundoff
         ktmin = ktmin+1
         if(ktmin >= 15 && m_estimatedError <= 0.001*(errorSum+drl)) m_errorCode = 4
-        if(absoluteEpsilon > m_estimatedError && lst != 3) go to 30
+        if(absoluteEpsilon > m_estimatedError && list != 3) go to 30
         m_estimatedError = absoluteEpsilon
         integral = resultEpsilon
         ktmin = 0
 
     // if m_errorCode is not 0, check whether direct integral (partial sum) or extrapolationPerformedolated integral yields the best integeral approximation
-        if((m_estimatedError+0.1e+02*errorCorrection) <= desiredAbsoluteError || (m_estimatedError <= desiredAbsoluteError && 0.1e+02*errorCorrection >= desiredAbsoluteError)) go to 60
+        if((m_estimatedError+10.*errorCorrection) <= desiredAbsoluteError || (m_estimatedError <= desiredAbsoluteError && 10.*errorCorrection >= desiredAbsoluteError)) go to 60
    30   if(m_errorCode != 0 && m_errorCode != 7) go to 60
    40   ll = numberElementsList2
         c1 = c2
@@ -176,7 +208,7 @@ qawfe(f, a, omega, integer, desiredAbsoluteError, limlst, maxp1, integral, m_est
    50 continue
 
     // set final integral and error estimate
-   60 m_estimatedError = m_estimatedError+0.1e+02*errorCorrection
+   60 m_estimatedError = m_estimatedError+10.*errorCorrection
       if(m_errorCode == 0) go to 999
       if(integral != 0. && partialIntegral(numberElementsList2) != 0.) go to 70
       if(m_estimatedError > errorSum) go to 80

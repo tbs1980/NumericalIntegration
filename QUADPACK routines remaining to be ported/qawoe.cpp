@@ -25,7 +25,7 @@
  * \param[] momentsComputed - Indicating that the chebyshev moments have been computed for intervals of lengths (abs(upperLimit-lowerLimit))*2**(-l), from l=0 to momentsComputed-1, momentsComputed < maxp1
  * \param[] chebyshevMoments - Array of dimension (maxp1,25) containing the Chebyshev moments.  The dimension of m_integralList2 is determined by  the value of limexp in subroutine qelg (m_integralList2 should be of dimension (limexp+2) at least).
  * \param[] maxErrorIndex - pointer to the interval with largest error estimate
- * \param[] errorMax - m_errorList(maxErrorIndex)
+ * \param[] errorMax - list(maxErrorIndex)
  * \param[] errorLast - error on the interval currently subdivided
  * \param[] area - sum of the integerals over the subintervals
  * \param[] errorSum - sum of the errors over the subintervals
@@ -40,39 +40,115 @@
  * \returns The approximation to the integeral.
  */
 
-      real a,absoluteEpsilon,m_estimatedError,m_lowerList,area,area1,integral,area2,a1,a2,b,m_upperList,b1,b2,chebyshevMoments,errorCorrection,absDiff1,absDiff2,absDiff,domega,r1mach,dResult,m_errorList,Eigen::NumTraits<Scalar>::epsilon(),desiredAbsoluteError,desiredRelativeError,errorLargest,errorLast,errorBound,errorMax,error1,erro12,error2,errorSum,errorTest,f,(std::numeric_limits<Scalar>::max)(),omega,absIntegral,resultEpsilon,integral,res3la,m_integralList,m_integralList2,smallestIntervalLength,(std::numeric_limits<Scalar>::min)(),width
-      integer icall,id,m_errorCode,m_errorCode,integer,m_errorListIndices,roundOff1,roundOff2,roundOff3,upperBound,k,keySign,ktmin,m_numSubintervals,m_maxSubintervals,maxErrorIndex,maxp1,momentsComputed,nEval,m_numEvaluations,nnlog,numberOfExtrapolations,maxNumberOfIntegrals,nrMoments,numberElementsList2
-      logical extrapolationPerformed,extrapolationAllowed,extall
+template <typename FunctionType>
+Scalar adaptiveQuadratureForOscillatoryBehaviorWithEndPointSingularities(
+        const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
+        const Scalar desireabsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
+        const QuadratureRule quadratureRule = 1)
+{
+    if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
+        || m_maxSubintervals < 1
+        || (integer != 1 && integer != 2)
+        || icall < 1
+        || maxp1 < 1)
+    {
+        m_errorCode = 6;
+        return Scalar(0.);
+    }
 
-      dimension m_lowerList(m_maxSubintervals),m_upperList(m_maxSubintervals),m_integralList(m_maxSubintervals),m_errorList(m_maxSubintervals),m_errorListIndices(m_maxSubintervals),m_integralList2(52),res3la(3),chebyshevMoments(maxp1,25),nnlog(m_maxSubintervals)
+    m_errorCode = 0;
+    m_numEvaluations = 0;
+    m_lowerList[0] = lowerLimit;
+    m_upperList[0] = upperLimit;
+    m_integralList[0] = Scalar(0.);
+    list[0] = Scalar(0.);
+    listIndices[0] = 0;
+    listIndices[1] = 1;
 
-      m_errorCode = 0
-      m_numEvaluations = 0
-      m_numSubintervals = 0
-      integral = 0.
-      m_estimatedError = 0.
-      m_lowerList(1) = a
-      m_upperList(1) = b
-      m_integralList(1) = 0.
-      m_errorList(1) = 0.
-      m_errorListIndices(1) = 0
-      nnlog(1) = 0
-      if((integer != 1 && integer != 2) || (desiredAbsoluteError <= 0. && desiredRelativeError < (std::max)(5.*Eigen::NumTraits<Scalar>::epsilon(),0.5e-14)) || icall < 1 || maxp1 < 1) m_errorCode = 6
-      if(m_errorCode == 6) go to 999
 
+
+
+    Scalar integral = 0.;
+    Scalar absDiff = 0.;
+    Scalar m_estimatedError = 0.;
+    Scalar absIntegral = 0.;
+
+      Scalar absoluteEpsilon;
+      Scalar area;
+      Scalar area1;
+      Scalar integral;
+      Scalar area2;
+      Scalar a1;
+      Scalar a2;
+      Scalar b1;
+      Scalar b2;
+      Scalar chebyshevMoments;
+      Scalar errorCorrection;
+      Scalar absDiff1;
+      Scalar absDiff2;
+      Scalar absDiff;
+      Scalar omega;
+      Scalar dResult;
+      Scalar desiredAbsoluteError;
+      Scalar desiredRelativeError;
+      Scalar errorLargest;
+      Scalar errorLast;
+      Scalar errorBound;
+      Scalar errorMax;
+      Scalar errorTest;
+      Scalar omega;
+      Scalar absIntegral;
+      Scalar resultEpsilon;
+      Scalar integral;
+      Scalar res3la;
+      Scalar smallestIntervalLength;
+      Scalar width;
+      
+      int icall;
+      int id;
+      int integer;
+      int roundOff1;
+      int roundOff2;
+      int roundOff3;
+      int upperBound;
+      int keySign;
+      int ktmin;
+      int maxErrorIndex;
+      int maxp1;
+      int momentsComputed;
+      int nEval;
+
+      int numberOfExtrapolations;
+      int maxNumberOfIntegrals;
+      int nrMoments;
+      int numberElementsList2;
+
+      bool extrapolationPerformed;
+      bool extrapolationAllowed;
+      bool extAll;
+
+      res3la[3]
+      chebyshevMoments[maxp1,25]
+      nnlog[m_maxSubintervals];
+
+      int nnlog;
+      nnlog(1) = 0;
     //first approximation to the integeral
-      domega = abs(omega)
+      omega = abs(omega)
       nrMoments = 0
-      if (icall > 1) go to 5
-      momentsComputed = 0
-    5 call qc25f(f,lowerLimit, upperLimit,domega,integer,nrMoments,maxp1,0,integral,m_estimatedError,m_numEvaluations,absDiff,absIntegral,momentsComputed,chebyshevMoments)
+    if (icall <= 1)
+    {
+        momentsComputed = 0;
+    }
+
+    qc25f(f,lowerLimit, upperLimit,omega,integer,nrMoments,maxp1,0,integral,m_estimatedError,m_numEvaluations,absDiff,absIntegral,momentsComputed,chebyshevMoments)
 
     // Test on accuracy.
-      dResult = abs(integral)
+      dResult = abs(integral);
       errorBound = (std::max)(desiredAbsoluteError,desiredRelativeError*dResult)
       m_integralList(1) = integral
-      m_errorList(1) = m_estimatedError
-      m_errorListIndices(1) = 1
+      list(1) = m_estimatedError
+      listIndices(1) = 1
       if(m_estimatedError <= 100.*Eigen::NumTraits<Scalar>::epsilon()*absDiff && m_estimatedError > errorBound) m_errorCode = 2
       if(m_maxSubintervals == 1) m_errorCode = 1
       if(m_errorCode != 0 || m_estimatedError <= errorBound) go to 200
@@ -83,7 +159,7 @@
     errorMax = m_estimatedError
     maxErrorIndex = 1
     area = integral
-    errorSum = m_estimatedError
+    Scalar errorSum = m_estimatedError;
     m_estimatedError = (std::numeric_limits<Scalar>::max)()
     maxNumberOfIntegrals = 1
     extrapolationPerformed = false;
@@ -96,12 +172,12 @@
     smallestIntervalLength = abs(upperLimit-lowerLimit)*0.75 
     numberOfExtrapolations = 0
     numberElementsList2 = 0
-    extall = .false.
-    if(0.5*abs(upperLimit-lowerLimit)*domega > 2.) go to 10
+    extAll = .false.
+    if(0.5*abs(upperLimit-lowerLimit)*omega > 2.) go to 10
     numberElementsList2 = 1
-    extall = .true.
+    extAll = .true.
     m_integralList2(1) = integral
-    10 if(0.25 *abs(upperLimit-lowerLimit)*domega <= 2.) extall = .true.
+    10 if(0.25 *abs(upperLimit-lowerLimit)*omega <= 2.) extAll = .true.
     keySign = -1
     if(dResult >= (1.-5.*Eigen::NumTraits<Scalar>::epsilon())*absDiff) keySign = 1
 
@@ -116,21 +192,36 @@
         b2 = m_upperList(maxErrorIndex)
         errorLast = errorMax
         
-        qc25f(f,a1,b1,domega,integer,nrMoments,maxp1,0,area1,error1,nEval,absIntegral,absDiff1,momentsComputed,chebyshevMoments)
+        Scalar error1;
+        Scalar error2;
+
+        qc25f(f,a1,b1,omega,integer,nrMoments,maxp1,0,area1,error1,nEval,absIntegral,absDiff1,momentsComputed,chebyshevMoments)
         m_numEvaluations = m_numEvaluations+nEval
         
-        qc25f(f,a2,b2,domega,integer,nrMoments,maxp1,1,area2,error2,nEval,absIntegral,absDiff2,momentsComputed,chebyshevMoments)
+        qc25f(f,a2,b2,omega,integer,nrMoments,maxp1,1,area2,error2,nEval,absIntegral,absDiff2,momentsComputed,chebyshevMoments)
         m_numEvaluations = m_numEvaluations+nEval
 
     // Improve previous approximations to integeral and error and test for accuracy.
-        integral = area1+area2
-        erro12 = error1+error2
-        errorSum = errorSum+erro12-errorMax
-        area = area+integral-m_integralList(maxErrorIndex)
-        if(absDiff1 == error1 || absDiff2 == error2) go to 25
-        if(abs(m_integralList(maxErrorIndex)-integral) > 0.1e-04*abs(integral) || erro12 < 0.99 *errorMax) go to 20
-        if(extrapolationPerformed) roundOff2 = roundOff2+1
-        if(.not.extrapolationPerformed) roundOff1 = roundOff1+1
+        Scalar area12 = area1 + area2;
+        Scalar erro12 = error1 + error2;
+        errorSum += erro12 - errorMax;
+        area += integral - m_integralList(maxErrorIndex);
+
+        if(absDiff1 != error1 && absDiff2 != error2)
+        {
+            if(abs(m_integralList(maxErrorIndex)-integral) <= 0.00001*abs(integral) && erro12 >= 0.99 *errorMax)
+            {
+                if(extrapolationPerformed)
+                {
+                    ++roundOff2;
+                }
+                else
+                {
+                    ++roundOff1;
+                }
+            }
+        }
+
    20   if(m_numSubintervals > 10 && erro12 > errorMax) roundOff3 = roundOff3+1
    25   m_integralList(maxErrorIndex) = area1
         m_integralList(m_numSubintervals) = area2
@@ -153,27 +244,27 @@
         m_lowerList(m_numSubintervals) = a2
         m_upperList(maxErrorIndex) = b1
         m_upperList(m_numSubintervals) = b2
-        m_errorList(maxErrorIndex) = error1
-        m_errorList(m_numSubintervals) = error2
+        list(maxErrorIndex) = error1
+        list(m_numSubintervals) = error2
         go to 40
    30   m_lowerList(maxErrorIndex) = a2
         m_lowerList(m_numSubintervals) = a1
         m_upperList(m_numSubintervals) = b1
         m_integralList(maxErrorIndex) = area2
         m_integralList(m_numSubintervals) = area1
-        m_errorList(maxErrorIndex) = error2
-        m_errorList(m_numSubintervals) = error1
+        list(maxErrorIndex) = error2
+        list(m_numSubintervals) = error1
 
     // Call subroutine qpsrt to maintain the descending ordering in the list of error estimates and select
     // the subinterval with maxNumberOfIntegrals-th largest error estimate (to be bisected next).
-   40   call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,m_errorList,m_errorListIndices,maxNumberOfIntegrals)
+   40   call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,list,listIndices,maxNumberOfIntegrals)
     // jump out of do-loop
       if(errorSum <= errorBound) go to 170
       if(m_errorCode != 0) go to 150
-        if(m_numSubintervals == 2 && extall) go to 120
+        if(m_numSubintervals == 2 && extAll) go to 120
         if(extrapolationAllowed)
         {
-        if(.not.extall) go to 50
+        if(.not.extAll) go to 50
         errorLargest = errorLargest-errorLast
         if(abs(b1-a1) > smallestIntervalLength) errorLargest = errorLargest+erro12
         if(extrapolationPerformed) go to 70
@@ -181,13 +272,13 @@
     // Test whether the interval to be bisected next is the smallestIntervalLengthest interval.
    50   width = abs(m_upperList(maxErrorIndex)-m_lowerList(maxErrorIndex))
         if(width > smallestIntervalLength) go to 140
-        if(extall) go to 60
+        if(extAll) go to 60
 
     // Test whether we can start with the extrapolationPerformed procedure (we do this if we integerate over the
     // next interval with use of a gauss-kronrod rule - see subroutine qc25f).
         smallestIntervalLength = smallestIntervalLength*0.5
-        if(0.25 *width*domega > 2.) go to 140
-        extall = .true.
+        if(0.25 *width*omega > 2.) go to 140
+        extAll = .true.
         go to 130
    60   extrapolationPerformed = .true.
         maxNumberOfIntegrals = 2
@@ -199,8 +290,8 @@
         if (m_numSubintervals > (m_maxSubintervals/2+2)) upperBound = m_maxSubintervals+3-m_numSubintervals
         id = maxNumberOfIntegrals
         do 80 k = id,upperBound
-          maxErrorIndex = m_errorListIndices(maxNumberOfIntegrals)
-          errorMax = m_errorList(maxErrorIndex)
+          maxErrorIndex = listIndices(maxNumberOfIntegrals)
+          errorMax = list(maxErrorIndex)
           if(abs(m_upperList(maxErrorIndex)-m_lowerList(maxErrorIndex)) > smallestIntervalLength) go to 140
           maxNumberOfIntegrals = maxNumberOfIntegrals+1
    80   continue
@@ -224,8 +315,8 @@
     // Prepare bisection of the smallestIntervalLengthest interval.
   100   if(numberElementsList2 == 1) extrapolationAllowed = false;
         if(m_errorCode == 5) go to 150
-  110   maxErrorIndex = m_errorListIndices(1)
-        errorMax = m_errorList(maxErrorIndex)
+  110   maxErrorIndex = listIndices(1)
+        errorMax = list(maxErrorIndex)
         maxNumberOfIntegrals = 1
         extrapolationPerformed = .false.
         smallestIntervalLength = smallestIntervalLength*0.5
@@ -251,19 +342,40 @@
   160 if(m_estimatedError/abs(integral) > errorSum/abs(area)) go to 170
 
     // Test on divergence.
-  165 if(keySign == (-1) && (std::max)(abs(integral),abs(area)) <= 
-     * absDiff*0.01) go to 190
-      if(0.01 > (integral/area) || (integral/area) > 100.
-     *  || errorSum >= abs(area)) m_errorCode = 6
-      go to 190
+165 if(keySign == (-1) && (std::max)(abs(integral),abs(area)) <= absDiff*0.01)
+    {
+    
+        if(0.01 > (integral/area) || (integral/area) > 100. || errorSum >= abs(area))
+        {
+            m_errorCode = 5;
+        }
+        
+        if (integer == 2 && omega < 0.) 
+        {
+            integral *= -1.;
+        }
+
+        return integral;
+    }
 
     // Compute global integeral sum.
-  170 integral = 0.
-      do 180 k=1,m_numSubintervals
-        integral = integral+m_integralList(k)
-  180 continue
-      m_estimatedError = errorSum
-  190 if (m_errorCode > 2) m_errorCode=m_errorCode-1
-  200 if (integer == 2 && omega < 0.) integral=-integral
+170 integral = 0.;
+
+    for (Size_t k=0; k<m_numSubintervals; ++k)
+    {
+        integral = integral+m_integralList(k);
+    }
+180   
+    m_estimatedError = errorSum;
+
+190 if (m_errorCode > 2)
+    {
+        --m_errorCode;
+    }
+200 
+if (integer == 2 && omega < 0.) 
+    {
+        integral *= -1.;
+    }
   999 return
       end

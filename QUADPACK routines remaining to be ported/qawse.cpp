@@ -62,10 +62,10 @@ Scalar adaptiveQuadratureForSingularities(
     const Scalar  fCenter = f(center);
 
     // First approximation to the integeral by integerating over the half-intervals.
-    dqc25s(f,lowerLimit,upperLimit,lowerLimit,center,alphlowerLimit, beta,ri,rj,rg,rh,area1,error1,approximateIntegralResults1,quadratureRule,nEval)
+    qc25s(f,lowerLimit,upperLimit,lowerLimit,center,alphlowerLimit, beta,ri,rj,rg,rh,area1,error1,approximateIntegralResults1,quadratureRule,nEval)
     ++(m_numEvaluations);
 
-    dqc25s(f,lowerLimit,upperLimit,center,upperLimit,alphlowerLimit, beta,ri,rj,rg,rh,area2,error2,approximateIntegralResults2,quadratureRule,nEval)
+    qc25s(f,lowerLimit,upperLimit,center,upperLimit,alphlowerLimit, beta,ri,rj,rg,rh,area2,error2,approximateIntegralResults2,quadratureRule,nEval)
     ++(m_numEvaluations);
 
     m_numSubintervals = 2;
@@ -165,10 +165,10 @@ Scalar adaptiveQuadratureForSingularities(
 
 
 /**************************************** Begin Code Is Different Here *******************************************/
-        call dqc25s(f,lowerLimit,upperLimit,lowerLimit,center,alphlowerLimit, beta,ri,rj,rg,rh,area1,error1,approximateIntegralResults1,quadratureRule,nEval)
+        qc25s(f,lowerLimit,upperLimit,lowerLimit,center,alphlowerLimit, beta,ri,rj,rg,rh,area1,error1,approximateIntegralResults1,quadratureRule,nEval)
         ++(m_numEvaluations);
 
-        call dqc25s(f,lowerLimit,upperLimit,center,upperLimit,alphlowerLimit, beta,ri,rj,rg,rh,area2,error2,approximateIntegralResults2,quadratureRule,nEval)
+        qc25s(f,lowerLimit,upperLimit,center,upperLimit,alphlowerLimit, beta,ri,rj,rg,rh,area2,error2,approximateIntegralResults2,quadratureRule,nEval)
         ++(m_numEvaluations);
 /**************************************** End Code Is Different Here *******************************************/
 

@@ -85,8 +85,8 @@ int test_peak(void)
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
     //typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
-    typedef double Scalar;
-    //typedef long double Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
     //typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
     //Scalar::set_default_prec(350);
     

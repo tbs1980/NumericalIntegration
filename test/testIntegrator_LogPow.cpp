@@ -82,8 +82,8 @@ int test_logpow(void)
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
      
     //typedef float Scalar;
-    typedef double Scalar;
-    //typedef long double Scalar;
+    //typedef double Scalar;
+    typedef long double Scalar;
     //typedef mpfr::mpreal Scalar;
     //Scalar::set_default_prec(500);
 

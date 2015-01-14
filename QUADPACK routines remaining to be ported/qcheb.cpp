@@ -7,10 +7,8 @@
  * \sa R. Piessens, E. de Doncker-Kapenger, C. Ueberhuber, D. Kahaner, QUADPACK, A Subroutine Package for Automatic integeration, Springer Verlag, 1983.
  *
  * \param[] x - Vector of dimension 11 containing the values cos(k*M_PI/24), from k = 1 to 11
- * \param[] fValue - Vector of dimension 25 containing the function values at the points
- *            (upperLimit+lowerLimit+(upperLimit-lowerLimit)*cos(k*M_PI/24))/2, from k = 0 to 24,
- *            where (lowerLimit, upperLimit) is the approximation interval. fValue(1) and fValue(25)
- *            are divided by two (these values are destroyed at output).
+ * \param[] fValue - Vector of dimension 25 containing the function values at the points (upperLimit+lowerLimit+(upperLimit-lowerLimit)*cos(k*M_PI/24))/2, from k = 0 to 24,
+ *            where (lowerLimit, upperLimit) is the approximation interval. fValue(1) and fValue(25) are divided by two (these values are destroyed at output).
  * \param[] chebyshevDegree12 - Vector of dimension 13 containing the Chebyshev coefficients for degree 12
  * \param[] chebyshevDegree24 - Vector of dimension 25 containing the Chebyshev coefficients for degree 24
  *
