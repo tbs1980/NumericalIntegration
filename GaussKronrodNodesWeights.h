@@ -903,11 +903,11 @@ namespace Kronrod {
         typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> ScalarArrayType;
         typedef typename ScalarArrayType::Index Index;
 
-
+        static Scalar abs(Scalar x) { return (x < Scalar(0)) ? -(x) : x; }
 
         static Scalar legendre_err(int const n, Scalar const x, Scalar & err)
         {
-            using std::abs;
+            //using std::abs;
             if (n == 0)
             {
                 err = Scalar(0);
@@ -978,7 +978,7 @@ namespace Kronrod {
         static Scalar chebyshev_series(Scalar const x, int const n_,
             ScalarArrayType const & coefs, Scalar& err)
         {
-            using std::abs;
+            //using std::abs;
             Scalar d1(0), d2(0);
             Scalar absc = abs(coefs(0)); // final term for truncation error
             Scalar y2 = 2 * x; // linear term for Clenshaw recursion
@@ -998,7 +998,7 @@ namespace Kronrod {
 
         static void legendre_zeros(int const m_,ScalarArrayType & zeros)
         {
-            using std::abs;
+            //using std::abs;
             ScalarArrayType temp = ScalarArrayType::Zero(m_+1);
             zeros(0) = Scalar(-1);
             zeros(1) = Scalar(1);
@@ -1146,6 +1146,8 @@ namespace Kronrod {
         {
             //const Index m_ = 2*nNodes;
             const Index n_ = m_ + 1;
+
+            std::cout<<"epsilon = "<<Eigen::NumTraits<Scalar>::epsilon()<<std::endl;
 
             xgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
             wgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
