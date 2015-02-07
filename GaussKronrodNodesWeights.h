@@ -1140,19 +1140,17 @@ namespace Kronrod {
 
         }
 
-        static void computeAbscissaeAndWeights(unsigned int nNodes,
+        static void computeAbscissaeAndWeights(unsigned int m_,
             ScalarArrayType & xgk_,ScalarArrayType & wgk_,
             ScalarArrayType & xk_,ScalarArrayType & wg_)
         {
-            const Index m_ = 2*nNodes;
+            //const Index m_ = 2*nNodes;
             const Index n_ = m_ + 1;
 
-            /*
-            ScalarArrayType xgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
-            ScalarArrayType wgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
-            ScalarArrayType xk_ = ScalarArrayType::Zero(n_/2);//2*nNodes
-            ScalarArrayType wg_ = ScalarArrayType::Zero(n_/2);//2*nNodes
-            */
+            xgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
+            wgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
+            xk_ = ScalarArrayType::Zero(n_/2);//2*nNodes
+            wg_ = ScalarArrayType::Zero(n_/2);//2*nNodes
 
             // initialise the coefficients to zero
             ScalarArrayType coefs = ScalarArrayType::Zero(n_+1);
@@ -1161,7 +1159,7 @@ namespace Kronrod {
             legendre_zeros(m_, zeros);
             chebyshev_coefs(m_, coefs);
             gauss_kronrod_abscissae(n_, m_, zeros,coefs, xgk_);
-            //gauss_kronrod_weights(n_, m_,coefs, xgk_, wg_, wgk_ );
+            gauss_kronrod_weights(n_, m_,coefs, xgk_, wg_, wgk_ );
         }
     };
 }
