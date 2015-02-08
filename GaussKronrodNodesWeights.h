@@ -52,7 +52,7 @@ namespace Kronrod {
          * \param[in/out] betaOut N beta-coefficients
          */
         static void r_jacobi(const IndexType N,const Scalar alpha,const Scalar beta,
-            VectorType & alphaOut, VectorType & betaOut)
+            VectorType& alphaOut, VectorType& betaOut)
         {
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
@@ -95,7 +95,7 @@ namespace Kronrod {
          * \param[in/out] betaOut N beta-coefficients
          */
         static void r_jacobi_01(const IndexType N,const Scalar alpha,const Scalar beta,
-            VectorType & alphaOut, VectorType & betaOut)
+            VectorType& alphaOut, VectorType& betaOut)
         {
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
@@ -144,8 +144,8 @@ namespace Kronrod {
          * \param[in/out] beta Beta-elements in the Jacobi-Kronrod matrix of order 2N+1
          *
          */
-        static void r_kronrod(const IndexType N,VectorType const & alphaIn, VectorType const & betaIn,
-            VectorType & alpha, VectorType & beta)
+        static void r_kronrod(const IndexType N,VectorType const& alphaIn, VectorType const& betaIn,
+            VectorType& alpha, VectorType& beta)
         {
             //TODO : make use the eigen assert facilities
             assert(alphaIn.rows() == betaIn.rows());
@@ -246,8 +246,8 @@ namespace Kronrod {
          * \param[in/out] nodes 2N+1 nodes
          * \param[in/out] weights 2N+1 weights corresponding to \a nodes
          */
-        static void kronrod(const IndexType N,VectorType const & alpha, VectorType const & beta,
-            VectorType & nodes, VectorType & weights)
+        static void kronrod(const IndexType N,VectorType const& alpha, VectorType const& beta,
+            VectorType& nodes, VectorType& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(N>0);
@@ -307,8 +307,8 @@ namespace Kronrod {
          * \param[in/out] nodes 2N+1 nodes
          * \param[in/out] weights 2N+1 weights corresponding to \a nodes
          */
-        static void gauss(const IndexType N,VectorType const & alpha, VectorType const & beta,
-            VectorType & nodes, VectorType & weights)
+        static void gauss(const IndexType N,VectorType const& alpha, VectorType const& beta,
+            VectorType& nodes, VectorType& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(N > 0);
@@ -351,7 +351,7 @@ namespace Kronrod {
          * \param[in/out] nodes Returns a vector of 2N+1 nodes
          * \param[in/out] w Returns a vector of weights corresponding to \a nodes
          */
-        static void mpkronrod(const IndexType N,VectorType & nodes, VectorType & weights)
+        static void mpkronrod(const IndexType N,VectorType& nodes, VectorType& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(nodes.rows() ==  2*N+1);
@@ -382,7 +382,7 @@ namespace Kronrod {
          * \param[in/out] nodes Returns a vector of 2N+1 nodes
          * \param[in/out] weights Returns a vector of weights corresponding to \a nodes
          */
-        static void mpgauss(const IndexType N,VectorType & nodes, VectorType & weights)
+        static void mpgauss(const IndexType N,VectorType& nodes, VectorType& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(nodes.rows() == N);
@@ -404,10 +404,10 @@ namespace Kronrod {
         }
 
         static void computeAbscissaeAndWeights(unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGauss,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGauss)
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGauss,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
             VectorType xGK = VectorType::Zero(2*nNodes+1);
             VectorType wGK = VectorType::Zero(2*nNodes+1);
@@ -492,9 +492,9 @@ namespace Kronrod {
         */
         static void kronrod(
             unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> & weightGauss)
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
             typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
             unsigned int arraySize = nNodes + 1;
@@ -903,9 +903,9 @@ namespace Kronrod {
         typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> ScalarArrayType;
         typedef typename ScalarArrayType::Index Index;
 
-        static Scalar abs(Scalar x) { return (x < Scalar(0)) ? -(x) : x; }
+        static Scalar abs(Scalar x) {return (x < Scalar(0)) ? -(x) : x;}
 
-        static Scalar legendre_err(int const n, Scalar const x, Scalar & err)
+        static Scalar legendre_err(const int n, const Scalar x, Scalar& err)
         {
             //using std::abs;
             if (n == 0)
@@ -959,8 +959,8 @@ namespace Kronrod {
             return dP2;
         }
 
-        static Scalar chebyshev_series_deriv(Scalar const x,int const n_,
-            ScalarArrayType const & coefs)
+        static Scalar chebyshev_series_deriv(const Scalar x,const int n_,
+            const ScalarArrayType& coefs)
         {
             Scalar d1(0), d2(0);
             Scalar y2 = 2 * x; // linear term for Clenshaw recursion
@@ -975,8 +975,8 @@ namespace Kronrod {
             return y2 * d1 - d2 + coefs(1);
         }
 
-        static Scalar chebyshev_series(Scalar const x, int const n_,
-            ScalarArrayType const & coefs, Scalar& err)
+        static Scalar chebyshev_series(const Scalar x, const int n_,
+            const ScalarArrayType& coefs, Scalar& err)
         {
             //using std::abs;
             Scalar d1(0), d2(0);
@@ -996,7 +996,7 @@ namespace Kronrod {
         }
 
 
-        static void legendre_zeros(int const m_,ScalarArrayType & zeros)
+        static void legendre_zeros(const int m_,ScalarArrayType& zeros)
         {
             //using std::abs;
             ScalarArrayType temp = ScalarArrayType::Zero(m_+1);
@@ -1034,9 +1034,9 @@ namespace Kronrod {
 
         }
 
-        static void chebyshev_coefs(int const m_,ScalarArrayType & coefs)
+        static void chebyshev_coefs(const int m_, ScalarArrayType& coefs)
         {
-            size_t ell = (m_ + 1)/2;
+            int ell = (m_ + 1)/2;
             ScalarArrayType alpha = ScalarArrayType::Zero(ell+1);
             ScalarArrayType f = ScalarArrayType::Zero(ell+1);
 
@@ -1068,9 +1068,9 @@ namespace Kronrod {
             }
         }
 
-        static void gauss_kronrod_abscissae(int const n_,int const m_,
-            ScalarArrayType const & zeros, ScalarArrayType const & coefs,
-            ScalarArrayType & xgk_)
+        static void gauss_kronrod_abscissae(const int n_,const int m_,
+            const ScalarArrayType& zeros, const ScalarArrayType& coefs,
+            ScalarArrayType& xgk_)
         {
             //
             // now from the function gauss_kronrod_abscissae
@@ -1100,9 +1100,9 @@ namespace Kronrod {
             }
         }
 
-        static void gauss_kronrod_weights(int const & n_,int const m_,
-            ScalarArrayType const & coefs, ScalarArrayType const& xgk_,
-            ScalarArrayType & wg_, ScalarArrayType & wgk_ )
+        static void gauss_kronrod_weights(const int& n_,const int m_,
+            const ScalarArrayType& coefs, const ScalarArrayType& xgk_,
+            ScalarArrayType& wg_, ScalarArrayType& wgk_ )
         {
             Scalar err;
 
@@ -1124,7 +1124,7 @@ namespace Kronrod {
 
             // Gauss-Kronrod weights:
 
-            for (size_t k = 0; k < n_; ++k)
+            for (int k = 0; k < n_; ++k)
             {
                 Scalar x = xgk_(k);
                 if (k % 2 == 0)
@@ -1141,8 +1141,8 @@ namespace Kronrod {
         }
 
         static void computeAbscissaeAndWeights(unsigned int m_,
-            ScalarArrayType & xgk_,ScalarArrayType & wgk_,
-            ScalarArrayType & xk_,ScalarArrayType & wg_)
+            ScalarArrayType& xgk_,ScalarArrayType& wgk_,
+            ScalarArrayType& xk_,ScalarArrayType& wg_)
         {
             //const Index m_ = 2*nNodes;
             const Index n_ = m_ + 1;
