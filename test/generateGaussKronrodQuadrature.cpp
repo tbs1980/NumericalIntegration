@@ -1,6 +1,6 @@
 /**
  * \file generateQuadratureGaussKronrod.cpp
- * This file will generate a replacement for the file GaussKronrodQuadrature.h 
+ * This file will generate a replacement for the file GaussKronrodNodesWeights.h 
  * at the level of precision specified by the user.
  */
 
@@ -20,8 +20,8 @@ int test_values()
     // Set the number of output digits
     int outputDigits = 50;
     
-    // Set this flag to 1 for LaurieGautschi Polity, or 0 for PiessensPolicy;
-    bool laurieGautschiOrPiessensPolicyFlag = 1;
+    // Set this flag to 0 for LaurieGautschi Polity, 1 for PiessensPolicy, or 2 for Monegato Policy;
+    int solverPolicy = 2;
 
     typedef mpfr::mpreal Scalar;
     // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
@@ -32,7 +32,7 @@ int test_values()
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
     std::ofstream fout;
-    std::string fileNameAndLocation = "test/testOutput/GaussKronrodQuadrature.h";
+    std::string fileNameAndLocation = "test/testOutput/GaussKronrodNodesWeights.h";
     fout.open(fileNameAndLocation);
     fout<<std::fixed<<std::setprecision(outputDigits);
 
@@ -109,8 +109,9 @@ int test_values()
     }
 
     fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n"
-         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
+         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n"
+         << "\ttypedef typename MonegatoPolicy::VectorType VectorType;\n"
+         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n\n"
          << "\tstatic bool compute;\n\n";
 
 
@@ -129,15 +130,24 @@ int test_values()
          << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
          << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
     
-    if(laurieGautschiOrPiessensPolicyFlag)
+    if(solverPolicy == 0)
     {
         fout << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
-    }else
+             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
+    else if(solverPolicy == 1)
     {
         fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
-    }    
+             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
+    else if(solverPolicy == 2)
+    {
+        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\tMonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
     
     fout << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
          << "\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t{\n\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\tgaussWeights(i) = wG(i);\n\t\t}\n\t}\n};\n\n"

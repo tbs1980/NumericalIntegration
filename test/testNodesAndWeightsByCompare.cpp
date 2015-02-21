@@ -1,6 +1,6 @@
 /**
  * \file testNodesAndWeightsByCompare.cpp
- * This file is a unit test for GaussKronrodNodesWeights.h.
+ * This file is a unit test for ComputeGaussKronrodNodesWeights.h.
  * The test is used to compare two different approaches to computing Gauss-Kronrod node and
  * weight values for a single ruleset for agreement at the specified level of precision.
  */

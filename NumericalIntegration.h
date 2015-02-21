@@ -45,8 +45,8 @@ namespace Eigen
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/MPRealSupport>
 
+#include "ComputeGaussKronrodNodesWeights.h"
 #include "GaussKronrodNodesWeights.h"
-#include "GaussKronrodQuadrature.h"
 #include "Integrator.h"
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
