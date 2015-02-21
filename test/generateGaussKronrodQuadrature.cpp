@@ -109,11 +109,10 @@ int test_values()
     }
 
     fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n"
-         << "\ttypedef typename MonegatoPolicy::VectorType VectorType;\n"
+         << "\ttypedef Kronrod::Monegato<Scalar> MonegatoPolicy;\n"
          << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n\n"
+         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
          << "\tstatic bool compute;\n\n";
-
 
     fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n";
     for (size_t i=0; i<12; ++i)
