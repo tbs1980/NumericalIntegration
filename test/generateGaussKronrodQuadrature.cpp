@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <sys/time.h>
 
 int test_values()
 {
@@ -21,15 +22,26 @@ int test_values()
     int outputDigits = 50;
     
     // Set this flag to 0 for LaurieGautschi Polity, 1 for PiessensPolicy, or 2 for Monegato Policy;
-    int solverPolicy = 2;
+    int solverPolicy = 0;
 
     typedef mpfr::mpreal Scalar;
     // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
     Scalar::set_default_prec(outputDigits*4);
     
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
+    
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int startTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
 
     QuadratureKronrodValuesType::computeNodesAndWeights();
+
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int finishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double timeElapsed = (finishTime - startTime) / 1000000.;
+    
+    std::cout << "\n\tNode/Weight Computation Time: " << timeElapsed << std::endl;
 
     std::ofstream fout;
     std::string fileNameAndLocation = "test/testOutput/GaussKronrodNodesWeights.h";
@@ -319,14 +331,25 @@ int test_values()
     fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H\n";
 
     fout.close();
-    std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n\n.";
+    std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n";
 
     return EXIT_SUCCESS;
 }
 
 int main(void)
-{
+{   
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processStartTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+
     int ret=EXIT_SUCCESS;
     test_values();
+
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    
+    std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
     return ret;
 }
