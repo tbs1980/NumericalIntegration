@@ -1,6 +1,6 @@
 /**
  * \file testNodesAndWeightsByCompare.cpp
- * This file is a unit test for GaussKronrodNodesWeights.h.
+ * This file is a unit test for ComputeGaussKronrodNodesWeights.h.
  * The test is used to compare two different approaches to computing Gauss-Kronrod node and
  * weight values for a single ruleset for agreement at the specified level of precision.
  */
@@ -11,14 +11,16 @@
 #include <fstream>
 #include <iomanip>
 
-int compare_codes_unified_interface(void)
+int compare_codes_unified_interface(const unsigned int N=10)
 {
     //typedef float Scalar;
     //typedef double Scalar;
-    //typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(320); //128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
+    typedef long double Scalar;
+    //typedef mpfr::mpreal Scalar;
+    //Scalar::set_default_prec(320); //128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
     //256,288,320,352,384,416,448
+
+
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGLaurieGautschi;
@@ -26,15 +28,18 @@ int compare_codes_unified_interface(void)
 
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef Kronrod::Piessens<Scalar> PiessensPolicy;
+    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
 
     typedef LaurieGautschiPolicy::IndexType IndexType;
-    
-    const unsigned int N = 100;
-    const int outputIntegers = 80; //beyond 67 integers methods disagree for precision=256.
+
+    //const unsigned int N = 90;
+    const int outputIntegers = 20; //beyond 67 integers methods disagree for precision=256.
 
     LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,xGLaurieGautschi,wGLaurieGautschi);
 
     std::ofstream fout;
+
+
     fout.open("LaurieGautschi320.dat");
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
@@ -90,13 +95,46 @@ int compare_codes_unified_interface(void)
 
     fout.close();
 
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKMonegato;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKMonegato;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> xGMonegato;
+    Eigen::Array<Scalar, Eigen::Dynamic, 1> wGMonegato;
+
+    MonegatoPolicy::computeAbscissaeAndWeights(N,xGKMonegato,wGKMonegato,xGMonegato,wGMonegato);
+
+    fout.open("Monegato320.dat");
+
+    fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
+    fout << "\nKronrod Nodes\n";
+    fout << std::fixed;
+    for(IndexType i = 0; i < xGKMonegato.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << xGKMonegato(i) << ",\n";
+    }
+
+    fout << "\nKronrod Weights\n";
+    for(IndexType i = 0; i < wGKMonegato.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGKMonegato(i) << ",\n";
+    }
+
+    fout << "\nGauss Weights\n";
+    for(IndexType i = 0; i < wGMonegato.rows(); ++i)
+    {
+        fout << std::setprecision(outputIntegers) << wGMonegato(i) << ",\n";
+    }
+
+    fout.close();
+
     return EXIT_SUCCESS;
 }
 
 
-int main(void)
+int main(int argc, char** argv)
 {
+    size_t m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
+
     int ret = 0;
-    ret += compare_codes_unified_interface();
+    ret += compare_codes_unified_interface(m);
     return ret;
 }

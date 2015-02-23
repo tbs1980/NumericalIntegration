@@ -1,6 +1,6 @@
 /**
  * \file generateQuadratureGaussKronrod.cpp
- * This file will generate a replacement for the file GaussKronrodQuadrature.h 
+ * This file will generate a replacement for the file GaussKronrodNodesWeights.h 
  * at the level of precision specified by the user.
  */
 
@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <sys/time.h>
 
 int test_values()
 {
@@ -20,19 +21,30 @@ int test_values()
     // Set the number of output digits
     int outputDigits = 100;
     
-    // Set this flag to 1 for LaurieGautschi Polity, or 0 for PiessensPolicy;
-    bool laurieGautschiOrPiessensPolicyFlag = 1;
+    // Set this flag to 0 for LaurieGautschi Polity, 1 for PiessensPolicy, or 2 for Monegato Policy;
+    int solverPolicy = 0;
 
     typedef mpfr::mpreal Scalar;
     // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
     Scalar::set_default_prec(outputDigits*4);
     
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
+    
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int startTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
 
     QuadratureKronrodValuesType::computeNodesAndWeights();
 
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int finishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double timeElapsed = (finishTime - startTime) / 1000000.;
+    
+    std::cout << "\n\tNode/Weight Computation Time: " << timeElapsed << std::endl;
+
     std::ofstream fout;
-    std::string fileNameAndLocation = "test/testOutput/GaussKronrodQuadrature.h";
+    std::string fileNameAndLocation = "test/testOutput/GaussKronrodNodesWeights.h";
     fout.open(fileNameAndLocation);
     fout<<std::fixed<<std::setprecision(outputDigits);
 
@@ -109,10 +121,10 @@ int test_values()
     }
 
     fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n"
+         << "\ttypedef Kronrod::Monegato<Scalar> MonegatoPolicy;\n"
+         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n\n"
          << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
          << "\tstatic bool compute;\n\n";
-
 
     fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n";
     for (size_t i=0; i<12; ++i)
@@ -129,15 +141,24 @@ int test_values()
          << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
          << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
     
-    if(laurieGautschiOrPiessensPolicyFlag)
+    if(solverPolicy == 0)
     {
         fout << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
-    }else
+             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
+    else if(solverPolicy == 1)
     {
         fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
-    }    
+             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
+    else if(solverPolicy == 2)
+    {
+        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
+             << "\t\tMonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+    }
     
     fout << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
          << "\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t{\n\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\tgaussWeights(i) = wG(i);\n\t\t}\n\t}\n};\n\n"
@@ -310,14 +331,25 @@ int test_values()
     fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H\n";
 
     fout.close();
-    std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n\n.";
+    std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n";
 
     return EXIT_SUCCESS;
 }
 
 int main(void)
-{
+{   
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processStartTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+
     int ret=EXIT_SUCCESS;
     test_values();
+
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    
+    std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
     return ret;
 }
