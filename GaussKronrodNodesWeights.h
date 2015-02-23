@@ -133,8 +133,9 @@ public:
 	static Array<Scalar, 50, 1> weightsGauss201;
 
 	typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+	typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
 	typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
+
 	typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
 	static bool compute;
@@ -171,6 +172,7 @@ public:
 
 		LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
 		//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
+		//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
 
 		for(size_t i=0; i<N+1; ++i)
 		{
