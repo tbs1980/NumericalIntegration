@@ -876,10 +876,10 @@ namespace Kronrod {
         }
 
         static void computeAbscissaeAndWeights(unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> abscGauss,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> &weightGauss)
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGauss,
+            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
             Piessens::kronrod(nNodes,abscGaussKronrod,weightGaussKronrod,weightGauss);
             abscGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(abscGauss.rows());

@@ -68,18 +68,11 @@ int test_nodes_weights_difference(const unsigned int N)
             return EXIT_FAILURE;
         }
     }
-/*
-    for(IndexType i = 0; i < xGLaurieGautschi.rows(); ++i)
-    {
-        if ((abs(xGLaurieGautschi(i) - xGPiessens(i)) > epsilon)
-           || (abs(xGLaurieGautschi(i) - xGMonegato(i)) > epsilon)
-           || (abs(xGPiessens(i) - xGMonegato(i)) > epsilon))
-        {
-            std::cout << "Failed xG " << i << std::endl;
-            return EXIT_FAILURE;
-        }
-    }
-*/
+    
+    // Note: Piessens and Monegato methods do not calculate the gauss nodes independently.
+    //       Piessens and Monegato gauss nodes are taken directly from GaussKronrod nodes,
+    //       and agreement in the GaussKronrod node test implies agreement for Gauss nodes.
+
     for(IndexType i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
