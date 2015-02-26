@@ -10,6 +10,9 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <Eigen/Dense>
+
+using namespace Eigen;
 
 int test_nodes_weights_difference(const unsigned int N)
 {
@@ -22,8 +25,6 @@ int test_nodes_weights_difference(const unsigned int N)
     typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef Kronrod::Piessens<Scalar> PiessensPolicy;
     typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
-
-    typedef LaurieGautschiPolicy::IndexType IndexType;
 
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;
@@ -47,7 +48,7 @@ int test_nodes_weights_difference(const unsigned int N)
     double epsilon = 1e-16;
 
     using std::abs;
-    for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
+    for(DenseIndex i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)
            || (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon)
@@ -58,7 +59,7 @@ int test_nodes_weights_difference(const unsigned int N)
         }
     }
 
-    for(IndexType i = 0; i < wGKLaurieGautschi.rows(); ++i)
+    for(DenseIndex i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon)
            || (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon)
@@ -73,7 +74,7 @@ int test_nodes_weights_difference(const unsigned int N)
     //       Piessens and Monegato gauss nodes are taken directly from GaussKronrod nodes,
     //       and agreement in the GaussKronrod node test implies agreement for Gauss nodes.
 
-    for(IndexType i = 0; i < wGLaurieGautschi.rows(); ++i)
+    for(DenseIndex i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
            || (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon)
