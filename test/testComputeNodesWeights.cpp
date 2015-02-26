@@ -44,35 +44,54 @@ int test_nodes_weights_difference(const unsigned int N)
     PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,xGPiessens,wGPiessens);
     MonegatoPolicy::computeAbscissaeAndWeights(N,xGKMonegato,wGKMonegato,xGMonegato,wGMonegato);
 
+    double epsilon = 1e-16;
+
     using std::abs;
     for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
-        assert(abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > 1e-200);
-        assert(abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > 1e-200);
-        assert(abs(xGKPiessens(i) - xGKMonegato(i)) > 1e-200);
+        if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)
+           || (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon)
+           || (abs(xGKPiessens(i) - xGKMonegato(i)) > epsilon))
+        {
+            std::cout << "Failed xGK " << i << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     for(IndexType i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
-        assert((wGKLaurieGautschi(i) - wGKPiessens(i)) > 1e-50);
-        assert((wGKLaurieGautschi(i) - wGKMonegato(i)) > 1e-50);
-        assert((wGKPiessens(i) - wGKMonegato(i)) > 1e-50);
+        if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon)
+           || (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon)
+           || (abs(wGKPiessens(i) - wGKMonegato(i)) > epsilon))
+        {
+            std::cout << "Failed wGK " << i << std::endl;
+            return EXIT_FAILURE;
+        }
     }
-
+/*
     for(IndexType i = 0; i < xGLaurieGautschi.rows(); ++i)
     {
-        assert((xGLaurieGautschi(i) - xGPiessens(i)) > 1e-50);
-        assert((xGLaurieGautschi(i) - xGMonegato(i)) > 1e-50);
-        assert((xGPiessens(i) - xGMonegato(i)) > 1e-50);
+        if ((abs(xGLaurieGautschi(i) - xGPiessens(i)) > epsilon)
+           || (abs(xGLaurieGautschi(i) - xGMonegato(i)) > epsilon)
+           || (abs(xGPiessens(i) - xGMonegato(i)) > epsilon))
+        {
+            std::cout << "Failed xG " << i << std::endl;
+            return EXIT_FAILURE;
+        }
     }
-
+*/
     for(IndexType i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
-        assert((wGLaurieGautschi(i) - wGPiessens(i)) > 1e-50);
-        assert((wGLaurieGautschi(i) - wGMonegato(i)) > 1e-50);
-        assert((wGPiessens(i) - wGMonegato(i)) > 1e-50);
+        if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
+           || (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon)
+           || (abs(wGPiessens(i) - wGMonegato(i)) > epsilon))
+        {
+            std::cout << "Failed wG " << i << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
+    std::cout << "Tests Succeeded" << std::endl;
     return EXIT_SUCCESS;
 }
 
