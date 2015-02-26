@@ -172,7 +172,7 @@ namespace Kronrod {
 
             tempVector(1) = beta(N+1);
 
-            for(IndexType m=0; m<N-2+1; ++m)
+            for(IndexType m=0; m<N-1; ++m)
             {
                 Scalar u = 0;
                 for(IndexType k=floor((m+1)/2); k>=0;--k)
@@ -192,7 +192,7 @@ namespace Kronrod {
                 sigma(j+1) = sigma(j);
             }
 
-            for(IndexType m = N-1; m<2*N-3+1; ++m)
+            for(IndexType m = N-1; m<2*N-2; ++m)
             {
                 IndexType k = m+1-N;
                 IndexType j = 0;
@@ -1146,8 +1146,6 @@ namespace Kronrod {
         {
             //const Index m_ = 2*nNodes;
             const Index n_ = m_ + 1;
-
-            std::cout<<"epsilon = "<<Eigen::NumTraits<Scalar>::epsilon()<<std::endl;
 
             xgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
             wgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1

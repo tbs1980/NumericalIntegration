@@ -47,9 +47,9 @@ int test_nodes_weights_difference(const unsigned int N)
     using std::abs;
     for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
-        assert(abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > 1e-50);
-        assert(abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > 1e-50);
-        assert(abs(xGKPiessens(i) - xGKMonegato(i)) > 1e-50);
+        assert(abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > 1e-200);
+        assert(abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > 1e-200);
+        assert(abs(xGKPiessens(i) - xGKMonegato(i)) > 1e-200);
     }
 
     for(IndexType i = 0; i < wGKLaurieGautschi.rows(); ++i)
@@ -82,5 +82,5 @@ int main(int argc, char** argv)
 
     int ret = EXIT_SUCCESS;
     ret += test_nodes_weights_difference(m);
-    return EXIT_SUCCESS;
+    return ret;
 }
