@@ -22,9 +22,9 @@ int test_nodes_weights_difference(const unsigned int N)
     //typedef mpfr::mpreal Scalar;
     //Scalar::set_default_prec(50);
 
-    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
+    typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef Eigen::Piessens<Scalar> PiessensPolicy;
+    typedef Eigen::Monegato<Scalar> MonegatoPolicy;
 
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGKLaurieGautschi;

@@ -132,9 +132,9 @@ public:
 	static Array<Scalar, 50, 1> abscissaeGauss201;
 	static Array<Scalar, 50, 1> weightsGauss201;
 
-	typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-	typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
-	typedef Kronrod::Piessens<Scalar> PiessensPolicy;
+	typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+	typedef Eigen::Monegato<Scalar> MonegatoPolicy;
+	typedef Eigen::Piessens<Scalar> PiessensPolicy;
 
 	typedef typename LaurieGautschiPolicy::VectorType VectorType;
 

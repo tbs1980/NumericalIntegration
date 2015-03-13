@@ -26,9 +26,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
 
-    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
+    typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef Eigen::Piessens<Scalar> PiessensPolicy;
+    typedef Eigen::Monegato<Scalar> MonegatoPolicy;
 
     typedef LaurieGautschiPolicy::IndexType IndexType;
 

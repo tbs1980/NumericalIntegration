@@ -7,7 +7,7 @@
 #ifndef NI_KRONRODLAURIEGAUTSCHI_H
 #define NI_KRONRODLAURIEGAUTSCHI_H
 
-namespace Kronrod {
+namespace Eigen {
 
 //----------------------------------Begin LaurieGautschi Class-----------------------------------//
     /**
@@ -267,6 +267,7 @@ namespace Kronrod {
 
             MatrixType J = MatrixType::Zero(2*N+1,2*N+1);
 
+            using std::sqrt;
             for(IndexType k=0; k<2*N; ++k)
             {
                 J(k,k) = alpha0(k);
@@ -320,6 +321,7 @@ namespace Kronrod {
             MatrixType J = MatrixType::Zero(N,N);
 
             J(0,0) = alpha(0);
+            using std::sqrt;
             for(IndexType n=1; n<N; ++n)
             {
                 J(n,n) = alpha(n);
