@@ -1,7 +1,7 @@
 #ifndef EIGEN_MONEGATO_H
 #define EIGEN_MONEGATO_H
 
-namespace Kronrod{
+namespace Eigen{
 
     /**
      * \ingroup Quadrature_Module

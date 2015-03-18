@@ -1,7 +1,7 @@
 #ifndef EIGEN_LAURIEGAUTSCHI_H
 #define EIGEN_LAURIEGAUTSCHI_H
 
-namespace Kronrod {
+namespace Eigen {
 
     /**
      * \ingroup Quadrature_Module

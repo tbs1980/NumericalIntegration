@@ -1,6 +1,6 @@
 /**
  * \file testNodesAndWeightsByCompare.cpp
- * This file is a unit test for GaussKronrodNodesWeights.h.
+ * This file is a unit test for ComputeGaussKronrodNodesWeights.h.
  * The test is used to compare two different approaches to computing Gauss-Kronrod node and
  * weight values for a single ruleset for agreement at the specified level of precision.
  */
@@ -26,9 +26,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
 
-    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
+    typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef Eigen::Piessens<Scalar> PiessensPolicy;
+    typedef Eigen::Monegato<Scalar> MonegatoPolicy;
 
     typedef LaurieGautschiPolicy::IndexType IndexType;
 

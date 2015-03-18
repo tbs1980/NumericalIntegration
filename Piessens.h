@@ -1,7 +1,7 @@
 #ifndef EIGEN_PIESSENS_H
 #define EIGEN_PIESSENS_H
 
-namespace Kronrod{
+namespace Eigen{
 
     /**
     * \brief kronrod adds n+1 points to an n-point Gaussian rule.

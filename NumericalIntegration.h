@@ -46,9 +46,10 @@ namespace Eigen
 #include <unsupported/Eigen/MPRealSupport>
 
 #ifdef COMPUTE_NI_WEIGHTS_ON_THE_FLY
-    #include "GaussKronrodNodesWeights.h"
+    #include "ComputeGaussKronrodNodesWeights.h"
 #endif
-#include "GaussKronrodQuadrature.h"
+
+#include "GaussKronrodNodesWeights.h"
 #include "Integrator.h"
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
