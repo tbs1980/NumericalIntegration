@@ -65,7 +65,9 @@ public:
         m_integralList.resize(maxSubintervals, 1);
         m_errorList.resize(maxSubintervals, 1);
 
+#ifdef COMPUTE_NI_WEIGHTS_ON_THE_FLY
         QuadratureKronrod<Scalar>::computeNodesAndWeights();
+#endif //COMPUTE_NI_WEIGHTS_ON_THE_FLY
     }
 
     /**
@@ -77,7 +79,7 @@ public:
      * are too difficult for non-adaptive quadrature, and, in particular, for integrands with
      * oscillating behavior of a non-specific type.
      *
-     * \param[in/out] f The function defining the integrand function.
+     * \param[in,out] f The function defining the integrand function.
      * \param[in] lowerLimit The lower limit of integration.
      * \param[in] upperLimit The upper limit of integration.
      * \param[in] desiredAbsoluteError The absolute accuracy requested.
@@ -232,7 +234,7 @@ public:
                 {
                     m_errorCode = 3;
                 }
-            }   
+            }
 
             // Append the newly-created intervals to the list.
             if (error2 > error1)
@@ -308,9 +310,9 @@ private:
      * At each call two error estimates are inserted using the sequential search method, top-down
      * for the largest error estimate and bottom-up for the smallest error estimate.
      *
-     * \param[in/out] maxErrorIndex The index to the nrMax-th largest error estimate currently in the list.
-     * \param[in/out] errorMax The nrMax-th largest error estimate. errorMaxIndex = errorList(maxError).
-     * \param[in/out] nrMax The integer value such that maxError = errorListIndices(nrMax).
+     * \param[in,out] maxErrorIndex The index to the nrMax-th largest error estimate currently in the list.
+     * \param[in,out] errorMax The nrMax-th largest error estimate. errorMaxIndex = errorList(maxError).
+     * \param[in,out] nrMax The integer value such that maxError = errorListIndices(nrMax).
      */
     void quadratureSort(int& maxErrorIndex, Scalar& errorMax, int& nrMax)
     {
@@ -416,11 +418,11 @@ private:
      * \param[in] f The variable representing the function f(x) be integrated.
      * \param[in] lowerLimit The lower limit of integration.
      * \param[in] upperLimit The upper limit of integration.
-     * \param[in/out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
+     * \param[in,out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
      *             abs(I - I').
-     * \param[in/out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
+     * \param[in,out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
      *             upperLimit.
-     * \param[in/out] absDiffIntegral The approximation to the integral of
+     * \param[in,out] absDiffIntegral The approximation to the integral of
      *             abs(f - I/(upperLimit - lowerLimit)).
      *
      * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
@@ -557,7 +559,7 @@ private:
 
         // The result of the Kronrod formula.
         Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;
-        
+
         using std::abs;
         absIntegral = abs(resultKronrod);
 
@@ -692,8 +694,8 @@ private:
      *
      * errorCode = 0 Indicates normal and reliable termination of the routine. (It is assumed that
      *               the requested accuracy has been achieved.)
-     * errorCode > 0 Any errorCode greater than zero indicates abnormal termination of the routine. 
-     *               (The estimates for integral and m_estimatedError are less reliable and the 
+     * errorCode > 0 Any errorCode greater than zero indicates abnormal termination of the routine.
+     *               (The estimates for integral and m_estimatedError are less reliable and the
      *               requested accuracy has not been achieved.)
      * errorCode = 1 The maximum number of subdivisions allowed has been achieved. One can allow more
      *               subdivisions by increasing the value of m_maxSubintervals. However, if this

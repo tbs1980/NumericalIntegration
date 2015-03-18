@@ -26,7 +26,7 @@ namespace Eigen
  * for Gauss-Kronrod integration, unit tests, and support for multiprecision using mpreal
  * precision type.
  */
- 
+
  /**
   *\code
   *	include <unsupported/Eigen/NumericalIntegration>
@@ -45,7 +45,9 @@ namespace Eigen
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/MPRealSupport>
 
-#include "GaussKronrodNodesWeights.h"
+#ifdef COMPUTE_NI_WEIGHTS_ON_THE_FLY
+    #include "GaussKronrodNodesWeights.h"
+#endif
 #include "GaussKronrodQuadrature.h"
 #include "Integrator.h"
 
