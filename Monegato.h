@@ -4,7 +4,7 @@
 namespace Eigen{
 
     /**
-     * \ingroup Quadrature_Module
+     * \ingroup NumericalIntegration_Module
      *
      * \class Monegato
      *
@@ -16,8 +16,8 @@ namespace Eigen{
      * extended Gaussian quadrature rules", Giovanni Monegato,
      * Math. Comp., Vol. 32 (1978) pp. 247-252. http://www.jstor.org/stable/2006272 .
      *
-     * The code is based on quadpackcpp library written by
-     * Jerry Gagelman <jerry@os-scientific.org> and is distributed under
+     * The code is based on quadpackcpp (http://quadpackpp.sourceforge.net/)
+     * library written by Jerry Gagelman <jerry@os-scientific.org> which is distributed under
      * GNU General Public License
      *
      */

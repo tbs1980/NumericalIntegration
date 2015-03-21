@@ -132,34 +132,28 @@ namespace Eigen
         static Array<Scalar, 50, 1> abscissaeGauss201;
         static Array<Scalar, 50, 1> weightsGauss201;
 
-        static bool compute;
+#ifdef EIGEN_HAS_MPREAL_CXX11_TGAMMA
 
-#ifdef COMPUTE_NI_WEIGHTS_ON_THE_FLY
         typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
         typedef Eigen::Monegato<Scalar> MonegatoPolicy;
         typedef Eigen::Piessens<Scalar> PiessensPolicy;
-
         typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
         static void computeNodesAndWeights()
         {
-            if(compute)
-            {
-                QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
-                QuadratureKronrod::computeForRule<10>(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21);
-                QuadratureKronrod::computeForRule<15>(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31);
-                QuadratureKronrod::computeForRule<20>(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41);
-                QuadratureKronrod::computeForRule<25>(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51);
-                QuadratureKronrod::computeForRule<30>(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61);
-                QuadratureKronrod::computeForRule<35>(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71);
-                QuadratureKronrod::computeForRule<40>(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81);
-                QuadratureKronrod::computeForRule<45>(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91);
-                QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
-                QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
-                QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
+            QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
+            QuadratureKronrod::computeForRule<10>(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21);
+            QuadratureKronrod::computeForRule<15>(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31);
+            QuadratureKronrod::computeForRule<20>(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41);
+            QuadratureKronrod::computeForRule<25>(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51);
+            QuadratureKronrod::computeForRule<30>(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61);
+            QuadratureKronrod::computeForRule<35>(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71);
+            QuadratureKronrod::computeForRule<40>(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81);
+            QuadratureKronrod::computeForRule<45>(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91);
+            QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
+            QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
+            QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
 
-                compute = false;
-            }
         }
 
         template <int N>
@@ -187,13 +181,8 @@ namespace Eigen
                 gaussWeights(i) = wG(i);
             }
         }
-#endif //COMPUTE_NI_WEIGHTS_ON_THE_FLY
-
+#endif //EIGEN_HAS_MPREAL_CXX11_TGAMMA
     };
-
-template <typename Scalar>
-bool QuadratureKronrod<Scalar>::compute = true;
-
 
 //Nodes and Weights - Rule 15
 template <typename Scalar>

@@ -4,44 +4,17 @@
 namespace Eigen{
 
     /**
-    * \brief kronrod adds n+1 points to an n-point Gaussian rule.
+    * \ingroup NumericalIntegration_Module
     *
-    *    This function is a C++ implementation of original work by R. Piessens, et.al,
-    *    published in the journal Mathematics of Computation, Volume 28, Number 125,
-    *    January, 1974.  Where possible strucutre and variable naming convention
-    *    has been aligned to favor work of the QUADPACK Gaus-Kronrod integration
-    *    routines created by individuals of the same group.
+    * \class Piessens
     *
-    *    This function calculates the abscissas and weights of the (2n+1)-point
-    *    Gauss-Kronrod quadrature formula which is obtained from the n-point
-    *    Gauss quadrature formula with the optimal addition of (n+1)-points.
+    * \brief This class computes Kronrod abscissae & weights for arbitrary precision
     *
-    *    The optimally added points are the Kronrod abscissae.  The
-    *    abscissas and weights for both the Gauss and Gauss Kronrod rules
-    *    are calculated for integration over the interval (-1, +1).
+    * \tparam _Scalar floating point type
     *
-    *    Because the quadrature formula is symmetric with respect to the origin,
-    *    only the positive abscissas are calculated.  Weights corresponding to the
-    *    symetric abscissae are equal.  Weights of weightGauss are calculated as well.
+    * This class is based on the work by R. Piessens, et.al,published in the
+    * journal Mathematics of Computation, Volume 28, Number 125, January, 1974.
     *
-    *    Work by Dr. John Burkhardt made note that the code published in Mathematics of
-    *    Computation omitted the definition of the second Chebyshev coefficient (chebCoeff2),
-    *    and Dr. Burkhardt's contributions are reflected here with permission.
-    *
-    *    The arrays abcsGaussKronrod, weightGaussKronrod and weightGauss contain the
-    *    positive abscissae in decreasing order, and the weights of each abscissa in
-    *    the Gauss-Kronrod and Gauss rules, respectively.
-    *
-    *    Ported to C++/Eigen and templated for multiprecision by Mark Sauder,
-    *    Sreekumar Thaithara Balan, Matt Beall, and R. Jeff Jenkins - September 2014.
-    *
-    * Input Parameters:
-    * \param[in] n, the order of the Gauss rule.
-    *
-    * Return Parameters:
-    * \param[in,out] abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
-    * \param[in,out] weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
-    * \param[in,out] weightGauss[n+1] The weights for the Gauss rule.
     */
     template<typename _Scalar>
     class Piessens
@@ -49,6 +22,46 @@ namespace Eigen{
     public:
         typedef _Scalar Scalar;
 
+        /**
+        * \brief kronrod adds n+1 points to an n-point Gaussian rule.
+        *
+        *    This function is a C++ implementation of original work by R. Piessens, et.al,
+        *    published in the journal Mathematics of Computation, Volume 28, Number 125,
+        *    January, 1974.  Where possible strucutre and variable naming convention
+        *    has been aligned to favor work of the QUADPACK Gaus-Kronrod integration
+        *    routines created by individuals of the same group.
+        *
+        *    This function calculates the abscissas and weights of the (2n+1)-point
+        *    Gauss-Kronrod quadrature formula which is obtained from the n-point
+        *    Gauss quadrature formula with the optimal addition of (n+1)-points.
+        *
+        *    The optimally added points are the Kronrod abscissae.  The
+        *    abscissas and weights for both the Gauss and Gauss Kronrod rules
+        *    are calculated for integration over the interval (-1, +1).
+        *
+        *    Because the quadrature formula is symmetric with respect to the origin,
+        *    only the positive abscissas are calculated.  Weights corresponding to the
+        *    symetric abscissae are equal.  Weights of weightGauss are calculated as well.
+        *
+        *    Work by Dr. John Burkhardt made note that the code published in Mathematics of
+        *    Computation omitted the definition of the second Chebyshev coefficient (chebCoeff2),
+        *    and Dr. Burkhardt's contributions are reflected here with permission.
+        *
+        *    The arrays abcsGaussKronrod, weightGaussKronrod and weightGauss contain the
+        *    positive abscissae in decreasing order, and the weights of each abscissa in
+        *    the Gauss-Kronrod and Gauss rules, respectively.
+        *
+        *    Ported to C++/Eigen and templated for multiprecision by Mark Sauder,
+        *    Sreekumar Thaithara Balan, Matt Beall, and R. Jeff Jenkins - September 2014.
+        *
+        * Input Parameters:
+        * \param[in] n, the order of the Gauss rule.
+        *
+        * Return Parameters:
+        * \param[in,out] abscGaussKronrod[n+1] The Gauss-Kronrod abscissae.
+        * \param[in,out] weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
+        * \param[in,out] weightGauss[n+1] The weights for the Gauss rule.
+        */
         static void kronrod(
             unsigned int nNodes,
             Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,

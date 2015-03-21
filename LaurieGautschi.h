@@ -4,9 +4,11 @@
 namespace Eigen {
 
     /**
-     * \ingroup Quadrature_Module
+     * \ingroup NumericalIntegration_Module
      *
      * \class LaurieGautschi
+     *
+     * \tparam _Scalar floating point type
      *
      * \brief This class computes Kronrod abscissae & weights for arbitrary precision.
      *

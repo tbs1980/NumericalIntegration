@@ -64,10 +64,6 @@ public:
         m_upperList.resize(maxSubintervals, 1);
         m_integralList.resize(maxSubintervals, 1);
         m_errorList.resize(maxSubintervals, 1);
-
-#ifdef COMPUTE_NI_WEIGHTS_ON_THE_FLY
-        QuadratureKronrod<Scalar>::computeNodesAndWeights();
-#endif //COMPUTE_NI_WEIGHTS_ON_THE_FLY
     }
 
     /**
