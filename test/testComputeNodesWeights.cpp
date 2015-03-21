@@ -85,7 +85,7 @@ int test_nodes_weights_difference(const unsigned int N)
         }
     }
 
-    std::cout << "Tests Succeeded" << std::endl;
+    std::cout << "\n\tTests Succeeded!\n" << std::endl;
     return EXIT_SUCCESS;
 }
 
