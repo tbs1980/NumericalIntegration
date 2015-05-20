@@ -1,0 +1,145 @@
+%-----------------------------------------------------------------------
+% Beginning of mcom-l-template.tex
+%-----------------------------------------------------------------------
+%
+%     This is a topmatter template file for MCOM for use with AMS-LaTeX.
+%
+%     Templates for various common text, math and figure elements are
+%     given following the \end{document} line.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%     Remove any commented or uncommented macros you do not use.
+
+\documentclass{mcom-l}
+
+%     If you need symbols beyond the basic set, uncomment this command.
+%\usepackage{amssymb}
+
+%     If your article includes graphics, uncomment this command.
+%\usepackage{graphicx}
+
+%     If the article includes commutative diagrams, ...
+%\usepackage[cmtip,all]{xy}
+
+
+%     Update the information and uncomment if AMS is not the copyright
+%     holder.
+%\copyrightinfo{2009}{American Mathematical Society}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+% \title[short text for running head]{full title}
+\title{Accurate computation of Gauss-Kronrod Quadrature Nodes and Weights}
+
+%    Only \author and \address are required; other information is
+%    optional.  Remove any unused author tags.
+
+%    author one information
+% \author[short version for running head]{name for top of paper}
+\author[S. T. Balan et al.]{Sreekumar T. Balan}
+\address{Department of Physics and Astronomy, University College London, Gower Street, London, WC1E 6BT, United Kingdom}
+\curraddr{}
+\email{sbalan@star.ucl.ac.uk}
+\thanks{}
+
+%    author two information
+\author{Mark Sauder}
+\address{Grey Point Corporation}
+\curraddr{}
+\email{mcsauder@greypointcorp.com}
+\thanks{}
+
+%    author two information
+\author{Matt Beall}
+\address{Grey Point Corporation}
+\curraddr{}
+\email{matt.beall@greypointcorp.com}
+\thanks{}
+
+%    \subjclass is required.
+\subjclass[2010]{Primary }
+
+\date{\today}
+
+\dedicatory{}
+
+%    Abstract is required.
+\begin{abstract}
+    We compare the accuracy of the Gauss-Kronrod nodes and weights computed
+    using three different methods and scruitnise their impact on the numerical
+    integration.
+\end{abstract}
+
+\maketitle
+
+%    Text of article.
+
+%    Bibliographies can be prepared with BibTeX using amsplain,
+%    amsalpha, or (for "historical" overviews) natbib style.
+\bibliographystyle{amsplain}
+%    Insert the bibliography data here.
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    Templates for common elements of a journal article; for additional
+%    information, see the AMS-LaTeX instructions manual, instr-l.pdf,
+%    included in the MCOM author package, and the amsthm user's guide,
+%    linked from http://www.ams.org/tex/amslatex.html .
+
+%    Section headings
+\section{}
+\subsection{}
+
+%    Ordinary theorem and proof
+\begin{theorem}[Optional addition to theorem head]
+% text of theorem
+\end{theorem}
+
+\begin{proof}[Optional replacement proof heading]
+% text of proof
+\end{proof}
+
+%    Figure insertion; default placement is top; if the figure occupies
+%    more than 75% of a page, the [p] option should be specified.
+\begin{figure}
+\includegraphics{filename}
+\caption{text of caption}
+\label{}
+\end{figure}
+
+%    Mathematical displays; for additional information, see the amsmath
+%    user's guide, linked from http://www.ams.org/tex/amslatex.html .
+
+% Numbered equation
+\begin{equation}
+\end{equation}
+
+% Unnumbered equation
+\begin{equation*}
+\end{equation*}
+
+% Aligned equations
+\begin{align}
+  &  \\
+  &
+\end{align}
+
+%-----------------------------------------------------------------------
+% End of mcom-l-template.tex
+%-----------------------------------------------------------------------
