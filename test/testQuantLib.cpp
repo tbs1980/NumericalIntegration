@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <sys/time.h>
 
 /**
  * \param epsilon Relative machine precision.
@@ -20,11 +21,15 @@ Scalar desiredRelativeError()
 
 void QuantLibSineIntegration(void)
 {
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processStartTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+
     typedef QuantLib::Real Scalar;
 
     QuantLib::Size maxEvaluations = 1000;
     Scalar tolerance = desiredRelativeError<Scalar>();//1.e-6;
-
 
     std::cout<<"\nEvaluating QuantLib"<<std::endl;
     std::cout<<"Tolerance = "<<desiredRelativeError<Scalar>()<<"\n"<<std::endl;
@@ -131,11 +136,22 @@ void QuantLibSineIntegration(void)
     std::cout<<"Abcd2,               |calculated - expected| = "
         <<std::setprecision(10)<<std::abs(calculated - expected)<<std::endl;
 
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    
+    std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
+
 }
 
 
 void EigenSineIntegration()
 {
+    // Track the time required to complete the calculations.
+    struct timeval timeStruct;
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processStartTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+
     typedef QuantLib::Real Scalar;
     Eigen::Integrator<Scalar>::QuadratureRule quadratureRule =
         Eigen::Integrator<Scalar>::GaussKronrod15;
@@ -253,6 +269,12 @@ void EigenSineIntegration()
 
     std::cout<<"Abcd2,               |calculated - expected| = "
         <<std::setprecision(10)<<std::abs(calculated - expected)<<std::endl;
+
+    gettimeofday(&timeStruct, NULL);
+    long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
+    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    
+    std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
 }
 
 int main(void)
