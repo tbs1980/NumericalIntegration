@@ -37,13 +37,8 @@ namespace Eigen
 
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
-#include <iomanip>
 
-#include <Eigen/Core>
 #include <Eigen/Eigenvalues>
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
 #include <unsupported/Eigen/MPRealSupport>
 
 //@{
