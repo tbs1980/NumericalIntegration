@@ -31,97 +31,109 @@
  * \returns The approximation to the integeral.
  */
 
-    real a,absc,absc1,absc2,m_estimatedError,b,finiteBound,center,dinfiniteBoundKey,r1mach,,f,fc,fsum,fValue1,fValue2,fv1,fv2,halfLength,absIntegral,m_estimatedError,resultGauss,resultKronrod,resultKronrodh,integral,tabsc1,tabsc2,,wg,wgk,xgk
+    double a, 
+           absc, 
+           absc1,
+           absc2,
+           m_estimatedError,
+           b,
+           finiteBound,
+           center,
+           dinfiniteBoundKey,
+           r1mach,
+           f,
+           fc,
+           fsum,
+           fValue1,
+           fValue2,
+           fv1,
+           fv2,
+           halfLength,
+           absIntegral,
+           m_estimatedError,
+           resultGauss,
+           resultKronrod,
+           resultKronrodh,
+           integral,
+           tabsc1,
+           tabsc2,
+
     int infiniteBoundKey;
     int j;
     int min0;
 
     fv1(7);
     fv2(7);
-    xgk(8);
-    wgk(8);
-    wg(8);
 
-    xgk
-    {
-        0.9914553711208126,
-        0.9491079123427585,
-        0.8648644233597691,
-        0.7415311855993944,
-        0.5860872354676911,
-        0.4058451513773972,
-        0.2077849550078985,
-        0.0000000000000000
-    }.finished();
+    Eigen::NumTraits<Scalar>::epsilon() = r1mach(3);
+    std::numeric_limits<Scalar>::min() = r1mach(0);
+    dinfiniteBoundKey = min0(1,infiniteBoundKey);
 
-    wgk
-    {
-        0.02293532201052922,
-        0.06309209262997855,
-        0.1047900103222502,
-        0.1406532597155259,
-        0.1690047266392679,
-        0.1903505780647854,
-        0.2044329400752989,
-        0.2094821410847278
-    }.finished();
-
-    wg
-    {
-        0.0000000000000000,
-        0.1294849661688697,
-        0.0000000000000000,
-        0.2797053914892767,
-        0.0000000000000000,
-        0.3818300505051189,
-        0.0000000000000000,
-        0.4179591836734694
-    }.finished();
-
-      Eigen::NumTraits<Scalar>::epsilon() = r1mach(4)
-      (std::numeric_limits<Scalar>::min)() = r1mach(1)
-      dinfiniteBoundKey = min0(1,infiniteBoundKey)
-
-      center = 0.5*(lowerLimit+upperLimit)
-      halfLength = 0.5*(upperLimit-lowerLimit)
-      tabsc1 = finiteBound+dinfiniteBoundKey*(1.-center)/center
-      fValue1 = f(tabsc1)
-      if(infiniteBoundKey == 2) fValue1 = fValue1+f(-tabsc1)
-      fc = (fValue1/center)/center
+    center = 0.5 * (lowerLimit+upperLimit);
+    halfLength = 0.5 * (upperLimit-lowerLimit);
+    tabsc1 = finiteBound+dinfiniteBoundKey*(1.-center) / center;
+    fValue1 = f(tabsc1);
+    if(infiniteBoundKey == 2) fValue1 = fValue1+f(-tabsc1);
+    fc = (fValue1/center)/center;
 
     // Compute the 15-point kronrod approximation to the integeral, and estimate the error.
-      resultGauss = wg(8)*fc
-      resultKronrod = wgk(8)*fc
-      absIntegral = abs(resultKronrod)
-      do 10 j=1,7
-        absc = halfLength*xgk(j)
-        absc1 = center-absc
-        absc2 = center+absc
-        tabsc1 = finiteBound+dinfiniteBoundKey*(1.-absc1)/absc1
-        tabsc2 = finiteBound+dinfiniteBoundKey*(1.-absc2)/absc2
-        fValue1 = f(tabsc1)
-        fValue2 = f(tabsc2)
-        if(infiniteBoundKey == 2) fValue1 = fValue1+f(-tabsc1)
-        if(infiniteBoundKey == 2) fValue2 = fValue2+f(-tabsc2)
-        fValue1 = (fValue1/absc1)/absc1
-        fValue2 = (fValue2/absc2)/absc2
-        fv1(j) = fValue1
-        fv2(j) = fValue2
-        fsum = fValue1+fValue2
-        resultGauss = resultGauss+wg(j)*fsum
-        resultKronrod = resultKronrod+wgk(j)*fsum
-        absIntegral = absIntegral+wgk(j)*(abs(fValue1)+abs(fValue2))
-   10 continue
-      resultKronrodh = resultKronrod*0.5
-      m_estimatedError = wgk(8)*abs(fc-resultKronrodh)
-      do 20 j=1,7
-        m_estimatedError = m_estimatedError+wgk(j)*(abs(fv1(j)-resultKronrodh)+abs(fv2(j)-resultKronrodh))
-   20 continue
-      integral = resultKronrod*halfLength
-      m_estimatedError = m_estimatedError*halfLength
-      absIntegral = absIntegral*halfLength
-      m_estimatedError = abs((resultKronrod-resultGauss)*halfLength)
-      if(m_estimatedError != 0. && m_estimatedError != 0.e0) m_estimatedError = m_estimatedError*(std::min)(1.,(0.2e+03*m_estimatedError/m_estimatedError)**1.5 )
-      if(absIntegral > (std::numeric_limits<Scalar>::min)()/(5.*Eigen::NumTraits<Scalar>::epsilon())) m_estimatedError = (std::max)((Eigen::NumTraits<Scalar>::epsilon()*5.)*absIntegral,m_estimatedError)
-      return
-      end
+    resultGauss = weightsGauss15(3) * fc;
+    resultKronrod = weightsGaussKronrod15(7) * fc;
+    absIntegral = abs(resultKronrod);
+
+    for(int j=0; j<7; j++)
+    {
+        absc = halfLength * abscissaeGaussKronrod15(j);
+        absc1 = center - absc;
+        absc2 = center + absc;
+        tabsc1 = finiteBound+dinfiniteBoundKey * (1.-absc1) / absc1;
+        tabsc2 = finiteBound+dinfiniteBoundKey * (1.-absc2) / absc2;
+        fValue1 = f(tabsc1);
+        fValue2 = f(tabsc2);
+        
+        if(infiniteBoundKey == 2)
+        {
+            fValue1 = fValue1 + f(-tabsc1);
+        }
+
+        if(infiniteBoundKey == 2)
+        {
+            fValue2 = fValue2 + f(-tabsc2);
+        }
+
+        fValue1 = (fValue1/absc1) / absc1;
+        fValue2 = (fValue2/absc2) / absc2;
+
+        fv1(j) = fValue1;
+        fv2(j) = fValue2;
+
+        fsum = fValue1+fValue2;
+        resultGauss = resultGauss+weightsGauss(floor(j/2)) * fsum;
+
+        resultKronrod = resultKronrod + weightsGaussKronrod15(j) * fsum;
+        absIntegral = absIntegral + weightsGaussKronrod15(j) * (abs(fValue1)+abs(fValue2));
+    }
+
+    resultKronrodh = resultKronrod * 0.5;
+    m_estimatedError = weightsGaussKronrod15(7) * std::abs(fc - resultKronrodh);
+
+    for(int j=0; j<7; j++)
+    {
+        m_estimatedError = m_estimatedError + weightsGaussKronrod15(j) * (abs(fv1(j) - resultKronrodh) + abs(fv2(j) - resultKronrodh));
+    }
+
+    integral = resultKronrod * halfLength;
+    m_estimatedError = m_estimatedError * halfLength;
+    absIntegral = absIntegral * halfLength;
+    m_estimatedError = std::abs((resultKronrod - resultGauss) * halfLength);
+
+    if(m_estimatedError != 0. && m_estimatedError != 0.e0)
+    {
+        m_estimatedError = m_estimatedError*(std::min)(1.,(0.2e+03*m_estimatedError/m_estimatedError)**1.5 )
+    }
+
+    if(absIntegral > (std::numeric_limits<Scalar>::min)()/(5.*Eigen::NumTraits<Scalar>::epsilon()))
+    {
+        m_estimatedError = (std::max)((Eigen::NumTraits<Scalar>::epsilon()*5.)*absIntegral,m_estimatedError);
+    }
+}
