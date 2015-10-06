@@ -186,9 +186,9 @@ Scalar adaptiveQuadratureForEndPointSingularities(
     list(maxErrorIndex) = error2
     list(m_numSubintervals) = error1
 
-    // Call subroutine qpsrt to maintain the descending ordering in the list of error estimates and select the 
+    // Call subroutine quadratureSort to maintain the descending ordering in the list of error estimates and select the 
     // subinterval with maxNumberOfIntegrals-th largest error estimate (to be bisected next).
-30  call qpsrt(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,list,listIndices,maxNumberOfIntegrals)
+30  call quadratureSort(m_maxSubintervals,m_numSubintervals,maxErrorIndex,errorMax,list,listIndices,maxNumberOfIntegrals)
 
     // jump out of do-loop
     if(errorSum <= errorBound) go to 115

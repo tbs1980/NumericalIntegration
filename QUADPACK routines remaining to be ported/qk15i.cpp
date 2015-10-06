@@ -30,7 +30,6 @@
  *
  * \returns The approximation to the integeral.
  */
-
     double a, 
            absc, 
            absc1,
@@ -67,7 +66,7 @@
 
     Eigen::NumTraits<Scalar>::epsilon() = r1mach(3);
     std::numeric_limits<Scalar>::min() = r1mach(0);
-    dinfiniteBoundKey = min0(1,infiniteBoundKey);
+    dinfiniteBoundKey = min0(1, infiniteBoundKey);
 
     center = 0.5 * (lowerLimit+upperLimit);
     halfLength = 0.5 * (upperLimit-lowerLimit);
@@ -86,8 +85,8 @@
         absc = halfLength * abscissaeGaussKronrod15(j);
         absc1 = center - absc;
         absc2 = center + absc;
-        tabsc1 = finiteBound+dinfiniteBoundKey * (1.-absc1) / absc1;
-        tabsc2 = finiteBound+dinfiniteBoundKey * (1.-absc2) / absc2;
+        tabsc1 = finiteBound + dinfiniteBoundKey * (1. - absc1) / absc1;
+        tabsc2 = finiteBound + dinfiniteBoundKey * (1. - absc2) / absc2;
         fValue1 = f(tabsc1);
         fValue2 = f(tabsc2);
         
@@ -111,7 +110,7 @@
         resultGauss = resultGauss+weightsGauss(floor(j/2)) * fsum;
 
         resultKronrod = resultKronrod + weightsGaussKronrod15(j) * fsum;
-        absIntegral = absIntegral + weightsGaussKronrod15(j) * (abs(fValue1)+abs(fValue2));
+        absIntegral = absIntegral + weightsGaussKronrod15(j) * (abs(fValue1) + abs(fValue2));
     }
 
     resultKronrodh = resultKronrod * 0.5;
@@ -129,11 +128,11 @@
 
     if(m_estimatedError != 0. && m_estimatedError != 0.e0)
     {
-        m_estimatedError = m_estimatedError*(std::min)(1.,(0.2e+03*m_estimatedError/m_estimatedError)**1.5 )
+        m_estimatedError = m_estimatedError * (std::min)(1.,(0.2e+03 * m_estimatedError / m_estimatedError) ** 1.5 )
     }
 
-    if(absIntegral > (std::numeric_limits<Scalar>::min)()/(5.*Eigen::NumTraits<Scalar>::epsilon()))
+    if(absIntegral > (std::numeric_limits<Scalar>::min)() / (5. * Eigen::NumTraits<Scalar>::epsilon()))
     {
-        m_estimatedError = (std::max)((Eigen::NumTraits<Scalar>::epsilon()*5.)*absIntegral,m_estimatedError);
+        m_estimatedError = (std::max)((Eigen::NumTraits<Scalar>::epsilon() * 5.) * absIntegral,m_estimatedError);
     }
 }
