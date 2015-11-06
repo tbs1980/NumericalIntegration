@@ -33,10 +33,16 @@ The capabilities of this library have been greatly expanded through multiprecisi
 	* [The GNU MPFR Library] (http://www.mpfr.org/ )
 	* [MPFR C++] (http://www.holoborodko.com/pavel/mpfr/ )
 
-## Compilation
-A compile script has been added to the top level directory, simply run: ./compile.sh
+Debian-based linux users can install dependencies with aptitude package manager:
+	
+	$sudo apt-get install libeigen3-dev libmpfrc++-dev
 
-The following compilation flags must be passed
+## Compilation
+
+A compile script has been added to the top level directory, from a terminal you may simply run: ./compile.sh
+
+
+(The following compilation flags must be passed)
 
 	* -DEIGEN3_INCLUDE_DIR
 	* -DGMP_ROOT
@@ -52,4 +58,3 @@ For example,
 
 	$ cmake ../ -DEIGEN3_INCLUDE_DIR=/arxiv/libraries/ubuntu/gcc/eigen-3.2.1/include/eigen3 -DGMP_ROOT=/arxiv/libraries/ubuntu/gcc/gmp-6.0.0 -DMPFR_ROOT=/arxiv/libraries/ubuntu/gcc/mpfr-3.1.2 -DMPFRCPP_ROOT=/arxiv/libraries/ubuntu/gcc/mpfrc++-3.5.9
 	$ make
-
