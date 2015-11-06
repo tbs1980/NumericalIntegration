@@ -61,6 +61,7 @@ ADD_DEFINITIONS(
   -pedantic
   -Wall
   -Wextra
+  -Wfatal-errors
   -fvisibility=hidden
   -DXPLM200
   -DXPLM210
@@ -70,6 +71,7 @@ ADD_DEFINITIONS(
   -fPIC
   -DNDEBUG
   -march=native
+  -DEIGEN_HAS_MPREAL_CXX11_TGAMMA
   )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")

@@ -10,185 +10,179 @@
 namespace Eigen
 {
 
-/**
- * \brief The abscissae and weights are given for the interval (-1,1).
- *        Because of symmetry, only the positive abscissae and their
- *        corresponding weights are given.
- *
- * \param abscissaeGaussKronrod15  The abscissae of the 15 point kronrod rule.
- * \param abscissaeGaussKronrod21  The abscissae of the 21 point kronrod rule.
- * \param abscissaeGaussKronrod31  The abscissae of the 31 point kronrod rule.
- * \param abscissaeGaussKronrod41  The abscissae of the 41 point kronrod rule.
- * \param abscissaeGaussKronrod51  The abscissae of the 51 point kronrod rule.
- * \param abscissaeGaussKronrod61  The abscissae of the 61 point kronrod rule.
- * \param abscissaeGaussKronrod71  The abscissae of the 71 point kronrod rule.
- * \param abscissaeGaussKronrod81  The abscissae of the 81 point kronrod rule.
- * \param abscissaeGaussKronrod91  The abscissae of the 91 point kronrod rule.
- * \param abscissaeGaussKronrod101  The abscissae of the 101 point kronrod rule.
- * \param abscissaeGaussKronrod121  The abscissae of the 121 point kronrod rule.
- * \param abscissaeGaussKronrod201  The abscissae of the 201 point kronrod rule.
- *
- * \param weightsGaussKronrod15  The weights of the 15 point kronrod rule.
- * \param weightsGaussKronrod21  The weights of the 21 point kronrod rule.
- * \param weightsGaussKronrod31  The weights of the 31 point kronrod rule.
- * \param weightsGaussKronrod41  The weights of the 41 point kronrod rule.
- * \param weightsGaussKronrod51  The weights of the 51 point kronrod rule.
- * \param weightsGaussKronrod61  The weights of the 61 point kronrod rule.
- * \param weightsGaussKronrod71  The weights of the 71 point kronrod rule.
- * \param weightsGaussKronrod81  The weights of the 81 point kronrod rule.
- * \param weightsGaussKronrod91  The weights of the 91 point kronrod rule.
- * \param weightsGaussKronrod101  The weights of the 101 point kronrod rule.
- * \param weightsGaussKronrod121  The weights of the 121 point kronrod rule.
- * \param weightsGaussKronrod201  The weights of the 201 point kronrod rule.
- *
- * \param abscissaeGauss15  The abscissae of the 7 point gauss rule.
- * \param abscissaeGauss21  The abscissae of the 10 point gauss rule.
- * \param abscissaeGauss31  The abscissae of the 15 point gauss rule.
- * \param abscissaeGauss41  The abscissae of the 20 point gauss rule.
- * \param abscissaeGauss51  The abscissae of the 25 point gauss rule.
- * \param abscissaeGauss61  The abscissae of the 30 point gauss rule.
- * \param abscissaeGauss71  The abscissae of the 35 point gauss rule.
- * \param abscissaeGauss81  The abscissae of the 40 point gauss rule.
- * \param abscissaeGauss91  The abscissae of the 45 point gauss rule.
- * \param abscissaeGauss101  The abscissae of the 50 point gauss rule.
- * \param abscissaeGauss121  The abscissae of the 60 point gauss rule.
- * \param abscissaeGauss201  The abscissae of the 100 point gauss rule.
- *
- * \param weightsGauss15  The weights of the 7 point gauss rule.
- * \param weightsGauss21  The weights of the 10 point gauss rule.
- * \param weightsGauss31  The weights of the 15 point gauss rule.
- * \param weightsGauss41  The weights of the 20 point gauss rule.
- * \param weightsGauss51  The weights of the 25 point gauss rule.
- * \param weightsGauss61  The weights of the 30 point gauss rule.
- * \param weightsGauss71  The weights of the 35 point gauss rule.
- * \param weightsGauss81  The weights of the 40 point gauss rule.
- * \param weightsGauss91  The weights of the 45 point gauss rule.
- * \param weightsGauss101  The weights of the 50 point gauss rule.
- * \param weightsGauss121  The weights of the 60 point gauss rule.
- * \param weightsGauss201  The weights of the 100 point gauss rule.
- */
+    /**
+     * \brief The abscissae and weights are given for the interval (-1,1).
+     *        Because of symmetry, only the positive abscissae and their
+     *        corresponding weights are given.
+     *
+     * \param abscissaeGaussKronrod15  The abscissae of the 15 point kronrod rule.
+     * \param abscissaeGaussKronrod21  The abscissae of the 21 point kronrod rule.
+     * \param abscissaeGaussKronrod31  The abscissae of the 31 point kronrod rule.
+     * \param abscissaeGaussKronrod41  The abscissae of the 41 point kronrod rule.
+     * \param abscissaeGaussKronrod51  The abscissae of the 51 point kronrod rule.
+     * \param abscissaeGaussKronrod61  The abscissae of the 61 point kronrod rule.
+     * \param abscissaeGaussKronrod71  The abscissae of the 71 point kronrod rule.
+     * \param abscissaeGaussKronrod81  The abscissae of the 81 point kronrod rule.
+     * \param abscissaeGaussKronrod91  The abscissae of the 91 point kronrod rule.
+     * \param abscissaeGaussKronrod101  The abscissae of the 101 point kronrod rule.
+     * \param abscissaeGaussKronrod121  The abscissae of the 121 point kronrod rule.
+     * \param abscissaeGaussKronrod201  The abscissae of the 201 point kronrod rule.
+     *
+     * \param weightsGaussKronrod15  The weights of the 15 point kronrod rule.
+     * \param weightsGaussKronrod21  The weights of the 21 point kronrod rule.
+     * \param weightsGaussKronrod31  The weights of the 31 point kronrod rule.
+     * \param weightsGaussKronrod41  The weights of the 41 point kronrod rule.
+     * \param weightsGaussKronrod51  The weights of the 51 point kronrod rule.
+     * \param weightsGaussKronrod61  The weights of the 61 point kronrod rule.
+     * \param weightsGaussKronrod71  The weights of the 71 point kronrod rule.
+     * \param weightsGaussKronrod81  The weights of the 81 point kronrod rule.
+     * \param weightsGaussKronrod91  The weights of the 91 point kronrod rule.
+     * \param weightsGaussKronrod101  The weights of the 101 point kronrod rule.
+     * \param weightsGaussKronrod121  The weights of the 121 point kronrod rule.
+     * \param weightsGaussKronrod201  The weights of the 201 point kronrod rule.
+     *
+     * \param abscissaeGauss15  The abscissae of the 7 point gauss rule.
+     * \param abscissaeGauss21  The abscissae of the 10 point gauss rule.
+     * \param abscissaeGauss31  The abscissae of the 15 point gauss rule.
+     * \param abscissaeGauss41  The abscissae of the 20 point gauss rule.
+     * \param abscissaeGauss51  The abscissae of the 25 point gauss rule.
+     * \param abscissaeGauss61  The abscissae of the 30 point gauss rule.
+     * \param abscissaeGauss71  The abscissae of the 35 point gauss rule.
+     * \param abscissaeGauss81  The abscissae of the 40 point gauss rule.
+     * \param abscissaeGauss91  The abscissae of the 45 point gauss rule.
+     * \param abscissaeGauss101  The abscissae of the 50 point gauss rule.
+     * \param abscissaeGauss121  The abscissae of the 60 point gauss rule.
+     * \param abscissaeGauss201  The abscissae of the 100 point gauss rule.
+     *
+     * \param weightsGauss15  The weights of the 7 point gauss rule.
+     * \param weightsGauss21  The weights of the 10 point gauss rule.
+     * \param weightsGauss31  The weights of the 15 point gauss rule.
+     * \param weightsGauss41  The weights of the 20 point gauss rule.
+     * \param weightsGauss51  The weights of the 25 point gauss rule.
+     * \param weightsGauss61  The weights of the 30 point gauss rule.
+     * \param weightsGauss71  The weights of the 35 point gauss rule.
+     * \param weightsGauss81  The weights of the 40 point gauss rule.
+     * \param weightsGauss91  The weights of the 45 point gauss rule.
+     * \param weightsGauss101  The weights of the 50 point gauss rule.
+     * \param weightsGauss121  The weights of the 60 point gauss rule.
+     * \param weightsGauss201  The weights of the 100 point gauss rule.
+     */
 
-template <typename Scalar>
-class QuadratureKronrod
-{
-public:
-	static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
-	static Array<Scalar, 8, 1> weightsGaussKronrod15;
-	static Array<Scalar, 4, 1> abscissaeGauss15;
-	static Array<Scalar, 4, 1> weightsGauss15;
+    template <typename Scalar>
+    class QuadratureKronrod
+    {
+    public:
+        static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
+        static Array<Scalar, 8, 1> weightsGaussKronrod15;
+        static Array<Scalar, 4, 1> abscissaeGauss15;
+        static Array<Scalar, 4, 1> weightsGauss15;
 
-	static Array<Scalar, 11, 1> abscissaeGaussKronrod21;
-	static Array<Scalar, 11, 1> weightsGaussKronrod21;
-	static Array<Scalar, 5, 1> abscissaeGauss21;
-	static Array<Scalar, 5, 1> weightsGauss21;
+        static Array<Scalar, 11, 1> abscissaeGaussKronrod21;
+        static Array<Scalar, 11, 1> weightsGaussKronrod21;
+        static Array<Scalar, 5, 1> abscissaeGauss21;
+        static Array<Scalar, 5, 1> weightsGauss21;
 
-	static Array<Scalar, 16, 1> abscissaeGaussKronrod31;
-	static Array<Scalar, 16, 1> weightsGaussKronrod31;
-	static Array<Scalar, 8, 1> abscissaeGauss31;
-	static Array<Scalar, 8, 1> weightsGauss31;
+        static Array<Scalar, 16, 1> abscissaeGaussKronrod31;
+        static Array<Scalar, 16, 1> weightsGaussKronrod31;
+        static Array<Scalar, 8, 1> abscissaeGauss31;
+        static Array<Scalar, 8, 1> weightsGauss31;
 
-	static Array<Scalar, 21, 1> abscissaeGaussKronrod41;
-	static Array<Scalar, 21, 1> weightsGaussKronrod41;
-	static Array<Scalar, 10, 1> abscissaeGauss41;
-	static Array<Scalar, 10, 1> weightsGauss41;
+        static Array<Scalar, 21, 1> abscissaeGaussKronrod41;
+        static Array<Scalar, 21, 1> weightsGaussKronrod41;
+        static Array<Scalar, 10, 1> abscissaeGauss41;
+        static Array<Scalar, 10, 1> weightsGauss41;
 
-	static Array<Scalar, 26, 1> abscissaeGaussKronrod51;
-	static Array<Scalar, 26, 1> weightsGaussKronrod51;
-	static Array<Scalar, 13, 1> abscissaeGauss51;
-	static Array<Scalar, 13, 1> weightsGauss51;
+        static Array<Scalar, 26, 1> abscissaeGaussKronrod51;
+        static Array<Scalar, 26, 1> weightsGaussKronrod51;
+        static Array<Scalar, 13, 1> abscissaeGauss51;
+        static Array<Scalar, 13, 1> weightsGauss51;
 
-	static Array<Scalar, 31, 1> abscissaeGaussKronrod61;
-	static Array<Scalar, 31, 1> weightsGaussKronrod61;
-	static Array<Scalar, 15, 1> abscissaeGauss61;
-	static Array<Scalar, 15, 1> weightsGauss61;
+        static Array<Scalar, 31, 1> abscissaeGaussKronrod61;
+        static Array<Scalar, 31, 1> weightsGaussKronrod61;
+        static Array<Scalar, 15, 1> abscissaeGauss61;
+        static Array<Scalar, 15, 1> weightsGauss61;
 
-	static Array<Scalar, 36, 1> abscissaeGaussKronrod71;
-	static Array<Scalar, 36, 1> weightsGaussKronrod71;
-	static Array<Scalar, 18, 1> abscissaeGauss71;
-	static Array<Scalar, 18, 1> weightsGauss71;
+        static Array<Scalar, 36, 1> abscissaeGaussKronrod71;
+        static Array<Scalar, 36, 1> weightsGaussKronrod71;
+        static Array<Scalar, 18, 1> abscissaeGauss71;
+        static Array<Scalar, 18, 1> weightsGauss71;
 
-	static Array<Scalar, 41, 1> abscissaeGaussKronrod81;
-	static Array<Scalar, 41, 1> weightsGaussKronrod81;
-	static Array<Scalar, 20, 1> abscissaeGauss81;
-	static Array<Scalar, 20, 1> weightsGauss81;
+        static Array<Scalar, 41, 1> abscissaeGaussKronrod81;
+        static Array<Scalar, 41, 1> weightsGaussKronrod81;
+        static Array<Scalar, 20, 1> abscissaeGauss81;
+        static Array<Scalar, 20, 1> weightsGauss81;
 
-	static Array<Scalar, 46, 1> abscissaeGaussKronrod91;
-	static Array<Scalar, 46, 1> weightsGaussKronrod91;
-	static Array<Scalar, 23, 1> abscissaeGauss91;
-	static Array<Scalar, 23, 1> weightsGauss91;
+        static Array<Scalar, 46, 1> abscissaeGaussKronrod91;
+        static Array<Scalar, 46, 1> weightsGaussKronrod91;
+        static Array<Scalar, 23, 1> abscissaeGauss91;
+        static Array<Scalar, 23, 1> weightsGauss91;
 
-	static Array<Scalar, 51, 1> abscissaeGaussKronrod101;
-	static Array<Scalar, 51, 1> weightsGaussKronrod101;
-	static Array<Scalar, 25, 1> abscissaeGauss101;
-	static Array<Scalar, 25, 1> weightsGauss101;
+        static Array<Scalar, 51, 1> abscissaeGaussKronrod101;
+        static Array<Scalar, 51, 1> weightsGaussKronrod101;
+        static Array<Scalar, 25, 1> abscissaeGauss101;
+        static Array<Scalar, 25, 1> weightsGauss101;
 
-	static Array<Scalar, 61, 1> abscissaeGaussKronrod121;
-	static Array<Scalar, 61, 1> weightsGaussKronrod121;
-	static Array<Scalar, 30, 1> abscissaeGauss121;
-	static Array<Scalar, 30, 1> weightsGauss121;
+        static Array<Scalar, 61, 1> abscissaeGaussKronrod121;
+        static Array<Scalar, 61, 1> weightsGaussKronrod121;
+        static Array<Scalar, 30, 1> abscissaeGauss121;
+        static Array<Scalar, 30, 1> weightsGauss121;
 
-	static Array<Scalar, 101, 1> abscissaeGaussKronrod201;
-	static Array<Scalar, 101, 1> weightsGaussKronrod201;
-	static Array<Scalar, 50, 1> abscissaeGauss201;
-	static Array<Scalar, 50, 1> weightsGauss201;
+        static Array<Scalar, 101, 1> abscissaeGaussKronrod201;
+        static Array<Scalar, 101, 1> weightsGaussKronrod201;
+        static Array<Scalar, 50, 1> abscissaeGauss201;
+        static Array<Scalar, 50, 1> weightsGauss201;
 
-	typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-	typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
-	typedef typename LaurieGautschiPolicy::VectorType VectorType;
+#ifdef EIGEN_HAS_MPREAL_CXX11_TGAMMA
 
-	static bool compute;
+        typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+        typedef Eigen::Monegato<Scalar> MonegatoPolicy;
+        typedef Eigen::Piessens<Scalar> PiessensPolicy;
+        typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
-	static void computeNodesAndWeights()
-	{
-		if(compute)
-		{
-			QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
-			QuadratureKronrod::computeForRule<10>(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21);
-			QuadratureKronrod::computeForRule<15>(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31);
-			QuadratureKronrod::computeForRule<20>(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41);
-			QuadratureKronrod::computeForRule<25>(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51);
-			QuadratureKronrod::computeForRule<30>(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61);
-			QuadratureKronrod::computeForRule<35>(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71);
-			QuadratureKronrod::computeForRule<40>(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81);
-			QuadratureKronrod::computeForRule<45>(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91);
-			QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
-			QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
-			QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
+        static void computeNodesAndWeights()
+        {
+            QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
+            QuadratureKronrod::computeForRule<10>(abscissaeGaussKronrod21, weightsGaussKronrod21, abscissaeGauss21, weightsGauss21);
+            QuadratureKronrod::computeForRule<15>(abscissaeGaussKronrod31, weightsGaussKronrod31, abscissaeGauss31, weightsGauss31);
+            QuadratureKronrod::computeForRule<20>(abscissaeGaussKronrod41, weightsGaussKronrod41, abscissaeGauss41, weightsGauss41);
+            QuadratureKronrod::computeForRule<25>(abscissaeGaussKronrod51, weightsGaussKronrod51, abscissaeGauss51, weightsGauss51);
+            QuadratureKronrod::computeForRule<30>(abscissaeGaussKronrod61, weightsGaussKronrod61, abscissaeGauss61, weightsGauss61);
+            QuadratureKronrod::computeForRule<35>(abscissaeGaussKronrod71, weightsGaussKronrod71, abscissaeGauss71, weightsGauss71);
+            QuadratureKronrod::computeForRule<40>(abscissaeGaussKronrod81, weightsGaussKronrod81, abscissaeGauss81, weightsGauss81);
+            QuadratureKronrod::computeForRule<45>(abscissaeGaussKronrod91, weightsGaussKronrod91, abscissaeGauss91, weightsGauss91);
+            QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
+            QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
+            QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
 
-			compute = false;
-		}
-	}
+        }
 
-	template <int N>
-	static void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,
-							   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)
-	{
-		Eigen::Array<Scalar, Eigen::Dynamic, 1> xGK;
-		Eigen::Array<Scalar, Eigen::Dynamic, 1> wGK;
-		Eigen::Array<Scalar, Eigen::Dynamic, 1> xG;
-		Eigen::Array<Scalar, Eigen::Dynamic, 1> wG;
+        template <int N>
+        static void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,
+                                   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)
+        {
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> xGK;
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> wGK;
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> xG;
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> wG;
 
-		LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
-		//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
+            LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
+            //PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
+            //MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);
 
-		for(size_t i=0; i<N+1; ++i)
-		{
-			kronrodAbscissae(i) = xGK(i);
-			kronrodWeights(i) =  wGK(i);
-		}
+            for(size_t i=0; i<N+1; ++i)
+            {
+                kronrodAbscissae(i) = xGK(i);
+                kronrodWeights(i) =  wGK(i);
+            }
 
-		for(size_t i=0; i<(N+1)/2; ++i)
-		{
-			gaussAbscissae(i) = xG(i);
-			gaussWeights(i) = wG(i);
-		}
-	}
-};
-
-template <typename Scalar>
-bool QuadratureKronrod<Scalar>::compute = true;
-
+            for(size_t i=0; i<(N+1)/2; ++i)
+            {
+                gaussAbscissae(i) = xG(i);
+                gaussWeights(i) = wG(i);
+            }
+        }
+#endif //EIGEN_HAS_MPREAL_CXX11_TGAMMA
+    };
 
 //Nodes and Weights - Rule 15
 template <typename Scalar>

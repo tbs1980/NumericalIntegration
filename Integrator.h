@@ -64,8 +64,6 @@ public:
         m_upperList.resize(maxSubintervals, 1);
         m_integralList.resize(maxSubintervals, 1);
         m_errorList.resize(maxSubintervals, 1);
-
-        QuadratureKronrod<Scalar>::computeNodesAndWeights();
     }
 
     /**
@@ -77,7 +75,7 @@ public:
      * are too difficult for non-adaptive quadrature, and, in particular, for integrands with
      * oscillating behavior of a non-specific type.
      *
-     * \param[in/out] f The function defining the integrand function.
+     * \param[in,out] f The function defining the integrand function.
      * \param[in] lowerLimit The lower limit of integration.
      * \param[in] upperLimit The upper limit of integration.
      * \param[in] desiredAbsoluteError The absolute accuracy requested.
@@ -160,15 +158,15 @@ public:
         Scalar errorMax = m_estimatedError;
 
         // An index into m_errorList at the interval with largest error estimate.
-        int maxErrorIndex = 0;
-        int nrMax = 0;
+        DenseIndex maxErrorIndex = 0;
+        DenseIndex nrMax = 0;
         int roundOff1 = 0;
         int roundOff2 = 0;
 
         // Main loop for the integration
         for (m_numSubintervals = 2; m_numSubintervals <= m_maxSubintervals; ++m_numSubintervals)
         {
-            const int numSubintervalsIndex = m_numSubintervals - 1;
+            const DenseIndex numSubintervalsIndex = m_numSubintervals - 1;
 
             // Bisect the subinterval with the largest error estimate.
             Scalar lower1 = m_lowerList[maxErrorIndex];
@@ -232,7 +230,7 @@ public:
                 {
                     m_errorCode = 3;
                 }
-            }   
+            }
 
             // Append the newly-created intervals to the list.
             if (error2 > error1)
@@ -297,7 +295,7 @@ public:
      *
      * \returns The value returned will only be valid after calling adaptiveQuadrature at least once.
      */
-    inline int errorCode() const {return m_errorCode;}
+    inline DenseIndex errorCode() const {return m_errorCode;}
 
 private:
 
@@ -308,11 +306,11 @@ private:
      * At each call two error estimates are inserted using the sequential search method, top-down
      * for the largest error estimate and bottom-up for the smallest error estimate.
      *
-     * \param[in/out] maxErrorIndex The index to the nrMax-th largest error estimate currently in the list.
-     * \param[in/out] errorMax The nrMax-th largest error estimate. errorMaxIndex = errorList(maxError).
-     * \param[in/out] nrMax The integer value such that maxError = errorListIndices(nrMax).
+     * \param[in,out] maxErrorIndex The index to the nrMax-th largest error estimate currently in the list.
+     * \param[in,out] errorMax The nrMax-th largest error estimate. errorMaxIndex = errorList(maxError).
+     * \param[in,out] nrMax The integer value such that maxError = errorListIndices(nrMax).
      */
-    void quadratureSort(int& maxErrorIndex, Scalar& errorMax, int& nrMax)
+    void quadratureSort(DenseIndex& maxErrorIndex, Scalar& errorMax, DenseIndex& nrMax)
     {
         if (m_numSubintervals <= 2)
         {
@@ -326,8 +324,8 @@ private:
         // This part of the routine is only executed if, due to a difficult integrand, subdivision has
         // increased the error estimate. In the normal case the insert procedure should start after the
         // nrMax-th largest error estimate.
-        int i = 0;
-        int succeed = 0;
+        DenseIndex i = 0;
+        DenseIndex succeed = 0;
         const Scalar errorMaximum = m_errorList[maxErrorIndex];
 
         if (nrMax != 1)
@@ -348,9 +346,9 @@ private:
 
         // Compute the number of elements in the list to be maintained in descending order. This number
         // depends on the number of subdivisions remaining allowed.
-        int topBegin = m_numSubintervals - 1;
-        int bottomEnd = topBegin - 1;
-        int start = nrMax + 1;
+        DenseIndex topBegin = m_numSubintervals - 1;
+        DenseIndex bottomEnd = topBegin - 1;
+        DenseIndex start = nrMax + 1;
 
         if (m_numSubintervals > m_maxSubintervals / 2 + 2)
         {
@@ -386,8 +384,8 @@ private:
         // Insert errorMin by traversing the list bottom-up.
         m_errorListIndices[i - 1] = maxErrorIndex;
 
-        int tempIndex = bottomEnd;
-        for (int j = i; j <= bottomEnd; ++j)
+        DenseIndex tempIndex = bottomEnd;
+        for (DenseIndex j = i; j <= bottomEnd; ++j)
         {
             succeed = m_errorListIndices[tempIndex];
 
@@ -416,11 +414,11 @@ private:
      * \param[in] f The variable representing the function f(x) be integrated.
      * \param[in] lowerLimit The lower limit of integration.
      * \param[in] upperLimit The upper limit of integration.
-     * \param[in/out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
+     * \param[in,out] errorEstimate Estimate of the modulus of the absolute error, not to exceed
      *             abs(I - I').
-     * \param[in/out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
+     * \param[in,out] absIntegral The approximation to the integral of abs(f) from lowerLimit to
      *             upperLimit.
-     * \param[in/out] absDiffIntegral The approximation to the integral of
+     * \param[in,out] absDiffIntegral The approximation to the integral of
      *             abs(f - I/(upperLimit - lowerLimit)).
      *
      * \returns The approximation I' to the integral I. It is computed by applying the 15, 21, 31,
@@ -523,7 +521,6 @@ private:
     }
 
 
-    //template <typename FunctionType, int rows1, int rows2>
     template <typename FunctionType, int numKronrodRows, int numGaussRows>
     Scalar quadratureKronrodHelper(
         Array<Scalar, numKronrodRows, 1> abscissaeGaussKronrod, Array<Scalar, numKronrodRows, 1> weightsGaussKronrod,
@@ -557,7 +554,7 @@ private:
 
         // The result of the Kronrod formula.
         Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;
-        
+
         using std::abs;
         absIntegral = abs(resultKronrod);
 
@@ -639,7 +636,7 @@ private:
      * sequence, with k = m_numSubintervals if m_numSubintervals <= (m_maxSubintervals/2 + 2),
      * otherwise k = m_maxSubintervals + 1 - m_numSubintervals.
      */
-    Array<int, Dynamic, 1> m_errorListIndices;
+    Array<DenseIndex, Dynamic, 1> m_errorListIndices;
 
     /**
      * \brief An Array of dimension m_maxSubintervals for subinterval left endpoints.
@@ -675,7 +672,7 @@ private:
     /**
     *  \brief Gives an upper bound on the number of subintervals. Must be at least 1.
      */
-    int m_maxSubintervals;
+    DenseIndex m_maxSubintervals;
 
     /**
      * \brief Estimate of the modulus of the absolute error, which should equal or exceed abs(I - I').
@@ -685,15 +682,15 @@ private:
     /**
      * \brief The number of integrand evaluations.
      */
-    int m_numEvaluations;
+    DenseIndex m_numEvaluations;
 
     /**
      * \brief Error messages generated by the routine.
      *
      * errorCode = 0 Indicates normal and reliable termination of the routine. (It is assumed that
      *               the requested accuracy has been achieved.)
-     * errorCode > 0 Any errorCode greater than zero indicates abnormal termination of the routine. 
-     *               (The estimates for integral and m_estimatedError are less reliable and the 
+     * errorCode > 0 Any errorCode greater than zero indicates abnormal termination of the routine.
+     *               (The estimates for integral and m_estimatedError are less reliable and the
      *               requested accuracy has not been achieved.)
      * errorCode = 1 The maximum number of subdivisions allowed has been achieved. One can allow more
      *               subdivisions by increasing the value of m_maxSubintervals. However, if this
@@ -716,12 +713,12 @@ private:
      *
      * \todo make relativeMachineAccuracy a member variable.
      */
-    int m_errorCode;
+    DenseIndex m_errorCode;
 
     /**
      * \brief The number of subintervals actually produced in the subdivision process.
      */
-    int m_numSubintervals;
+    DenseIndex m_numSubintervals;
 
     };
 }

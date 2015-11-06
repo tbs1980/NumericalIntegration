@@ -26,9 +26,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGLaurieGautschi;
     Eigen::Array<Scalar, Eigen::Dynamic, 1> wGLaurieGautschi;
 
-    typedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-    typedef Kronrod::Piessens<Scalar> PiessensPolicy;
-    typedef Kronrod::Monegato<Scalar> MonegatoPolicy;
+    typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
+    typedef Eigen::Piessens<Scalar> PiessensPolicy;
+    typedef Eigen::Monegato<Scalar> MonegatoPolicy;
 
     typedef LaurieGautschiPolicy::IndexType IndexType;
 
@@ -39,8 +39,10 @@ int compare_codes_unified_interface(const unsigned int N=10)
 
     std::ofstream fout;
 
-
-    fout.open("LaurieGautschi320.dat");
+    std::string fileLocation = "test/testOutput/";
+    std::string fileName = "LaurieGautschi320.dat";
+    std::string fileNameAndLocation = fileLocation + fileName;
+    fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
     fout << "\nKronrod Nodes\n";
@@ -71,7 +73,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
 
     PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,xGPiessens,wGPiessens);
 
-    fout.open("Piessens320.dat");
+    fileName = "Piessens320.dat";
+    fileNameAndLocation = fileLocation + fileName;
+    fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
     fout << "\nKronrod Nodes\n";
@@ -102,7 +106,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
 
     MonegatoPolicy::computeAbscissaeAndWeights(N,xGKMonegato,wGKMonegato,xGMonegato,wGMonegato);
 
-    fout.open("Monegato320.dat");
+    fileName = "Monegato320.dat";
+    fileNameAndLocation = fileLocation + fileName;
+    fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
     fout << "\nKronrod Nodes\n";
