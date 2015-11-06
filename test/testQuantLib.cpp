@@ -170,7 +170,7 @@ void EigenSineIntegration()
     Scalar b(1.);
 
     Scalar expected(0.);
-    Scalar calculated = IConst0.quadratureAdaptive(fConst0,a,b,Scalar(0.),
+    Scalar calculated = IConst0.adaptiveQuadrature(fConst0,a,b,Scalar(0.),
         desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"constant 0,          |calculated - expected| = "
@@ -185,7 +185,7 @@ void EigenSineIntegration()
     b = Scalar(1.);
 
     expected = Scalar(1.);
-    calculated = IConst1.quadratureAdaptive(fConst1,a,b,Scalar(0.),
+    calculated = IConst1.adaptiveQuadrature(fConst1,a,b,Scalar(0.),
         desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"constant 1,          |calculated - expected| = "
@@ -200,7 +200,7 @@ void EigenSineIntegration()
     b = Scalar(1.);
 
     expected = Scalar(0.5);
-    calculated = IIdentity.quadratureAdaptive(fIdentity,a,b,Scalar(0.),
+    calculated = IIdentity.adaptiveQuadrature(fIdentity,a,b,Scalar(0.),
         desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"identity,            |calculated - expected| = "
@@ -215,7 +215,7 @@ void EigenSineIntegration()
     b = Scalar(1.);
 
     expected = Scalar(1.)/Scalar(3.);
-    calculated = ISquare.quadratureAdaptive(fSquare,a,b,Scalar(0.),
+    calculated = ISquare.adaptiveQuadrature(fSquare,a,b,Scalar(0.),
         desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"square,              |calculated - expected| = "
@@ -230,7 +230,7 @@ void EigenSineIntegration()
     b = Scalar(M_PI);
 
     expected = Scalar(2.);
-    calculated = ISine.quadratureAdaptive(fSine,a,b, Scalar(0.),
+    calculated = ISine.adaptiveQuadrature(fSine,a,b, Scalar(0.),
         desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"sine,                |calculated - expected| = "
@@ -246,7 +246,7 @@ void EigenSineIntegration()
     b = Scalar(10);
 
     expected = Scalar(1.);
-    calculated = INormalDistribution.quadratureAdaptive(fNormalDistribution,a,b,
+    calculated = INormalDistribution.adaptiveQuadrature(fNormalDistribution,a,b,
         Scalar(0.),desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"Normal Distribution, |calculated - expected| = "
@@ -264,7 +264,7 @@ void EigenSineIntegration()
 
     expected = QuantLib::AbcdFunction(Scalar(0.07), Scalar(0.07), Scalar(0.5),
         Scalar(0.1)).covariance(Scalar(5.0),Scalar(6.0), Scalar(8.0), Scalar(10.0));
-    calculated = IAbcd2.quadratureAdaptive(fAbcd2,a,b,
+    calculated = IAbcd2.adaptiveQuadrature(fAbcd2,a,b,
         Scalar(0.),desiredRelativeError<Scalar>(),quadratureRule);
 
     std::cout<<"Abcd2,               |calculated - expected| = "
