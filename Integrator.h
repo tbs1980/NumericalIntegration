@@ -90,7 +90,7 @@ public:
     Scalar quadratureAdaptive(
         const FunctionType& f, const Scalar lowerLimit, const Scalar upperLimit,
         const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
-        const QuadratureRule quadratureRule = 1)
+        const QuadratureRule quadratureRule = Eigen::Integrator<Scalar>::QuadratureRule(1))
     {
         if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
             || m_maxSubintervals < 1)
@@ -520,11 +520,11 @@ private:
         }
     }
 
-
-    template <typename FunctionType, int numKronrodRows, int numGaussRows>
+    template <typename FunctionType, int numKronrodRows, int numGaussRows, int alignment>
     Scalar quadratureKronrodHelper(
-        Array<Scalar, numKronrodRows, 1> abscissaeGaussKronrod, Array<Scalar, numKronrodRows, 1> weightsGaussKronrod,
-        Array<Scalar, numGaussRows, 1> weightsGauss, const FunctionType& f, const Scalar lowerLimit,
+        Array<Scalar, numKronrodRows, 1, alignment, numKronrodRows, 1> abscissaeGaussKronrod,
+        Array<Scalar, numKronrodRows, 1, alignment, numKronrodRows, 1> weightsGaussKronrod,
+        Array<Scalar, numGaussRows, 1, alignment, numGaussRows, 1> weightsGauss, const FunctionType& f, const Scalar lowerLimit,
         const Scalar upperLimit, Scalar& estimatedError, Scalar& absIntegral, Scalar& absDiffIntegral,
         const QuadratureRule quadratureRule)
     {
