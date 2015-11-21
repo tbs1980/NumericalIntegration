@@ -81,6 +81,6 @@ Here's an alphabetical list: (note to contributors: do add yourself!)
 
 name | contributions
 -----|--------------
-Sreekumar T. Balan | Laurie-Gautschi and Monegato method
+Sreekumar T. Balan | Laurie-Gautschi and Monegato methods
 Matt Beall | Adaptive quadrature and Piessens method
 Mark Sauder | Adaptive quadrature, Piessens method, unit-tests
