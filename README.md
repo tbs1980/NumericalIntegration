@@ -2,7 +2,7 @@
 
 > A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be a part of the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. Please see the pull request [#109](https://bitbucket.org/eigen/eigen/pull-requests/109/numerical-integration-module-for-eigen/diff)
 
-![Gaussian quadrature](./gauss_quadrature.pnggauss_quadrature.png)
+![Gaussian quadrature](./gauss_quadrature.png)
 
 Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method capable of multiprecision calculation of Gauss Kronrod nodes/weights utilizing Laurie/Gautschi and Piessens'/Patterson's methods for the desired number of nodes/ruleset for the quadrature calculations.  Considerations have also been also paid in this effort to allow the future integration of the additional QUADPACK routines.
 
@@ -80,4 +80,4 @@ name | contributions
 -----|--------------
 Sreekumar T. Balan | Laurie-Gautschi and Monegato method
 Matt Beall | Adaptive quadrature and Piessens method
-Mark Sauder | Adaptive quadrature, Piessens method, unit-tests 
+Mark Sauder | Adaptive quadrature, Piessens method, unit-tests
