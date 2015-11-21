@@ -9,7 +9,9 @@ Adaptive Quadrature Numerical Integration routine in the Gauss Kronrod method ca
 The original QUADPACK FORTRAN77 code can be found here:
 	(http://www.netlib.org/quadpack/)
 
-	Note: The naming of functions and variable has been adapted to favor either the associated journal publications' naming or simply better descriptive names over the original QUADPCK FORTRAN77 source code.
+	Note: The naming of functions and variable has been adapted to favor either the associated
+	journal publications' naming or simply better descriptive names over the original
+	QUADPCK FORTRAN77 source code.
 
 ## Gauss-Kronrod Node/Weight Calculations
 
@@ -24,7 +26,8 @@ Laurie's (a.k.a. Golub-Welsch), algorithm as implemented is outlined in the foll
 Walter Gautschi's OPQ Matlab library and the work cited above can be found at:
 
 	https://www.cs.purdue.edu/archives/2002/wxg/codes/OPQ.html,
-	Orthogonal Polynomials, Quadrature, and Approximation: Computational Methods and Software (in Matlab), can be found at: https://www.cs.purdue.edu/homes/wxg/Madrid.pdf
+	Orthogonal Polynomials, Quadrature, and Approximation: Computational Methods and Software (in Matlab),
+	can be found at: https://www.cs.purdue.edu/homes/wxg/Madrid.pdf
 
 Monegato method used in [quadpackcpp](http://quadpackpp.sourceforge.net/) is under development
 
