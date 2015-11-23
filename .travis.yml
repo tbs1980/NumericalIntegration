@@ -1,0 +1,16 @@
+language: cpp
+
+compiler:
+    - gcc
+
+before_install:
+    - echo $LANG
+
+before_script:
+    - mkdir build
+    - cd build
+    - cmake ../
+
+script:
+    - $CXX --version
+    - make
