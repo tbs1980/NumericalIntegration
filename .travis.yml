@@ -16,10 +16,11 @@ before_script:
     - cd mpreal
     - export MPREAL_INCLUDE_DIR=${PWD}
     - cd ..
-    - mkdir build
-    - cd build
-    - cmake -DMPFRCPP_ROOT=${MPREAL_INCLUDE_DIR} ../
 
 script:
+    - mkdir build
+    - cd build
+    - echo ${MPREAL_INCLUDE_DIR}
+    - cmake -DMPFRCPP_ROOT=${MPREAL_INCLUDE_DIR} ../
     - $CXX --version
-    - make
+    - make VERBOSE=1
