@@ -4,13 +4,17 @@ compiler:
     - gcc
 
 before_install:
-    - sudo apt-get install libeigen3-dev libmpfrc++-dev
+    - sudo apt-get install libeigen3-dev libmpfr-dev
     - echo $LANG
 
 before_script:
+    - hg clone https://bitbucket.org/advanpix/mpreal
+    - cd mpreal
+    - export MPREAL_INCLUDE_DIR=${PWD}
+    - cd ..
     - mkdir build
     - cd build
-    - cmake ../
+    - cmake -DMPFRCPP_ROOT=${MPREAL_INCLUDE_DIR} ../
 
 script:
     - $CXX --version
