@@ -28,3 +28,4 @@ script:
     - cmake -DMPFRCPP_ROOT=${MPREAL_INCLUDE_DIR} -DEIGEN3_INCLUDE_DIR=${EIGEN_INCLUDE_DIR} ../
     - $CXX --version
     - make VERBOSE=1
+    - gcov --version
