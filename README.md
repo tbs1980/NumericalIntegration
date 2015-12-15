@@ -73,9 +73,11 @@ For example,
 	$ cmake ../ -DEIGEN3_INCLUDE_DIR=/arxiv/libraries/ubuntu/gcc/eigen-3.2.1/include/eigen3 -DGMP_ROOT=/arxiv/libraries/ubuntu/gcc/gmp-6.0.0 -DMPFR_ROOT=/arxiv/libraries/ubuntu/gcc/mpfr-3.1.2 -DMPFRCPP_ROOT=/arxiv/libraries/ubuntu/gcc/mpfrc++-3.5.9
 	$ make
 
-## Contributing to NumericalIntegration  project
+## Contributing to NumericalIntegration project
 
 Contributions are most welcome  :smile: . Please submit a pull request or use the [issues](https://github.com/tbs1980/NumericalIntegration/issues) facility to raise any comments  :+1: .
+
+(You can let people know that this Repository was useful to you by clicking the "Star" in the upper right of the repository home page!)
 
 ## Credits
 
