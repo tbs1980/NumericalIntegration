@@ -1,0 +1,32 @@
+language: cpp
+
+compiler:
+    - gcc
+
+before_install:
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get -qq update
+    - sudo apt-get -qq install g++-4.8
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+    - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 90
+    - sudo apt-get install libmpfr-dev
+    - echo $LANG
+
+before_script:
+    - hg clone https://bitbucket.org/advanpix/mpreal
+    - cd mpreal
+    - export MPREAL_INCLUDE_DIR=${PWD}
+    - cd ..
+    - hg clone https://bitbucket.org/eigen/eigen
+    - cd eigen
+    - export EIGEN_INCLUDE_DIR=${PWD}
+    - cd ..
+
+script:
+    - mkdir build
+    - cd build
+    - echo ${MPREAL_INCLUDE_DIR}
+    - cmake -DMPFRCPP_ROOT=${MPREAL_INCLUDE_DIR} -DEIGEN3_INCLUDE_DIR=${EIGEN_INCLUDE_DIR} ../
+    - $CXX --version
+    - make VERBOSE=1
+    - gcov --version
