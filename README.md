@@ -2,7 +2,7 @@
 
 # C++ Numerical Integration
 
-####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be easily ustilized in conjunction with the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. Please see our [Bitbucket Repository](https://bitbucket.org/tbs1980/eigen-numerical-integration-module) for an easy way to incorporate this Numerical Integration repo as one of the unsupported submodules in your normal Eigen package.  (A declined Eigen pull request to include this feature into the Eigen library can be found [here](https://bitbucket.org/eigen/eigen/pull-requests/109/numerical-integration-module-for-eigen/diff).)
+####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be easily utilized in conjunction with the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. Please see our [Bitbucket Repository](https://bitbucket.org/tbs1980/eigen-numerical-integration-module) for an easy way to incorporate this Numerical Integration repo as one of the unsupported submodules in your normal Eigen package.  (A declined Eigen pull request to include this feature into the Eigen library can be found [here](https://bitbucket.org/eigen/eigen/pull-requests/109/numerical-integration-module-for-eigen/diff).)
 
 ![Gaussian quadrature](./gauss_quadrature.png)
 
