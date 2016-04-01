@@ -44,12 +44,19 @@ The capabilities of this library have been greatly expanded through multiprecisi
 
 	* [Eigen library] (http://eigen.tuxfamily.org/index.php?title=Main_Page )
 	* [The GNU Multiple Precision Arithmetic Library] (https://gmplib.org/ )
+    
+	(If extended precision is needed, as will be the case for computing the Gauss-Kronrod nodes/weights or if desired for integration computations, MPFR C++ will also be required.) 
+    
 	* [The GNU MPFR Library] (http://www.mpfr.org/ )
 	* [MPFR C++] (http://www.holoborodko.com/pavel/mpfr/ )
 
 Debian-based linux users can install dependencies with aptitude package manager:
 
-	$sudo apt-get install libeigen3-dev libmpfrc++-dev
+	$sudo apt-get install libeigen3-dev
+    
+    (and if your application requires extended precision)
+    
+    $sudo apt-get install libmpfrc++-dev
 
 ## Compilation
 
