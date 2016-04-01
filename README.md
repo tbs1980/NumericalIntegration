@@ -2,7 +2,7 @@
 
 # C++ Numerical Integration
 
-####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be a part of the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. Please see the pull request [#109](https://bitbucket.org/eigen/eigen/pull-requests/109/numerical-integration-module-for-eigen/diff)
+####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be easily utilized in conjunction with the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. Please see our [Bitbucket Repository](https://bitbucket.org/tbs1980/eigen-numerical-integration-module) for an easy way to incorporate this Numerical Integration repo as one of the unsupported submodules in your normal Eigen package.  (A declined Eigen pull request to include this feature into the Eigen library can be found [here](https://bitbucket.org/eigen/eigen/pull-requests/109/numerical-integration-module-for-eigen/diff).)
 
 ![Gaussian quadrature](./gauss_quadrature.png)
 
@@ -43,13 +43,20 @@ The capabilities of this library have been greatly expanded through multiprecisi
 ## Requirements
 
 	* [Eigen library] (http://eigen.tuxfamily.org/index.php?title=Main_Page )
+    
+	(If extended precision is needed, as will be the case for computing the Gauss-Kronrod nodes/weights or if desired for integration computations, MPFR C++ will also be required.) 
+    
 	* [The GNU Multiple Precision Arithmetic Library] (https://gmplib.org/ )
 	* [The GNU MPFR Library] (http://www.mpfr.org/ )
 	* [MPFR C++] (http://www.holoborodko.com/pavel/mpfr/ )
 
 Debian-based linux users can install dependencies with aptitude package manager:
 
-	$sudo apt-get install libeigen3-dev libmpfrc++-dev
+	$sudo apt-get install libeigen3-dev
+    
+    (and if your application requires extended precision)
+    
+    $sudo apt-get install libmpfrc++-dev
 
 ## Compilation
 
