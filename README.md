@@ -2,7 +2,7 @@
 
 # C++ Numerical Integration
 
-####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be easily utilized in conjunction with the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library.  (For a very simple way to incorporate this Numerical Integration capability as one of the unsupported submodules in your normal Eigen package, just clone our fork of the eigen library from our [Bitbucket Repository](https://bitbucket.org/tbs1980/eigen-numerical-integration-module) and use the normal commands install it!)  
+####  A C++ header-only, precision-independent library for performing numerical integration. This project is intended to be easily utilized in conjunction with the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library.  (For a very simple way to incorporate this Numerical Integration capability as one of the unsupported submodules in your normal Eigen package, just clone our fork of the eigen library from this [Bitbucket Repository](https://bitbucket.org/tbs1980/eigen-numerical-integration-module) and use the normal commands install it!)  
 
 	$ hg clone ssh://hg@bitbucket.org/tbs1980/eigen-numerical-integration-module
 	$ cd eigen-numerical-integration-module/
