@@ -111,7 +111,7 @@ int test_logpow(void)
 
             using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || isnan(abs((Scalar)(expected - actual))))
+                || std::isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 

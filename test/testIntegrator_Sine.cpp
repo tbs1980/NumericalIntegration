@@ -90,7 +90,7 @@ int test_sine(void)
 
         using std::abs;
         if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || isnan(abs((Scalar)(expected - actual))))
+                || std::isnan(abs((Scalar)(expected - actual))))
         {
             fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
