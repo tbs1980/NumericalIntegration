@@ -256,7 +256,7 @@ public:
             // with the largest error estimate, (the next subinterval to be bisected).
             quadratureSort(maxErrorIndex, errorMax,nrMax);
 
-            if (m_errorCode != 0 || errorSum <= errorBound)
+            if (m_errorCode != 0 || errorSum <= errorBound || m_numSubintervals == m_maxSubintervals)
             {
                 break;
             }
