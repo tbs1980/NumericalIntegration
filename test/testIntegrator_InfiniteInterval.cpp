@@ -82,16 +82,16 @@ int test_pow(void)
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
-    //typedef float Scalar;
+    // typedef float Scalar;
     typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(500);
+    // typedef long double Scalar;
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(500);
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(1000);
+    IntegratorType eigenIntegrator(1000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;
@@ -112,8 +112,10 @@ int test_pow(void)
             Scalar expected = IntegrandInfiniteFunctorType::integrateInfinite(alpha);
 
             using std::abs;
+            using std::isnan;
+            
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || std::isnan(abs((Scalar)(expected - actual))))
+                || isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 

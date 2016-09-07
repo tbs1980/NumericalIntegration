@@ -81,16 +81,16 @@ int test_logpow(void)
 
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
      
-    //typedef float Scalar;
+    // typedef float Scalar;
     typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(500);
+    // typedef long double Scalar;
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(500);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(1000);   // \detail The number of subintervals must be increased to roughly 100X the precision requested.
+    IntegratorType eigenIntegrator(1000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
@@ -110,8 +110,10 @@ int test_logpow(void)
             Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
             using std::abs;
+            using std::isnan;
+            
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || std::isnan(abs((Scalar)(expected - actual))))
+                || isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 

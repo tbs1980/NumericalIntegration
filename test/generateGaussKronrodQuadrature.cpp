@@ -120,9 +120,9 @@ int test_values()
              << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
     }
 
-    fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef Kronrod::Monegato<Scalar> MonegatoPolicy;\n"
-         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n\n"
+    fout << "\ttypedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
+         << "\ttypedef Eigen::Monegato<Scalar> MonegatoPolicy;\n"
+         << "\ttypedef Eigen::Piessens<Scalar> PiessensPolicy;\n\n"
          << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
          << "\tstatic bool compute;\n\n";
 

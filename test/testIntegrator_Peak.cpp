@@ -25,7 +25,7 @@ public:
         using std::pow;
         return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        // return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
@@ -39,7 +39,7 @@ public:
         using std::atan;
         return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
+        // return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
     }
 
 private:
@@ -84,11 +84,11 @@ int test_peak(void)
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
-    //typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
+    // typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
     typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    //Scalar::set_default_prec(350);
+    // typedef long double Scalar;
+    // typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
+    // Scalar::set_default_prec(350);
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
@@ -98,7 +98,7 @@ int test_peak(void)
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    const Scalar alphaLimit = 15.;
+    const Scalar alphaLimit = 15;
     const size_t numRules = 12;
 
     for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
@@ -114,8 +114,10 @@ int test_peak(void)
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
 
             using std::abs;
+            using std::isnan;
+            
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || std::isnan(abs((Scalar)(expected - actual))))
+                || isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 
