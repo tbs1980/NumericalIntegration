@@ -31,7 +31,10 @@ public:
     /**
     * A paramater for varying the upper bound.
     */
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+    void setAlpha(const Scalar& alpha)
+    {
+        m_alpha = alpha;
+    }
 
     static Scalar integrateInfinite(const Scalar& alpha)
     {
@@ -83,22 +86,22 @@ int test_pow(void)
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
     // typedef float Scalar;
-    typedef double Scalar;
+    // typedef double Scalar;
     // typedef long double Scalar;
-    // typedef mpfr::mpreal Scalar;
-    // Scalar::set_default_prec(500);
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(500);
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(1000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;
-    const Scalar alphaLimit = 18.;
+    const Scalar alphaLimit = Scalar(18.);
     const size_t numRules = 12;
 
-    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
+    for (Scalar alpha = Scalar(0.); alpha < alphaLimit; ++alpha)
     {
         success = true;
         integrandInfiniteFunctor.setAlpha(alpha);
@@ -108,6 +111,7 @@ int test_pow(void)
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
             using std::pow;
+            
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandInfiniteFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandInfiniteFunctorType::integrateInfinite(alpha);
 

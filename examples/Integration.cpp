@@ -23,7 +23,7 @@ class IntegrandExampleFunctor
 {
 public:
     IntegrandExampleFunctor(const Scalar alpha)
-    :m_alpha(alpha)
+        : m_alpha(alpha)
     {
         assert(alpha>0);
     }
@@ -38,21 +38,22 @@ public:
     {
         m_alpha = alpha;
     }
+
 private:
     Scalar m_alpha;
 };
 
 int main(void)
 {
-    //define the sclar
-    //typedef float Scalar;
-    typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(256);
+    // Define the scalar type.
+    // typedef float Scalar;
+    // typedef double Scalar;
+    // typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(256);
 
     //define the functor
-    Scalar alpha=1.;
+    Scalar alpha = Scalar(1.);
     IntegrandExampleFunctor<Scalar> inFctr(alpha);
 
     //define the integrator
@@ -63,10 +64,10 @@ int main(void)
 
     //define the desired absolute and relative errors
     Scalar desAbsErr = Scalar(0.);
-    Scalar desRelErr = Eigen::NumTraits<Scalar>::epsilon() * 50.;
+    Scalar desRelErr = Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.);
 
     //integrate
-    Scalar result = eigIntgtor.quadratureAdaptive(inFctr, Scalar(0.),Scalar(1.), desAbsErr, desRelErr, quadratureRule);
+    Scalar result = eigIntgtor.quadratureAdaptive(inFctr, Scalar(0.), Scalar(1.), desAbsErr, desRelErr, quadratureRule);
 
     //expected result
     Scalar expected = Scalar(-4.);

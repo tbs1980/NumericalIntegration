@@ -31,7 +31,10 @@ public:
     /**
     * \param alpha A parameter for varying the upper bound.
     */
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+    void setAlpha(const Scalar& alpha)
+    {
+        m_alpha = alpha;
+    }
 
     static Scalar exact_value_in_01(const Scalar& alpha)
     {
@@ -82,22 +85,22 @@ int test_logpow(void)
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
      
     // typedef float Scalar;
-    typedef double Scalar;
+    // typedef double Scalar;
     // typedef long double Scalar;
-    // typedef mpfr::mpreal Scalar;
-    // Scalar::set_default_prec(500);
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(500);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(1000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
-    const Scalar alphaLimit = 18.;
+    const Scalar alphaLimit = Scalar(18.);
     const size_t numRules = 12;
 
-    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
+    for (Scalar alpha = Scalar(0.); alpha < alphaLimit; ++alpha)
     {
         success = true;
         integrandLogPowFunctor.setAlpha(alpha);

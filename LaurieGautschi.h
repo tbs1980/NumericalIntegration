@@ -145,35 +145,38 @@ namespace Eigen {
         static void r_kronrod(const IndexType N,VectorType const& alphaIn, VectorType const& betaIn,
             VectorType& alpha, VectorType& beta)
         {
+            using std::ceil;
+            using std::floor;
+
             //TODO : make use the eigen assert facilities
             assert(alphaIn.rows() == betaIn.rows());
             assert(alphaIn.rows() > 0);
-            assert(alphaIn.rows() >= std::ceil(3*N/2)+1 );
+            assert(alphaIn.rows() >= ceil(3*N/2)+1 );
             assert(alpha.rows() == 2*N+1);
             assert(beta.rows() == 2*N+1);
 
             alpha = VectorType::Zero(2*N+1);
             beta = VectorType::Zero(2*N+1);
 
-            for(IndexType k=0; k<=std::floor(3*N/2)+1; ++k)
+            for(IndexType k=0; k<=floor(3*N/2)+1; ++k)
             {
                 alpha(k) = alphaIn(k);
             }
 
-            for(IndexType k=0; k<=std::ceil(3*N/2)+1; ++k)
+            for(IndexType k=0; k<=ceil(3*N/2)+1; ++k)
             {
                 beta(k) = betaIn(k);
             }
 
-            VectorType sigma = VectorType::Zero(std::floor(N/2)+2);
-            VectorType tempVector = VectorType::Zero(std::floor(N/2)+2);
+            VectorType sigma = VectorType::Zero(floor(N/2)+2);
+            VectorType tempVector = VectorType::Zero(floor(N/2)+2);
 
             tempVector(1) = beta(N+1);
 
             for(IndexType m=0; m<N-2+1; ++m)
             {
                 Scalar u = 0;
-                for(IndexType k=std::floor((m+1)/2); k>=0;--k)
+                for(IndexType k=floor((m+1)/2); k>=0;--k)
                 {
                     IndexType l = m-k;
                     u = u + ( alpha(k+N+1)-alpha(l) )*tempVector(k+1) + beta(k+N+1)*sigma(k) - beta(l)*sigma(k+1);
@@ -185,7 +188,7 @@ namespace Eigen {
                 tempVector = swap;
             }
 
-            for(IndexType j=std::floor(N/2); j>=0; --j)
+            for(IndexType j=floor(N/2); j>=0; --j)
             {
                 sigma(j+1) = sigma(j);
             }
@@ -195,7 +198,7 @@ namespace Eigen {
                 IndexType k = m+1-N;
                 IndexType j = 0;
                 Scalar u = 0;
-                for(k=m+1-N; k<std::floor((m-1)/2)+1; ++k)
+                for(k=m+1-N; k<floor((m-1)/2)+1; ++k)
                 {
                     IndexType l = m-k;
                     j = N-1-l;
@@ -203,7 +206,7 @@ namespace Eigen {
                     sigma(j+1) = u;
                 }
 
-                k=std::floor((m+1)/2);
+                k=floor((m+1)/2);
 
                 if(m % 2 == 0)
                 {
@@ -261,7 +264,9 @@ namespace Eigen {
 
             // \TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            assert(std::abs(beta0.sum() - (Scalar) (2*N+1)) > 1e-5);
+            using std::abs;
+
+            assert(abs(beta0.sum() - (Scalar) (2*N+1)) > 1e-5);
 
             MatrixType J = MatrixType::Zero(2*N+1,2*N+1);
 

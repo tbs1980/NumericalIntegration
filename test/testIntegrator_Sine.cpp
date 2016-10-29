@@ -63,15 +63,15 @@ int test_sine(void)
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
      
     // typedef float Scalar;
-    typedef double Scalar;
+    // typedef double Scalar;
     // typedef long double Scalar;
-    // typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    // Scalar::set_default_prec(500);
+    typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    Scalar::set_default_prec(500);
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(1000); // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(50000); // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
@@ -84,8 +84,8 @@ int test_sine(void)
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2);
 
         using std::abs;
