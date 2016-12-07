@@ -132,8 +132,6 @@ namespace Eigen
         static Array<Scalar, 50, 1> abscissaeGauss201;
         static Array<Scalar, 50, 1> weightsGauss201;
 
-#ifdef EIGEN_HAS_MPREAL_CXX11_TGAMMA
-
         typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
         typedef Eigen::Monegato<Scalar> MonegatoPolicy;
         typedef Eigen::Piessens<Scalar> PiessensPolicy;
@@ -181,7 +179,6 @@ namespace Eigen
                 gaussWeights(i) = wG(i);
             }
         }
-#endif //EIGEN_HAS_MPREAL_CXX11_TGAMMA
     };
 
 //Nodes and Weights - Rule 15

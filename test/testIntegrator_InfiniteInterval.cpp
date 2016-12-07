@@ -23,14 +23,10 @@ class IntegrandInfiniteFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-        using std::pow;
-        using std::exp;
         return pow(param, Scalar(2.)) * exp(-param * pow(Scalar(2.), -m_alpha));
     }
 
-    /**
-    * A paramater for varying the upper bound.
-    */
+    // A paramater for varying the upper bound.
     void setAlpha(const Scalar& alpha)
     {
         m_alpha = alpha;
@@ -38,8 +34,6 @@ public:
 
     static Scalar integrateInfinite(const Scalar& alpha)
     {
-        using std::pow;
-        using std::exp;
         return (exp(Scalar(40.)) - Scalar(841.)) * pow(2., Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
     }
 
@@ -53,7 +47,7 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * 50.;
 }
 
 template <typename Scalar>
@@ -110,14 +104,9 @@ int test_pow(void)
         {
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-            using std::pow;
-            
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandInfiniteFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandInfiniteFunctorType::integrateInfinite(alpha);
 
-            using std::abs;
-            using std::isnan;
-            
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {

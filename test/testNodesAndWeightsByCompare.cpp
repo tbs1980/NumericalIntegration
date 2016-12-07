@@ -13,12 +13,12 @@
 
 int compare_codes_unified_interface(const unsigned int N=10)
 {
-    //typedef float Scalar;
-    //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(320); //128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
-    //256,288,320,352,384,416,448
+    // typedef float Scalar;
+    // typedef double Scalar;
+    // typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(320); // 128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
+    // 256,288,320,352,384,416,448
 
 
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;

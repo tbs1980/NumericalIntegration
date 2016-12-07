@@ -51,7 +51,6 @@ namespace Eigen{
          */
         static Scalar legendre_err(const int n, const Scalar x, Scalar& err)
         {
-            //using std::abs;
             if (n == 0)
             {
                 err = Scalar(0);
@@ -65,8 +64,8 @@ namespace Eigen{
 
             // below Sree modified this to avoid -Wmaybe-uninitialized
             Scalar P0 = Scalar(1), P1 = x, P2=x;
-            Scalar E0 = Eigen::NumTraits<Scalar>::epsilon();
-            Scalar E1 = abs(x) * Eigen::NumTraits<Scalar>::epsilon();
+            Scalar E0 = NumTraits<Scalar>::epsilon();
+            Scalar E1 = abs(x) * NumTraits<Scalar>::epsilon();
             for (int k = 1; k < n; ++k)
             {
                 P2 = ((2*k + 1) * x * P1 - k * P0) / (k + 1);
@@ -94,9 +93,13 @@ namespace Eigen{
                 return Scalar(1);
             }
 
-            Scalar P0 = Scalar(1), P1 = x, P2;
-            // below Sree modified this to avoid -Wmaybe-uninitialized
-            Scalar dP0 = Scalar(0), dP1 = Scalar(1), dP2=P1;
+            Scalar P0 = Scalar(1);
+            Scalar P1 = x;
+            Scalar P2 = P1;
+            Scalar dP0 = Scalar(0);
+            Scalar dP1 = Scalar(1);
+            Scalar dP2 = P1;
+
             for (int k = 1; k < n; ++k)
             {
                 P2 = ((2*k + 1) * x * P1 - k * P0) / (k + Scalar(1));
@@ -143,7 +146,6 @@ namespace Eigen{
         static Scalar chebyshev_series(const Scalar x, const int n_,
             const ScalarArrayType& coefs, Scalar& err)
         {
-            //using std::abs;
             Scalar d1(0), d2(0);
             Scalar absc = abs(coefs(0)); // final term for truncation error
             Scalar y2 = 2 * x; // linear term for Clenshaw recursion
@@ -156,7 +158,7 @@ namespace Eigen{
                 absc += abs(coefs(k));
             }
 
-            err = absc * Eigen::NumTraits<Scalar>::epsilon();
+            err = absc * NumTraits<Scalar>::epsilon();
             return x * d1 - d2 + coefs(0)/2.;
         }
 
@@ -167,7 +169,6 @@ namespace Eigen{
          */
         static void legendre_zeros(const int m_,ScalarArrayType& zeros)
         {
-            //using std::abs;
             ScalarArrayType temp = ScalarArrayType::Zero(m_+1);
             zeros(0) = Scalar(-1);
             zeros(1) = Scalar(1);
@@ -184,7 +185,7 @@ namespace Eigen{
                     Scalar x_j = (zeros(j) + zeros(j+1)) / 2.;
                     Scalar P_k = legendre_err(k, x_j, epsilon);
                     while (abs(P_k) > epsilon &&
-                        abs(delta) > Eigen::NumTraits<Scalar>::epsilon())
+                        abs(delta) > NumTraits<Scalar>::epsilon())
                     {
                         delta = P_k / legendre_deriv(k, x_j);
                         x_j -= delta;
@@ -266,7 +267,7 @@ namespace Eigen{
                 Scalar x_k = (zeros(m_-k) + zeros(m_+1-k))/Scalar(2);
                 Scalar E = chebyshev_series(x_k,n_,coefs, epsilon);
                 while (abs(E) > epsilon &&
-                    abs(delta) > Eigen::NumTraits<Scalar>::epsilon() )
+                    abs(delta) > NumTraits<Scalar>::epsilon() )
                 {
                     delta = E / chebyshev_series_deriv(x_k,n_,coefs);
                     x_k -= delta;

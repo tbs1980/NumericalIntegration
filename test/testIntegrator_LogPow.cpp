@@ -23,8 +23,6 @@ class IntegrandLogPowFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-        using std::pow;
-        using std::log;
         return pow(param, m_alpha) * log(1/param);
     }
 
@@ -52,7 +50,7 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-    return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+    return NumTraits<Scalar>::epsilon() * 50.;
 }
 
 template <typename Scalar>
@@ -112,9 +110,6 @@ int test_logpow(void)
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandLogPowFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandLogPowFunctorType::exact_value_in_01(alpha);
 
-            using std::abs;
-            using std::isnan;
-            
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {

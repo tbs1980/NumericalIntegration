@@ -15,7 +15,7 @@
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * 50.;
 }
 
 

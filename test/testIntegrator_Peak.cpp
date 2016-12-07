@@ -22,7 +22,6 @@ class IntegrandPeakFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-        using std::pow;
         // return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
         return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
@@ -38,8 +37,6 @@ public:
 
     static Scalar integralPeak(const Scalar& alpha)
     {
-        using std::pow;
-        using std::atan;
         // return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
         return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
@@ -55,7 +52,7 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-    return Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.);
+    return NumTraits<Scalar>::epsilon() * Scalar(50.);
 }
 
 template <typename Scalar>
@@ -116,15 +113,12 @@ int test_peak(void)
             Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPeakFunctor, Scalar(0.), Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
 
-            using std::abs;
-            using std::isnan;
-            
-            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs((Scalar)expected) 
+            if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs((Scalar)expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 
-                if(i == numRules-1)
+                if (i == numRules-1)
                 {
                     fout << "\nPeak Test could not pass Alpha = " << alpha
                          << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
@@ -155,7 +149,7 @@ int test_peak(void)
 
     fout.close();
 
-    if(success)
+    if (success)
     {
         std::cout << std::endl << "\tTest Succeeded!\n" << std::endl;
         return EXIT_SUCCESS;

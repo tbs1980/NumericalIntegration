@@ -19,8 +19,7 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-      using std::sin;
-      return sin(param);
+        return sin(param);
     }
 };
 
@@ -30,7 +29,7 @@ public:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * 50.;
 }
 
 template <typename Scalar>
@@ -83,16 +82,13 @@ int test_sine(void)
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
+        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-        Scalar expected = Scalar(2);
+        Scalar expected = Scalar(2.);
 
-        using std::abs;
-        using std::isnan;
-        
-        if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || isnan(abs((Scalar)(expected - actual))))
+        if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
+            || isnan(abs((Scalar)(expected - actual))))
         {
             fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "

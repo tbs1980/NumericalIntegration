@@ -18,9 +18,9 @@ int test_nodes_weights_difference(const unsigned int N)
 {
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(50);
+    // typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(50);
 
     typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef Eigen::Piessens<Scalar> PiessensPolicy;
@@ -47,7 +47,6 @@ int test_nodes_weights_difference(const unsigned int N)
 
     double epsilon = 1e-16;
 
-    using std::abs;
     for(DenseIndex i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)

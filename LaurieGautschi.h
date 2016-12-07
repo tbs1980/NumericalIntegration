@@ -59,12 +59,10 @@ namespace Eigen {
             assert(alphaOut.rows() > 0);
             assert(N <= alphaOut.rows());
 
-            using std::pow;
-            using std::tgamma;
             alphaOut(0) = (beta-alpha)/(alpha+beta+Scalar(2.));
             betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * tgamma(alpha+Scalar(1.)) * tgamma(beta+Scalar(1.)) / tgamma(alpha+beta+Scalar(2.));
 
-            for(IndexType n=1;n<N;++n)
+            for (IndexType n=1; n<N; ++n)
             {
                 Scalar nAlphaBeta = Scalar(2.)*n+alpha+beta;
                 alphaOut(n) = (beta*beta - alpha*alpha) / (nAlphaBeta*(nAlphaBeta+Scalar(2.)));
@@ -109,7 +107,6 @@ namespace Eigen {
                 alphaOut(n) = (Scalar(1.)+alphaOut(n))/Scalar(2.);
             }
 
-            using std::pow;
             betaOut(0) = betaOut(0)/pow(Scalar(2),alpha+beta+Scalar(1.));
 
             for(IndexType n=1; n<N; ++n)
@@ -145,38 +142,35 @@ namespace Eigen {
         static void r_kronrod(const IndexType N,VectorType const& alphaIn, VectorType const& betaIn,
             VectorType& alpha, VectorType& beta)
         {
-            using std::ceil;
-            using std::floor;
-
             //TODO : make use the eigen assert facilities
             assert(alphaIn.rows() == betaIn.rows());
             assert(alphaIn.rows() > 0);
-            assert(alphaIn.rows() >= ceil(3*N/2)+1 );
+            assert(alphaIn.rows() >= std::ceil(3*N/2)+1 );
             assert(alpha.rows() == 2*N+1);
             assert(beta.rows() == 2*N+1);
 
             alpha = VectorType::Zero(2*N+1);
             beta = VectorType::Zero(2*N+1);
 
-            for(IndexType k=0; k<=floor(3*N/2)+1; ++k)
+            for(IndexType k=0; k<=std::floor(3*N/2)+1; ++k)
             {
                 alpha(k) = alphaIn(k);
             }
 
-            for(IndexType k=0; k<=ceil(3*N/2)+1; ++k)
+            for(IndexType k=0; k<=std::ceil(3*N/2)+1; ++k)
             {
                 beta(k) = betaIn(k);
             }
 
-            VectorType sigma = VectorType::Zero(floor(N/2)+2);
-            VectorType tempVector = VectorType::Zero(floor(N/2)+2);
+            VectorType sigma = VectorType::Zero(std::floor(N/2)+2);
+            VectorType tempVector = VectorType::Zero(std::floor(N/2)+2);
 
             tempVector(1) = beta(N+1);
 
             for(IndexType m=0; m<N-2+1; ++m)
             {
                 Scalar u = 0;
-                for(IndexType k=floor((m+1)/2); k>=0;--k)
+                for(IndexType k=std::floor((m+1)/2); k>=0;--k)
                 {
                     IndexType l = m-k;
                     u = u + ( alpha(k+N+1)-alpha(l) )*tempVector(k+1) + beta(k+N+1)*sigma(k) - beta(l)*sigma(k+1);
@@ -188,7 +182,7 @@ namespace Eigen {
                 tempVector = swap;
             }
 
-            for(IndexType j=floor(N/2); j>=0; --j)
+            for(IndexType j=std::floor(N/2); j>=0; --j)
             {
                 sigma(j+1) = sigma(j);
             }
@@ -198,7 +192,8 @@ namespace Eigen {
                 IndexType k = m+1-N;
                 IndexType j = 0;
                 Scalar u = 0;
-                for(k=m+1-N; k<floor((m-1)/2)+1; ++k)
+
+                for (k=m+1-N; k<std::floor((m-1)/2)+1; ++k)
                 {
                     IndexType l = m-k;
                     j = N-1-l;
@@ -206,9 +201,9 @@ namespace Eigen {
                     sigma(j+1) = u;
                 }
 
-                k=floor((m+1)/2);
+                k = std::floor((m+1)/2);
 
-                if(m % 2 == 0)
+                if (m % 2 == 0)
                 {
                     alpha(k+N+1) = alpha(k) + (sigma(j+1)-beta(k+N+1)*sigma(j+2)) / tempVector(j+2);
                 }
@@ -264,13 +259,10 @@ namespace Eigen {
 
             // \TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            using std::abs;
-
             assert(abs(beta0.sum() - (Scalar) (2*N+1)) > 1e-5);
 
             MatrixType J = MatrixType::Zero(2*N+1,2*N+1);
 
-            using std::sqrt;
             for(IndexType k=0; k<2*N; ++k)
             {
                 J(k,k) = alpha0(k);
@@ -324,8 +316,8 @@ namespace Eigen {
             MatrixType J = MatrixType::Zero(N,N);
 
             J(0,0) = alpha(0);
-            using std::sqrt;
-            for(IndexType n=1; n<N; ++n)
+
+            for (IndexType n=1; n<N; ++n)
             {
                 J(n,n) = alpha(n);
                 J(n,n-1) = sqrt(beta(n));
@@ -370,7 +362,7 @@ namespace Eigen {
 
             kronrod(N,alpha,beta,nodes,weights);
 
-            for(IndexType i=0; i<nodes.rows(); ++i)
+            for (IndexType i=0; i<nodes.rows(); ++i)
             {
                 nodes(i) = Scalar(2.)*nodes(i) - Scalar(1.);
                 weights(i) = Scalar(2.)*weights(i);
@@ -401,7 +393,7 @@ namespace Eigen {
 
             gauss(N, alpha, beta, nodes, weights);
 
-            for(IndexType i = 0;i<nodes.rows();++i)
+            for (IndexType i = 0;i<nodes.rows();++i)
             {
                 nodes(i) = Scalar(2.)*nodes(i) - Scalar(1.);
                 weights(i) = Scalar(2.)*weights(i);
@@ -437,8 +429,7 @@ namespace Eigen {
             abscGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
             weightGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
 
-            using std::abs;
-            for(unsigned int i=0;i<arraySize;++i)
+            for (unsigned int i=0; i<arraySize; ++i)
             {
                 abscGaussKronrod(i) = abs(xGK(i));
                 weightGaussKronrod(i) = wGK(i);
@@ -446,7 +437,7 @@ namespace Eigen {
 
             abscGaussKronrod(arraySize-1) = Scalar(0);
 
-            for(unsigned int i=0;i<arraySize/2;++i)
+            for (unsigned int i=0; i<arraySize/2; ++i)
             {
                 abscGauss(i) = abs(xG(i));
                 weightGauss(i) = wG(i);

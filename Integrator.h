@@ -92,7 +92,7 @@ public:
         const Scalar desiredAbsoluteError = Scalar(0.), const Scalar desiredRelativeError = Scalar(0.),
         const QuadratureRule quadratureRule = Eigen::Integrator<Scalar>::QuadratureRule(1))
     {
-        if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < Eigen::NumTraits<Scalar>::epsilon())
+        if ((desiredAbsoluteError <= Scalar(0.) && desiredRelativeError < NumTraits<Scalar>::epsilon())
             || m_maxSubintervals < 1)
         {
             m_errorCode = 6;
@@ -108,8 +108,8 @@ public:
         m_errorListIndices[0] = 0;
         m_errorListIndices[1] = 1;
 
-        Scalar absDiff;
-        Scalar absResult;
+        Scalar absDiff = 0.;
+        Scalar absResult = 0.;
 
         // First approximation to the integral
         Scalar integral = quadratureKronrod(
@@ -120,15 +120,13 @@ public:
         m_errorList[0] = m_estimatedError;
 
         // Test on accuracy.
-        using std::abs;
-        using std::max;
         Scalar errorBound = max(desiredAbsoluteError, desiredRelativeError * abs(integral));
 
         if (m_maxSubintervals == 1)
         {
             m_errorCode = 1;
         }
-        else if (m_estimatedError <= Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.) * absDiff
+        else if (m_estimatedError <= NumTraits<Scalar>::epsilon() * Scalar(50.) * absDiff
                  && m_estimatedError > errorBound)
         {
             m_errorCode = 2;
@@ -161,8 +159,14 @@ public:
         // An index into m_errorList at the interval with largest error estimate.
         DenseIndex maxErrorIndex = 0;
         DenseIndex nrMax = 0;
+        
         int roundOff1 = 0;
         int roundOff2 = 0;
+
+        Scalar error1 = 0.;
+        Scalar error2 = 0.;
+        Scalar absDiff1 = 0.;
+        Scalar absDiff2 = 0.;
 
         // Main loop for the integration
         for (m_numSubintervals = 2; m_numSubintervals <= m_maxSubintervals; ++m_numSubintervals)
@@ -170,26 +174,23 @@ public:
             const DenseIndex numSubintervalsIndex = m_numSubintervals - 1;
 
             // Bisect the subinterval with the largest error estimate.
-            Scalar lower1 = m_lowerList[maxErrorIndex];
-            Scalar upper2 = m_upperList[maxErrorIndex];
+            const Scalar lower1 = m_lowerList[maxErrorIndex];
+            const Scalar upper2 = m_upperList[maxErrorIndex];
 
-            Scalar upper1 = (lower1 + upper2) * Scalar(.5);
-            Scalar lower2 = upper1;
-
-            Scalar error1;
-            Scalar error2;
-            Scalar absDiff1;
-            Scalar absDiff2;
+            const Scalar upper1 = (lower1 + upper2) * Scalar(.5);
+            const Scalar lower2 = upper1;
 
             const Scalar area1 = quadratureKronrod(
-            functionType, lower1, upper1, error1, absResult, absDiff1, quadratureRule);
+                functionType, lower1, upper1, error1, absResult, absDiff1, quadratureRule);
             const Scalar area2 = quadratureKronrod(
-            functionType, lower2, upper2, error2, absResult, absDiff2, quadratureRule);
+                functionType, lower2, upper2, error2, absResult, absDiff2, quadratureRule);
 
             // Improve previous approximations to integral and error and test for accuracy.
             ++(m_numEvaluations);
+            
             const Scalar area12 = area1 + area2;
             const Scalar error12 = error1 + error2;
+            
             errorSum += error12 - errorMax;
             area += area12 - m_integralList[maxErrorIndex];
 
@@ -223,10 +224,9 @@ public:
                 {
                     m_errorCode = 2;
                 }
-                // Set m_error_code in the case of poor integrand behaviour within
-                // the integration range.
+                // Set m_error_code in the case of poor integrand behaviour within the integration range.
                 else if (max(abs(lower1), abs(upper2)) <=
-                         (Eigen::NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
+                         (NumTraits<Scalar>::epsilon() * Scalar(100.) + Scalar(1.))
                          * (abs(lower2) + (std::numeric_limits<Scalar>::min)() * Scalar(1.e3)))
                 {
                     m_errorCode = 3;
@@ -555,7 +555,6 @@ private:
 
         // The result of the Kronrod formula.
         Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;
-        using std::abs;
         absIntegral = abs(resultKronrod);
 
         for (DenseIndex j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
@@ -587,6 +586,7 @@ private:
 
             f1Array[jj] = f1;
             f2Array[jj] = f2;
+
             const Scalar funcSum = f1 + f2;
 
             resultKronrod += weightsGaussKronrod[jj] * funcSum;
@@ -609,18 +609,15 @@ private:
         absDiffIntegral *= abs(halfLength);
         estimatedError = abs((resultKronrod - resultGauss) * halfLength);
 
-        using std::min;
-        using std::pow;
         if (absDiffIntegral != Scalar(0.) && estimatedError != Scalar(0.))
         {
             estimatedError = absDiffIntegral
                 * min(Scalar(1.), pow((estimatedError * Scalar(200.) / absDiffIntegral), Scalar(1.5)));
         }
 
-        using std::max;
-        if (absIntegral > (std::numeric_limits<Scalar>::min)() / (Eigen::NumTraits<Scalar>::epsilon() * Scalar(50.)))
+        if (absIntegral > (std::numeric_limits<Scalar>::min)() / (NumTraits<Scalar>::epsilon() * Scalar(50.)))
         {
-            estimatedError = max(Eigen::NumTraits<Scalar>::epsilon() * static_cast<Scalar>(50.) * absIntegral,
+            estimatedError = max(NumTraits<Scalar>::epsilon() * static_cast<Scalar>(50.) * absIntegral,
                                  estimatedError);
         }
 

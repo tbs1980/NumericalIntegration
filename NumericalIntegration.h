@@ -35,21 +35,11 @@ namespace Eigen
  */
 }
 
-#include <cmath>
-#include <cstdlib>
-
 #include <Eigen/Eigenvalues>
 #include <unsupported/Eigen/MPRealSupport>
-
-//@{
-
-#ifdef EIGEN_HAS_MPREAL_CXX11_TGAMMA
-    #include "ComputeGaussKronrodNodesWeights.h"
-#endif //EIGEN_HAS_MPREAL_CXX11_TGAMMA
+#include "ComputeGaussKronrodNodesWeights.h"
 
 #include "GaussKronrodNodesWeights.h"
 #include "Integrator.h"
-
-//@}
 
 #endif // EIGEN_NUMERICAL_INTEGRATION_H
