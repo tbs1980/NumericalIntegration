@@ -47,7 +47,7 @@ int test_nodes_weights_difference(const unsigned int N)
 
     double epsilon = 1e-16;
 
-    for(DenseIndex i = 0; i < xGKLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)
            || (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon)
@@ -58,7 +58,7 @@ int test_nodes_weights_difference(const unsigned int N)
         }
     }
 
-    for(DenseIndex i = 0; i < wGKLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon)
            || (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon)
@@ -73,7 +73,7 @@ int test_nodes_weights_difference(const unsigned int N)
     //       Piessens and Monegato gauss nodes are taken directly from GaussKronrod nodes,
     //       and agreement in the GaussKronrod node test implies agreement for Gauss nodes.
 
-    for(DenseIndex i = 0; i < wGLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
            || (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon)

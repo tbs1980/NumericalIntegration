@@ -29,11 +29,11 @@ public:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * Scalar(50.);
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& i)
 {
     static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -56,11 +56,14 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 int test_sine(void)
 {
+    using std::abs;
+    using std::isnan;
+
     std::ofstream fout;
     fout.open("test/testOutput/Sine_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
-     
+
     // typedef float Scalar;
     // typedef double Scalar;
     // typedef long double Scalar;
@@ -74,9 +77,9 @@ int test_sine(void)
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
-    const size_t numRules = 12;
+    const Index numRules = 12;
 
-    for (size_t i = 0; i < numRules; ++i)
+    for (Index i = 0; i < numRules; ++i)
     {
         success = true;
 
@@ -87,10 +90,10 @@ int test_sine(void)
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2.);
 
-        if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-            || isnan(abs((Scalar)(expected - actual))))
+        if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) ||
+            isnan((Scalar)(expected - actual)))
         {
-            fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+            fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
@@ -99,7 +102,7 @@ int test_sine(void)
         }
         else
         {
-            fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+            fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 

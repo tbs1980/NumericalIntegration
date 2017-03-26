@@ -46,7 +46,7 @@ int test_values()
     std::ofstream fout;
     std::string fileNameAndLocation = "test/testOutput/GaussKronrodNodesWeights.h";
     fout.open(fileNameAndLocation);
-    fout<<std::fixed<<std::setprecision(outputDigits);
+    fout << std::fixed << std::setprecision(outputDigits);
 
     int gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};
     int kronrodRule[12] = {15, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 201};

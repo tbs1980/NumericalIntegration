@@ -56,7 +56,7 @@ Scalar desiredRelativeError()
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -99,14 +99,14 @@ int test_peak(void)
 
     bool success = true;
     const Scalar alphaLimit = Scalar(15.);
-    const size_t numRules = 12;
+    const Index numRules = 12;
 
     for (Scalar alpha = Scalar(0.); alpha < alphaLimit; ++alpha)
     {
         success = true;
         integrandPeakFunctor.setAlpha(alpha);
 
-        for (size_t i = 0; i < numRules; ++i)
+        for (Index i = 0; i < numRules; ++i)
         {
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
@@ -121,7 +121,7 @@ int test_peak(void)
                 if (i == numRules-1)
                 {
                     fout << "\nPeak Test could not pass Alpha = " << alpha
-                         << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                         << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                          << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
@@ -134,7 +134,7 @@ int test_peak(void)
             }
             else
             {
-                fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                      << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           

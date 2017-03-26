@@ -37,8 +37,8 @@ namespace Eigen
 
 #include <Eigen/Eigenvalues>
 #include <unsupported/Eigen/MPRealSupport>
-#include "ComputeGaussKronrodNodesWeights.h"
 
+#include "ComputeGaussKronrodNodesWeights.h"
 #include "GaussKronrodNodesWeights.h"
 #include "Integrator.h"
 

@@ -47,7 +47,7 @@ namespace Eigen
         };
 
         /**
-         * \brief Prepares an Integrator for a call to a quadrature function.
+         * \brief Prepares an Integrator for a call to the quadrature function.
          *
          * \param[in] maxSubintervals The maximum number of subintervals allowed in the subdivision process
          *        of quadrature functions. This corresponds to the amount of memory allocated for said
@@ -74,7 +74,7 @@ namespace Eigen
          * are too difficult for non-adaptive quadrature, and, in particular, for integrands with
          * oscillating behavior of a non-specific type.
          *
-         * \param[in,out] f The function defining the integrand function.
+         * \param[in,out] functionType The function type defining the integrand function.
          * \param[in] lowerLimit The lower limit of integration.
          * \param[in] upperLimit The upper limit of integration.
          * \param[in] desiredAbsoluteError The absolute accuracy requested.
@@ -117,8 +117,7 @@ namespace Eigen
             Scalar absResult = 0.;
 
             // First approximation to the integral
-            Scalar integral = quadratureKronrod(
-              functionType, lowerLimit, upperLimit, m_estimatedError, absDiff, absResult, quadratureRule);
+            Scalar integral = quadratureKronrod(functionType, lowerLimit, upperLimit, m_estimatedError, absDiff, absResult, quadratureRule);
 
             m_numSubintervals = 1;
             m_integralList[0] = integral;
@@ -139,7 +138,8 @@ namespace Eigen
 
             if (m_errorCode != 0 ||
                 m_estimatedError == Scalar(0.) ||
-                (m_estimatedError <= errorBound && m_estimatedError != absResult))
+                (m_estimatedError <= errorBound &&
+                 m_estimatedError != absResult))
             {
                 if (quadratureRule == GaussKronrod15)
                 {
@@ -162,8 +162,8 @@ namespace Eigen
             Scalar errorMax = m_estimatedError;
 
             // An index into m_errorList at the interval with largest error estimate.
-            DenseIndex maxErrorIndex = 0;
-            DenseIndex nrMax = 0;
+            Index maxErrorIndex = 0;
+            Index nrMax = 0;
             
             int roundOff1 = 0;
             int roundOff2 = 0;
@@ -176,7 +176,7 @@ namespace Eigen
             // Main loop for the integration
             for (m_numSubintervals = 2; m_numSubintervals <= m_maxSubintervals; ++m_numSubintervals)
             {
-                const DenseIndex numSubintervalsIndex = m_numSubintervals - 1;
+                const Index numSubintervalsIndex = m_numSubintervals - 1;
 
                 // Bisect the subinterval with the largest error estimate.
                 const Scalar lower1 = m_lowerList[maxErrorIndex];
@@ -205,6 +205,7 @@ namespace Eigen
                     {
                         ++roundOff1;
                     }
+                    
                     if (m_numSubintervals > 10 &&
                         error12 > errorMax)
                     {
@@ -260,7 +261,7 @@ namespace Eigen
 
                 // Maintain the descending ordering in the list of error estimates and select the subinterval
                 // with the largest error estimate, (the next subinterval to be bisected).
-                quadratureSort(maxErrorIndex, errorMax,nrMax);
+                quadratureSort(maxErrorIndex, errorMax, nrMax);
 
                 if (m_errorCode != 0 ||
                     errorSum <= errorBound ||
@@ -296,14 +297,20 @@ namespace Eigen
          *
          * \returns The value returned will only be valid after calling quadratureAdaptive at least once.
          */
-        inline Scalar estimatedError() const {return m_estimatedError;}
+        inline Scalar estimatedError()
+        {
+            return m_estimatedError;
+        }
 
         /**
          * \brief Returns the error code.
          *
          * \returns The value returned will only be valid after calling quadratureAdaptive at least once.
          */
-        inline DenseIndex errorCode() const {return m_errorCode;}
+        inline Index errorCode()
+        {
+            return m_errorCode;
+        }
 
     private:
 
@@ -318,7 +325,9 @@ namespace Eigen
          * \param[in,out] errorMax The nrMax-th largest error estimate. errorMaxIndex = errorList(maxError).
          * \param[in,out] nrMax The integer value such that maxError = errorListIndices(nrMax).
          */
-        void quadratureSort(DenseIndex& maxErrorIndex, Scalar& errorMax, DenseIndex& nrMax)
+        void quadratureSort(Index& maxErrorIndex,
+                            Scalar& errorMax,
+                            Index& nrMax)
         {
             if (m_numSubintervals <= 2)
             {
@@ -332,8 +341,8 @@ namespace Eigen
             // This part of the routine is only executed if, due to a difficult integrand, subdivision has
             // increased the error estimate. In the normal case the insert procedure should start after the
             // nrMax-th largest error estimate.
-            DenseIndex i = 0;
-            DenseIndex succeed = 0;
+            Index i = 0;
+            Index succeed = 0;
             const Scalar errorMaximum = m_errorList[maxErrorIndex];
 
             if (nrMax != 1)
@@ -354,9 +363,9 @@ namespace Eigen
 
             // Compute the number of elements in the list to be maintained in descending order. This number
             // depends on the number of subdivisions remaining allowed.
-            DenseIndex topBegin = m_numSubintervals - 1;
-            DenseIndex bottomEnd = topBegin - 1;
-            DenseIndex start = nrMax + 1;
+            Index topBegin = m_numSubintervals - 1;
+            Index bottomEnd = topBegin - 1;
+            Index start = nrMax + 1;
 
             if (m_numSubintervals > m_maxSubintervals / 2 + 2)
             {
@@ -392,8 +401,9 @@ namespace Eigen
             // Insert errorMin by traversing the list bottom-up.
             m_errorListIndices[i - 1] = maxErrorIndex;
 
-            DenseIndex tempIndex = bottomEnd;
-            for (DenseIndex j = i; j <= bottomEnd; ++j)
+            Index tempIndex = bottomEnd;
+            
+            for (Index j = i; j <= bottomEnd; ++j)
             {
                 succeed = m_errorListIndices[tempIndex];
 
@@ -541,8 +551,8 @@ namespace Eigen
                                        const QuadratureRule quadratureRule)
         {
             using std::abs;
-            using std::max;
             using std::min;
+            using std::max;
             using std::pow;
 
             // Half-length of the interval.
@@ -552,31 +562,28 @@ namespace Eigen
             const Scalar center = (lowerLimit + upperLimit) * Scalar(.5);
             const Scalar fCenter = functionType(center);
 
-            DenseIndex size1 = weightsGaussKronrod.size() - 1;
-            DenseIndex size2 = weightsGauss.size() - 1;
+            Index size1 = weightsGaussKronrod.size() - 1;
+            Index size2 = weightsGauss.size() - 1;
 
             Array<Scalar, numKronrodRows - 1, 1> f1Array;
             Array<Scalar, numKronrodRows - 1, 1> f2Array;
 
             // The result of the Gauss formula.
-            Scalar resultGauss;
+            Scalar resultGauss = Scalar(0.);
 
-            if (quadratureRule % 2 == 0)
-            {
-                resultGauss = Scalar(0.);
-            }
-            else
+            if (quadratureRule % 2 != 0)
             {
                 resultGauss = weightsGauss[size2] * fCenter;
             }
 
             // The result of the Kronrod formula.
-            Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;
+            Scalar resultKronrod = weightsGaussKronrod[size1] * fCenter;            
+
             absIntegral = abs(resultKronrod);
 
-            for (DenseIndex j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
+            for (Index j = 1; j < weightsGaussKronrod.size() - weightsGauss.size(); ++j)
             {
-                const DenseIndex jj = j * 2 - 1;
+                const Index jj = j * 2 - 1;
                 const Scalar abscissa = halfLength * abscissaeGaussKronrod[jj];
 
                 const Scalar f1 = functionType(center - abscissa);
@@ -593,10 +600,9 @@ namespace Eigen
                 absIntegral += weightsGaussKronrod[jj] * (abs(f1) + abs(f2));
             }
 
-            for (DenseIndex j = 0; j < weightsGauss.size(); ++j)
+            for (Index j = 0; j < weightsGauss.size(); ++j)
             {
-                const DenseIndex jj = j * 2;
-
+                const Index jj = j * 2;
                 const Scalar abscissa = halfLength * abscissaeGaussKronrod[jj];
 
                 const Scalar f1 = functionType(center - abscissa);
@@ -650,7 +656,7 @@ namespace Eigen
          * sequence, with k = m_numSubintervals if m_numSubintervals <= (m_maxSubintervals/2 + 2),
          * otherwise k = m_maxSubintervals + 1 - m_numSubintervals.
          */
-        Array<DenseIndex, Dynamic, 1> m_errorListIndices;
+        Array<Index, Dynamic, 1> m_errorListIndices;
 
         /**
          * \brief An Array of dimension m_maxSubintervals for subinterval left endpoints.
@@ -684,19 +690,19 @@ namespace Eigen
         Array<Scalar, Dynamic, 1> m_errorList;
 
         /**
-        *  \brief Gives an upper bound on the number of subintervals. Must be at least 1.
+         * \brief Gives an upper bound on the number of subintervals. Must be at least 1.
          */
-        DenseIndex m_maxSubintervals;
+        Index m_maxSubintervals;
+
+        /**
+         * \brief The number of integrand evaluations.
+         */
+        Index m_numEvaluations;
 
         /**
          * \brief Estimate of the modulus of the absolute error, which should equal or exceed abs(I - I').
          */
         Scalar m_estimatedError;
-
-        /**
-         * \brief The number of integrand evaluations.
-         */
-        DenseIndex m_numEvaluations;
 
         /**
          * \brief Error messages generated by the routine.
@@ -727,12 +733,12 @@ namespace Eigen
          *
          * \todo make relativeMachineAccuracy a member variable.
          */
-        DenseIndex m_errorCode;
+        Index m_errorCode;
 
         /**
          * \brief The number of subintervals actually produced in the subdivision process.
          */
-        DenseIndex m_numSubintervals;
+        Index m_numSubintervals;
 
     };
 }

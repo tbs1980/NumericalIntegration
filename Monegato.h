@@ -1,7 +1,8 @@
 #ifndef EIGEN_MONEGATO_H
 #define EIGEN_MONEGATO_H
 
-namespace Eigen{
+namespace Eigen
+{
 
     /**
      * \ingroup NumericalIntegration_Module

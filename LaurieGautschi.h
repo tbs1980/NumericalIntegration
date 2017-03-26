@@ -1,7 +1,8 @@
 #ifndef EIGEN_LAURIEGAUTSCHI_H
 #define EIGEN_LAURIEGAUTSCHI_H
 
-namespace Eigen {
+namespace Eigen
+{
 
     /**
      * \ingroup NumericalIntegration_Module

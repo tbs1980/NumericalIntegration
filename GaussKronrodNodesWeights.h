@@ -9,7 +9,6 @@
 
 namespace Eigen
 {
-
     /**
      * \brief The abscissae and weights are given for the interval (-1,1).
      *        Because of symmetry, only the positive abscissae and their
