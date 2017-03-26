@@ -90,9 +90,10 @@ int test_nodes_weights_difference(const unsigned int N)
 
 int main(int argc, char** argv)
 {
-    size_t m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
+    int m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
 
     int ret = EXIT_SUCCESS;
+    
     ret += test_nodes_weights_difference(m);
     return ret;
 }

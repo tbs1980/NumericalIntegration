@@ -135,7 +135,6 @@ namespace Eigen
         typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
         typedef Eigen::Monegato<Scalar> MonegatoPolicy;
         typedef Eigen::Piessens<Scalar> PiessensPolicy;
-        typedef typename LaurieGautschiPolicy::VectorType VectorType;
 
         static void computeNodesAndWeights()
         {

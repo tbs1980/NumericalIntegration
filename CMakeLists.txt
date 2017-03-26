@@ -65,6 +65,7 @@ ADD_DEFINITIONS(
   -Wall
   -Wcast-align
   -Wchar-subscripts
+  -Wconversion
   -Wdouble-promotion
   -Wextra
   -Wfatal-errors

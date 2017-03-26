@@ -1,7 +1,8 @@
 #ifndef EIGEN_PIESSENS_H
 #define EIGEN_PIESSENS_H
 
-namespace Eigen{
+namespace Eigen
+{
 
     /**
     * \ingroup NumericalIntegration_Module
@@ -10,17 +11,15 @@ namespace Eigen{
     *
     * \brief This class computes Kronrod abscissae & weights for arbitrary precision
     *
-    * \tparam _Scalar floating point type
+    * \tparam Scalar floating point type
     *
     * This class is based on the work by R. Piessens, et.al,published in the
     * journal Mathematics of Computation, Volume 28, Number 125, January, 1974.
-    *
     */
-    template<typename _Scalar>
+    template <typename Scalar>
     class Piessens
     {
     public:
-        typedef _Scalar Scalar;
 
         /**
         * \brief kronrod adds n+1 points to an n-point Gaussian rule.
@@ -62,11 +61,10 @@ namespace Eigen{
         * \param[in,out] weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
         * \param[in,out] weightGauss[n+1] The weights for the Gauss rule.
         */
-        static void kronrod(
-            unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
+        static void kronrod(unsigned int nNodes,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
             typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
             unsigned int arraySize = nNodes + 1;
@@ -189,10 +187,14 @@ namespace Eigen{
         * \param[in,out] abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
         * \param[in,out] weightGaussKronrod The Gauss-Kronrod weight.
         */
-        static void abscWeightKronrod(
-            unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
-            Scalar& weightGaussKronrod)
+        static void abscWeightKronrod(unsigned int nNodes,
+                                      unsigned int m,
+                                      bool even,
+                                      Scalar chebCoeff,
+                                      Eigen::Array<Scalar,
+                                      Eigen::Dynamic, 1> betaCoeffs,
+                                      Scalar& abscGaussKronrod,
+                                      Scalar& weightGaussKronrod)
         {
             Scalar ai;
 
@@ -319,10 +321,14 @@ namespace Eigen{
         * \param[in,out] weightGaussKronrod The Gauss-Kronrod weight.
         * \param[in,out] weightGauss The Gauss weight.
         */
-        static void abscWeightGauss(
-            unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
-            Scalar& weightGaussKronrod, Scalar& weightGauss)
+        static void abscWeightGauss(unsigned int nNodes,
+                                    unsigned int m,
+                                    bool even,
+                                    const Scalar& chebCoeff,
+                                    Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs,
+                                    Scalar& abscGaussKronrod,
+                                    Scalar& weightGaussKronrod,
+                                    Scalar& weightGauss)
         {
             Scalar ai(0.);
             Scalar delta(1.);

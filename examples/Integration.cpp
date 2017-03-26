@@ -73,11 +73,11 @@ int main(void)
     Scalar expected = Scalar(-4.);
 
     // Print output.
-    size_t outputPrecision  = 18;
-    std::cout<<std::fixed;
-    std::cout<<"result          = "<<std::setprecision(outputPrecision)<<result<<std::endl;
-    std::cout<<"exact result    = "<<std::setprecision(outputPrecision)<<expected<<std::endl;
-    std::cout<<"actual error    = "<<std::setprecision(outputPrecision)<<(expected-result)<<std::endl;
+    int outputPrecision  = 18;
+    std::cout << std::fixed;
+    std::cout << "result          = " << std::setprecision(outputPrecision) << result << std::endl;
+    std::cout << "exact result    = " << std::setprecision(outputPrecision) << expected << std::endl;
+    std::cout << "actual error    = " << std::setprecision(outputPrecision) << (expected-result) << std::endl;
 
     return 0;
 }

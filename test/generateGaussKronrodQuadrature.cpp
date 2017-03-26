@@ -39,7 +39,7 @@ int test_values()
 
     gettimeofday(&timeStruct, NULL);
     long unsigned int finishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
-    double timeElapsed = (finishTime - startTime) / 1000000.;
+    double timeElapsed = (double)(finishTime - startTime) / 1000000.;
     
     std::cout << "\n\tNode/Weight Computation Time: " << timeElapsed << std::endl;
 
@@ -348,7 +348,7 @@ int main(void)
 
     gettimeofday(&timeStruct, NULL);
     long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
-    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    double totalTimeElapsed = (double)(processFinishTime - processStartTime) / 1000000.;
     
     std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
     return ret;
