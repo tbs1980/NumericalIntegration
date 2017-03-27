@@ -1,4 +1,3 @@
-mkdir -p test
 cd test
 mkdir -p testOutput
 cd ..
