@@ -71,6 +71,7 @@ namespace Eigen
     class QuadratureKronrod
     {
     public:
+
         static Array<Scalar, 8, 1> abscissaeGaussKronrod15;
         static Array<Scalar, 8, 1> weightsGaussKronrod15;
         static Array<Scalar, 4, 1> abscissaeGauss15;
@@ -149,7 +150,6 @@ namespace Eigen
             QuadratureKronrod::computeForRule<50>(abscissaeGaussKronrod101, weightsGaussKronrod101, abscissaeGauss101, weightsGauss101);
             QuadratureKronrod::computeForRule<60>(abscissaeGaussKronrod121, weightsGaussKronrod121, abscissaeGauss121, weightsGauss121);
             QuadratureKronrod::computeForRule<100>(abscissaeGaussKronrod201, weightsGaussKronrod201, abscissaeGauss201, weightsGauss201);
-
         }
 
         template <int N>

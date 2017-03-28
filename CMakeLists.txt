@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
 
 PROJECT(NumericalIntegration CXX)
 
@@ -61,6 +61,7 @@ ADD_DEFINITIONS(
   -DIBM=0
   -DLIN=1
   -DNDEBUG
+  -DCOMPUTE_NI_WEIGHTS_ON_THE_FLY
 
   -Wall
   -Wcast-align
@@ -86,8 +87,10 @@ ADD_DEFINITIONS(
   -fno-common
   -fvisibility=hidden
   -fPIC
+
   -c
   -g
+  -march=native
   -pedantic
   -pthread
   )

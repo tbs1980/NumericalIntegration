@@ -47,7 +47,7 @@ namespace Eigen
         };
 
         /**
-         * \brief Prepares an Integrator for a call to the quadrature function.
+         * \brief Prepares an Integrator for a call to a quadrature function.
          *
          * \param[in] maxSubintervals The maximum number of subintervals allowed in the subdivision process
          *        of quadrature functions. This corresponds to the amount of memory allocated for said
