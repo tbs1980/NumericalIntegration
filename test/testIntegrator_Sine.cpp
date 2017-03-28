@@ -56,8 +56,6 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_sine(void)
 {
-    using std::isnan;
-
     std::ofstream fout;
     fout.open("test/testOutput/Sine_integration_test_output.txt");
 
