@@ -91,8 +91,8 @@ int test_peak(void)
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
     // typedef float Scalar;        // \details float precision will not pass beyond alphaLimit = 7.
-    // typedef double Scalar;       // \details double precision will not pass beyond alphaLimit = 8.
-    typedef long double Scalar;     // \details long double precision will not pass beyond alphaLimit = 10.
+    typedef double Scalar;       // \details double precision will not pass beyond alphaLimit = 8.
+    // typedef long double Scalar;     // \details long double precision will not pass beyond alphaLimit = 10.
     // typedef mpfr::mpreal Scalar; // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
     // Scalar::set_default_prec(350);
     // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
