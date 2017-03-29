@@ -79,54 +79,53 @@ int test_values()
          << " * \\sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package\n"
          << " *     for Automatic Integration, Springer Verlag, 1983.\n"
          << " */\n\n#ifndef EIGEN_QUADRATURE_KRONROD_H\n#define EIGEN_QUADRATURE_KRONROD_H\n\n"
-         << "namespace Eigen\n{\n\n/**\n * \\brief The abscissae and weights are given for the interval (-1,1).\n"
-         << " *        Because of symmetry, only the positive abscissae and their\n"
-         << " *        corresponding weights are given.\n *\n";
+         << "namespace Eigen\n{\n\t/**\n\t * \\brief The abscissae and weights are given for the interval (-1,1).\n"
+         << "\t *        Because of symmetry, only the positive abscissae and their\n"
+         << "\t *        corresponding weights are given.\n\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param abscissaeGaussKronrodXX  The abscissae of the X point kronrod rule."
-        fout << " * \\param abscissaeGaussKronrod" << kronrodRule[i] << "  The abscissae of the " << kronrodRule[i] << " point kronrod rule.\n";
+        fout << "\t * \\param abscissaeGaussKronrod" << kronrodRule[i] << "  The abscissae of the " << kronrodRule[i] << " point kronrod rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param weightsGaussKronrodXX  The weights of the X point kronrod rule."
-        fout << " * \\param weightsGaussKronrod" << kronrodRule[i] << "  The weights of the " << kronrodRule[i] << " point kronrod rule.\n";
+        fout << "\t * \\param weightsGaussKronrod" << kronrodRule[i] << "  The weights of the " << kronrodRule[i] << " point kronrod rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param abscissaeGaussXX  The abscissae of the X point gauss rule."
-        fout << " * \\param abscissaeGauss" << kronrodRule[i] << "  The abscissae of the " << gaussRule[i] << " point gauss rule.\n";
+        fout << "\t * \\param abscissaeGauss" << kronrodRule[i] << "  The abscissae of the " << gaussRule[i] << " point gauss rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param weightsGaussXX  The weights of the X point gauss rule."
-        fout << " * \\param weightsGauss" << kronrodRule[i] << "  The weights of the " << gaussRule[i] << " point gauss rule.\n";
+        fout << "\t * \\param weightsGauss" << kronrodRule[i] << "  The weights of the " << gaussRule[i] << " point gauss rule.\n";
     }
 
-    fout << " */\n\ntemplate <typename Scalar>\nclass QuadratureKronrod\n{\npublic:\n";
+    fout << "\t */\n\n\ttemplate <typename Scalar>\n\tclass QuadratureKronrod\n\t{\n\tpublic:\n";
     
     for (size_t i=0; i<12; ++i)
     {
-        fout << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussAbscissaeNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
+        fout << "\t\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussAbscissaeNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
     }
 
-    fout << "\ttypedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef Eigen::Monegato<Scalar> MonegatoPolicy;\n"
-         << "\ttypedef Eigen::Piessens<Scalar> PiessensPolicy;\n\n"
-         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
-         << "\tstatic bool compute;\n\n";
+    fout << "\t\ttypedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
+         << "\t\ttypedef Eigen::Monegato<Scalar> MonegatoPolicy;\n"
+         << "\t\ttypedef Eigen::Piessens<Scalar> PiessensPolicy;\n\n";
 
-    fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n";
+    fout << "\t\tstatic void computeNodesAndWeights()\n\t\t{\n";
+    
     for (size_t i=0; i<12; ++i)
     {
         fout << "\t\t\tQuadratureKronrod::computeForRule<" << gaussRule[i] << ">(" 
@@ -134,35 +133,35 @@ int test_values()
              << gaussAbscissaeNames[i] << ", " << gaussWeightsNames[i] << ");\n";
     }
 
-    fout << "\n\t\t\tcompute = false;\n\t\t}\n\t}\n\n"
-         << "\ttemplate <int N>\n"
-         << "\tstatic void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,\n"
-         << "\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t{\n"
-         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
-         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
+    fout << "\t\t}\n\n"
+         << "\t\ttemplate <Index N>\n"
+         << "\t\tstatic void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,\n"
+         << "\t\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t\t{\n"
+         << "\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
+         << "\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
     
     if(solverPolicy == 0)
     {
-        fout << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//PiessensPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//MonegatoPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     else if(solverPolicy == 1)
     {
-        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\tPiessensPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//MonegatoPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     else if(solverPolicy == 2)
     {
-        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tMonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//PiessensPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\tMonegatoPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     
-    fout << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
-         << "\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t{\n\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\tgaussWeights(i) = wG(i);\n\t\t}\n\t}\n};\n\n"
-         << "template <typename Scalar>\nbool QuadratureKronrod<Scalar>::compute = true;\n\n";
+    fout << "\t\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t\t{\n\t\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t\t}\n\n"
+         << "\t\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t\t{\n\t\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\t\tgaussWeights(i) = wG(i);\n\t\t\t}\n\t\t}\n\t};\n\n";
+
 
 //-----------------------------------End File Header Information---------------------------------//
 
@@ -260,75 +259,75 @@ int test_values()
         size_t kronrodSize = gaussKronrodAbscissae.rows();
         size_t gaussSize = gaussAbscissae.rows();
 
-        fout << "\n//Nodes and Weights - Rule " << kronrodRule << "\n";
+        fout << "\n// Nodes and Weights - Rule " << kronrodRule << "\n";
 
         //Abscissae Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussKronrodAbscissaeNames[i]<< " =\n"
-             << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "    " << gaussKronrodAbscissae(j);
+            fout << "\t\tScalar(\"" << gaussKronrodAbscissae(j) << "\")";
             if(j !=kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Weights Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussKronrodWeightsNames[i] << " =\n"
-             << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "    " << kronrodWeights(j);
+            fout << "\t\tScalar(\"" << kronrodWeights(j) << "\")";
             if(j != kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussAbscissaeNames[i] << " =\n"
-             << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "    " << gaussAbscissae(j);
+            fout << "\t\tScalar(\"" << gaussAbscissae(j) << "\")";
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussWeightsNames[i] << " =\n"
-             << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "    " << gaussWeights(j);
+            fout << "\t\tScalar(\"" << gaussWeights(j) << "\")";
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n";
 
     }
 
-    fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H\n";
+    fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H";
 
     fout.close();
     std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n";
