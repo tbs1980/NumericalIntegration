@@ -64,8 +64,9 @@ int test_sine(void)
     // typedef float Scalar;
     // typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    Scalar::set_default_prec(500);
+    typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    Scalar::set_default_prec(500);  // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static value assignments are truncated when they are assigned at compile time.
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;

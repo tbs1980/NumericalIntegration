@@ -87,6 +87,7 @@ int test_logpow(void)
     // typedef long double Scalar;
     typedef mpfr::mpreal Scalar;
     Scalar::set_default_prec(500);
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;

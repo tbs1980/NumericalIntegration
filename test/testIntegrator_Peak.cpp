@@ -89,6 +89,7 @@ int test_peak(void)
     // typedef long double Scalar;
     typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
     Scalar::set_default_prec(350);
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
