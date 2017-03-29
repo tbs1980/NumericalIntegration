@@ -1,5 +1,5 @@
 /**
- * \file QuadratureKronrod.h
+ * \file GaussKronrodNodesWeights.h
  * \sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package
  *     for Automatic Integration, Springer Verlag, 1983.
  */

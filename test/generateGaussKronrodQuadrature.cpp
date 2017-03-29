@@ -75,7 +75,7 @@ int test_values()
 
 //----------------------------------Begin File Header Information--------------------------------//
 
-    fout << "/**\n * \\file QuadratureKronrod.h\n"
+    fout << "/**\n * \\file GaussKronrodNodesWeights.h\n"
          << " * \\sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package\n"
          << " *     for Automatic Integration, Springer Verlag, 1983.\n"
          << " */\n\n#ifndef EIGEN_QUADRATURE_KRONROD_H\n#define EIGEN_QUADRATURE_KRONROD_H\n\n"
