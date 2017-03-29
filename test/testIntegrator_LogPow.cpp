@@ -23,6 +23,7 @@ class IntegrandLogPowFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::pow;
         return pow(param, m_alpha) * log(1/param);
     }
 
@@ -77,6 +78,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_logpow(void)
 {
+    using std::abs;
     using std::isnan;
     
     std::ofstream fout;

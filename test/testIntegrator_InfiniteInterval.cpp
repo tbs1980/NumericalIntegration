@@ -23,6 +23,7 @@ class IntegrandInfiniteFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::pow;
         return pow(param, Scalar(2.)) * exp(-param * pow(Scalar(2.), -m_alpha));
     }
 
@@ -34,6 +35,8 @@ public:
 
     static Scalar integrateInfinite(const Scalar& alpha)
     {
+        using std::pow;
+        using std::exp;
         return (exp(Scalar(40.)) - Scalar(841.)) * pow(2., Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
     }
 
@@ -74,8 +77,9 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_pow(void)
 {
+    using std::abs;
     using std::isnan;
-    
+
     std::ofstream fout;
     fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
 

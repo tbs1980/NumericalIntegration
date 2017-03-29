@@ -19,6 +19,7 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::sin;
         return sin(param);
     }
 };
@@ -56,6 +57,7 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_sine(void)
 {
+    using std::abs;
     using std::isnan;
     
     std::ofstream fout;
