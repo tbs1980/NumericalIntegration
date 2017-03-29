@@ -56,17 +56,19 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_sine(void)
 {
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/Sine_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
 
     // typedef float Scalar;
-    // typedef double Scalar;
+    typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    Scalar::set_default_prec(500);  // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static value assignments are truncated when they are assigned at compile time.
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    // typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    // Scalar::set_default_prec(500);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
@@ -83,9 +85,9 @@ int test_sine(void)
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2.);
 
         if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) ||

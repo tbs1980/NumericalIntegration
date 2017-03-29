@@ -74,17 +74,19 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_pow(void)
 {
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
     // typedef float Scalar;
-    // typedef double Scalar;
+    typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(500);
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(500);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;

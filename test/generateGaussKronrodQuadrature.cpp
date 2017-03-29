@@ -269,7 +269,7 @@ int test_values()
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "\t\tScalar(\"" << gaussKronrodAbscissae(j) << "\")";
+            fout << "\t\t" << gaussKronrodAbscissae(j);
             if(j !=kronrodSize - 1)
                 fout << ",";
             fout << "\n";
@@ -285,7 +285,7 @@ int test_values()
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "\t\tScalar(\"" << kronrodWeights(j) << "\")";
+            fout << "\t\t" << kronrodWeights(j);
             if(j != kronrodSize - 1)
                 fout << ",";
             fout << "\n";
@@ -301,7 +301,7 @@ int test_values()
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "\t\tScalar(\"" << gaussAbscissae(j) << "\")";
+            fout << "\t\t" << gaussAbscissae(j);
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
@@ -317,7 +317,7 @@ int test_values()
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "\t\tScalar(\"" << gaussWeights(j) << "\")";
+            fout << "\t\t" << gaussWeights(j);
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";

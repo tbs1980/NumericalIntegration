@@ -77,17 +77,19 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_logpow(void)
 {
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/LogPow_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] x^a*log(1/x) = 1/(a+1)^2\n";
      
     // typedef float Scalar;
-    // typedef double Scalar;
+    typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(500);
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(500);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;

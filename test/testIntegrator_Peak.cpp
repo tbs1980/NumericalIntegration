@@ -22,9 +22,9 @@ class IntegrandPeakFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-        // return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        // return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
@@ -37,9 +37,9 @@ public:
 
     static Scalar integralPeak(const Scalar& alpha)
     {
-        // return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
+        return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
+        // return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
     }
 
 private:
@@ -79,17 +79,19 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& 
 
 int test_peak(void)
 {
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/Peak_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
     // typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
-    // typedef double Scalar;
+    typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
-    Scalar::set_default_prec(350);
-    QuadratureKronrod<Scalar>::computeNodesAndWeights();
+    // typedef mpfr::mpreal Scalar;   // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
+    // Scalar::set_default_prec(350);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
     
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
