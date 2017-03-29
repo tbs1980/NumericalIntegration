@@ -286,7 +286,7 @@ namespace Eigen
             J(2*N,2*N) = alpha0(2*N);
 
             //TODO : Is this assumption of positive definiteness correct?
-            SelfAdjointEigenSolver<Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic>> es(J);
+            SelfAdjointEigenSolver< Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> > es(J);
 
             //TODO : make use the eigen assert facilities
             assert(es.info() == Eigen::Success);
@@ -341,7 +341,7 @@ namespace Eigen
             }
 
             //TODO : Is this assumption of positive definiteness correct?
-            SelfAdjointEigenSolver<Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic>> es(J);
+            SelfAdjointEigenSolver< Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> > es(J);
 
             //TODO : make use the eigen assert facilities
             assert(es.info() == Eigen::Success);
