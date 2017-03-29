@@ -11,14 +11,16 @@
 #include <fstream>
 #include <iomanip>
 
+using namespace Eigen;
+
 int compare_codes_unified_interface(const unsigned int N=10)
 {
-    //typedef float Scalar;
-    //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(320); //128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
-    //256,288,320,352,384,416,448
+    // typedef float Scalar;
+    // typedef double Scalar;
+    // typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(320); // 128, 320, 384, 448 gives an error Newton-Raphson iterative abscissae solver failed.
+    // 256,288,320,352,384,416,448
 
 
     Eigen::Array<Scalar, Eigen::Dynamic, 1> xGKLaurieGautschi;
@@ -30,12 +32,9 @@ int compare_codes_unified_interface(const unsigned int N=10)
     typedef Eigen::Piessens<Scalar> PiessensPolicy;
     typedef Eigen::Monegato<Scalar> MonegatoPolicy;
 
-    typedef LaurieGautschiPolicy::IndexType IndexType;
-
-    //const unsigned int N = 90;
     const int outputIntegers = 20; //beyond 67 integers methods disagree for precision=256.
 
-    LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGKLaurieGautschi,wGKLaurieGautschi,xGLaurieGautschi,wGLaurieGautschi);
+    LaurieGautschiPolicy::computeAbscissaeAndWeights(N, xGKLaurieGautschi, wGKLaurieGautschi, xGLaurieGautschi, wGLaurieGautschi);
 
     std::ofstream fout;
 
@@ -45,21 +44,24 @@ int compare_codes_unified_interface(const unsigned int N=10)
     fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
-    fout << "\nKronrod Nodes\n";
+    fout << std::endl << "Kronrod Nodes" << std::endl;
     fout << std::fixed;
-    for(IndexType i = 0; i < xGKLaurieGautschi.rows(); ++i)
+    
+    for(DenseIndex i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << xGKLaurieGautschi(i) << ",\n";
     }
 
-    fout << "\nKronrod Weights\n";
-    for(IndexType i = 0; i < wGKLaurieGautschi.rows(); ++i)
+    fout << std::endl << "Kronrod Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGKLaurieGautschi(i) << ",\n";
     }
 
-    fout << "\nGauss Weights\n";
-    for(IndexType i = 0; i < wGLaurieGautschi.rows(); ++i)
+    fout << std::endl << "Gauss Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGLaurieGautschi(i) << ",\n";
     }
@@ -78,21 +80,24 @@ int compare_codes_unified_interface(const unsigned int N=10)
     fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
-    fout << "\nKronrod Nodes\n";
+    fout << std::endl << "Kronrod Nodes" << std::endl;
     fout << std::fixed;
-    for(IndexType i = 0; i < xGKPiessens.rows(); ++i)
+    
+    for(DenseIndex i = 0; i < xGKPiessens.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << xGKPiessens(i) << ",\n";
     }
 
-    fout << "\nKronrod Weights\n";
-    for(IndexType i = 0; i < wGKPiessens.rows(); ++i)
+    fout << std::endl <<"Kronrod Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGKPiessens.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGKPiessens(i) << ",\n";
     }
 
-    fout << "\nGauss Weights\n";
-    for(IndexType i = 0; i < wGPiessens.rows(); ++i)
+    fout << std::endl << "Gauss Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGPiessens.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGPiessens(i) << ",\n";
     }
@@ -111,21 +116,24 @@ int compare_codes_unified_interface(const unsigned int N=10)
     fout.open(fileNameAndLocation);
 
     fout << "Kronrod Nodes and Weights for N = " << N << std::endl;
-    fout << "\nKronrod Nodes\n";
+    fout << std::endl << "Kronrod Nodes" << std::endl;
     fout << std::fixed;
-    for(IndexType i = 0; i < xGKMonegato.rows(); ++i)
+    
+    for(DenseIndex i = 0; i < xGKMonegato.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << xGKMonegato(i) << ",\n";
     }
 
-    fout << "\nKronrod Weights\n";
-    for(IndexType i = 0; i < wGKMonegato.rows(); ++i)
+    fout << std::endl << "Kronrod Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGKMonegato.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGKMonegato(i) << ",\n";
     }
 
-    fout << "\nGauss Weights\n";
-    for(IndexType i = 0; i < wGMonegato.rows(); ++i)
+    fout << std::endl << "Gauss Weights" << std::endl;
+    
+    for(DenseIndex i = 0; i < wGMonegato.rows(); ++i)
     {
         fout << std::setprecision(outputIntegers) << wGMonegato(i) << ",\n";
     }
@@ -138,9 +146,11 @@ int compare_codes_unified_interface(const unsigned int N=10)
 
 int main(int argc, char** argv)
 {
-    size_t m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
-
-    int ret = 0;
+    int m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
+    
+    int ret = EXIT_SUCCESS;
+    
     ret += compare_codes_unified_interface(m);
+    
     return ret;
 }

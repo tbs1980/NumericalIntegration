@@ -24,14 +24,14 @@ public:
     Scalar operator()(const Scalar& param) const
     {
         using std::pow;
-        using std::exp;
         return pow(param, Scalar(2.)) * exp(-param * pow(Scalar(2.), -m_alpha));
     }
 
-    /**
-    * A paramater for varying the upper bound.
-    */
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+    // A paramater for varying the upper bound.
+    void setAlpha(const Scalar& alpha)
+    {
+        m_alpha = alpha;
+    }
 
     static Scalar integrateInfinite(const Scalar& alpha)
     {
@@ -50,11 +50,11 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * Scalar(50.);
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -77,41 +77,43 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 int test_pow(void)
 {
+    using std::abs;
+    using std::isnan;
+
     std::ofstream fout;
     fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
 
     std::cout<<"\nTesting Interval [0->Alpha], F(x) = x^2 * exp(-x * 2^(-alpha))\n";
      
-    //typedef float Scalar;
+    // typedef float Scalar;
     typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(500);
+    // typedef long double Scalar;
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(500);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(1000);
+    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;
-    const Scalar alphaLimit = 18.;
-    const size_t numRules = 12;
+    const Scalar alphaLimit = Scalar(18.);
+    const Index numRules = 12;
 
-    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
+    for (Scalar alpha = Scalar(0.); alpha < alphaLimit; ++alpha)
     {
         success = true;
         integrandInfiniteFunctor.setAlpha(alpha);
         
-        for (size_t i = 0; i < numRules; ++i)
+        for (Index i = 0; i < numRules; ++i)
         {
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-            using std::pow;
-            Scalar actual = eigenIntegrator.adaptiveQuadrature(integrandInfiniteFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandInfiniteFunctor, Scalar(0.), Scalar(40. * pow(2., alpha)), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandInfiniteFunctorType::integrateInfinite(alpha);
 
-            using std::abs;
             if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {
@@ -120,7 +122,7 @@ int test_pow(void)
                 if(i == numRules-1)
                 {
                     fout << "\nPeak Test could not pass Alpha = " << alpha
-                         << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                         << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                          << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
@@ -133,7 +135,7 @@ int test_pow(void)
             }
             else
             {
-                fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                      << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           

@@ -25,13 +25,16 @@ public:
         using std::pow;
         return pow(Scalar(4.), -m_alpha) / (pow(param-Scalar(M_PI)/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi()/Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
+        // return pow(Scalar(4.), -m_alpha) / (pow(param-NumTraits<Scalar>::Pi() / Scalar(4.), Scalar(2.)) + pow(Scalar(16.), -m_alpha));
     }
 
     /**
     * \param alpha A parameter for varying the peak.
     */
-    void setAlpha(const Scalar& alpha) {m_alpha = alpha;}
+    void setAlpha(const Scalar& alpha)
+    {
+        m_alpha = alpha;
+    }
 
     static Scalar integralPeak(const Scalar& alpha)
     {
@@ -39,7 +42,7 @@ public:
         using std::atan;
         return atan((Scalar(4.) - Scalar(M_PI))*pow(Scalar(4.), alpha - Scalar(1.))) + atan(Scalar(M_PI)*pow(Scalar(4.), alpha - Scalar(1.)));
         // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
+        // return atan((Scalar(4.) - NumTraits<Scalar>::Pi())*pow(Scalar(4.), alpha - Scalar(1.))) + atan(NumTraits<Scalar>::Pi()*pow(Scalar(4.), alpha - Scalar(1.)));
     }
 
 private:
@@ -52,11 +55,11 @@ private:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-    return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+    return NumTraits<Scalar>::epsilon() * Scalar(50.);
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& i)
 {
   static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -79,50 +82,52 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 int test_peak(void)
 {
+    using std::abs;
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/Peak_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->1] 4^-alpha/((x-pi/4)^2 + 16^-alpha) = atan((4-pi)*4^(alpha-1)) + atan(pi*4^(alpha-1))\n";
 
-    //typedef float Scalar;     // \details float precision will not pass beyond alphaLimit = 7.
-    //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    //Scalar::set_default_prec(350);
-    
+    // typedef float Scalar;        // \details float precision will not pass beyond alphaLimit = 7.
+    typedef double Scalar;       // \details double precision will not pass beyond alphaLimit = 8.
+    // typedef long double Scalar;     // \details long double precision will not pass beyond alphaLimit = 10.
+    // typedef mpfr::mpreal Scalar; // \detail Performing this test using multiprecision requires changing from M_PI to NumTraits<Scalar>::PI();
+    // Scalar::set_default_prec(350);
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandPeakFunctor<Scalar> IntegrandPeakFunctorType;
 
-    IntegratorType eigenIntegrator(10000);  // \detail The number of subintervals must be increased to roughly 100X the precision requested.
+    IntegratorType eigenIntegrator(350000);  // \detail The number of subintervals must be increased to roughly 100X the precision requested.
     IntegrandPeakFunctorType integrandPeakFunctor;
 
     bool success = true;
-    const Scalar alphaLimit = 15.;
-    const size_t numRules = 12;
+    const Scalar alphaLimit = Scalar(15.);
+    const Index numRules = 12;
 
-    for (Scalar alpha = 0.; alpha < alphaLimit; ++alpha)
+    for (Scalar alpha = Scalar(0.); alpha < alphaLimit; ++alpha)
     {
         success = true;
         integrandPeakFunctor.setAlpha(alpha);
 
-        for (size_t i = 0; i < numRules; ++i)
+        for (Index i = 0; i < numRules; ++i)
         {
             Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-            Scalar actual = eigenIntegrator.adaptiveQuadrature(integrandPeakFunctor, Scalar(0.),Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+            Scalar actual = eigenIntegrator.quadratureAdaptive(integrandPeakFunctor, Scalar(0.), Scalar(1.), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
             Scalar expected = IntegrandPeakFunctorType::integralPeak(alpha);
 
-            using std::abs;
-            if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
+            if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs((Scalar)expected) 
                 || isnan(abs((Scalar)(expected - actual))))
             {
                 success = false;
 
-                if(i == numRules-1)
+                if (i == numRules-1)
                 {
                     fout << "\nPeak Test could not pass Alpha = " << alpha
-                         << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                         << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                          << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                          << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
@@ -135,7 +140,7 @@ int test_peak(void)
             }
             else
             {
-                fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+                fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                      << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                      << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
                           
@@ -150,7 +155,7 @@ int test_peak(void)
 
     fout.close();
 
-    if(success)
+    if (success)
     {
         std::cout << std::endl << "\tTest Succeeded!\n" << std::endl;
         return EXIT_SUCCESS;

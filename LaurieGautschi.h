@@ -1,14 +1,15 @@
 #ifndef EIGEN_LAURIEGAUTSCHI_H
 #define EIGEN_LAURIEGAUTSCHI_H
 
-namespace Eigen {
+namespace Eigen
+{
 
     /**
      * \ingroup NumericalIntegration_Module
      *
      * \class LaurieGautschi
      *
-     * \tparam _Scalar floating point type
+     * \tparam Scalar floating point type
      *
      * \brief This class computes Kronrod abscissae & weights for arbitrary precision.
      *
@@ -20,15 +21,11 @@ namespace Eigen {
      *
      * \TODO Ensure only appropriates types are used for Scalar, e.g. prohibit integers.
      */
-    template<typename _Scalar>
+    template <typename Scalar>
+
     class LaurieGautschi
     {
     public:
-        typedef _Scalar Scalar;
-        typedef typename Eigen::Matrix<Scalar,Eigen::Dynamic,1>  VectorType;
-        typedef typename Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> MatrixType;
-        typedef typename VectorType::Index IndexType;
-        typedef typename Eigen::SelfAdjointEigenSolver<MatrixType> SelfAdjointEigenSolverType;
 
         /**
          * \brief Recurrence coefficients for monic Jacobi polynomials.
@@ -49,8 +46,11 @@ namespace Eigen {
          * \param[in,out] alphaOut N alpha-coefficients
          * \param[in,out] betaOut N beta-coefficients
          */
-        static void r_jacobi(const IndexType N,const Scalar alpha,const Scalar beta,
-            VectorType& alphaOut, VectorType& betaOut)
+        static void r_jacobi(const Index N,
+                             const Scalar alpha,
+                             const Scalar beta,
+                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& alphaOut,
+                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& betaOut)
         {
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
@@ -59,16 +59,16 @@ namespace Eigen {
             assert(alphaOut.rows() > 0);
             assert(N <= alphaOut.rows());
 
-            using std::pow;
-            using std::tgamma;
             alphaOut(0) = (beta-alpha)/(alpha+beta+Scalar(2.));
-            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * tgamma(alpha+Scalar(1.)) * tgamma(beta+Scalar(1.)) / tgamma(alpha+beta+Scalar(2.));
+            betaOut(0) = pow(Scalar(2.),(alpha+beta+Scalar(1.))) * tgamma(alpha+Scalar(1.)) *
+                         tgamma(beta+Scalar(1.)) / tgamma(alpha+beta+Scalar(2.));
 
-            for(IndexType n=1;n<N;++n)
+            for (Index n = 1; n < N; ++n)
             {
-                Scalar nAlphaBeta = Scalar(2.)*n+alpha+beta;
-                alphaOut(n) = (beta*beta - alpha*alpha) / (nAlphaBeta*(nAlphaBeta+Scalar(2.)));
-                betaOut(n) =  Scalar(4.)*(n+alpha)*(n+beta)*n*(n+alpha+beta) / (nAlphaBeta*nAlphaBeta*(nAlphaBeta+Scalar(1.))*(nAlphaBeta-Scalar(1.)));
+                Scalar nAlphaBeta = Scalar(2.) * n + alpha + beta;
+                alphaOut(n) = (beta*beta - alpha*alpha) / (nAlphaBeta * (nAlphaBeta+Scalar(2.)));
+                betaOut(n) =  Scalar(4.) * (n+alpha)*(n+beta)*n*(n+alpha+beta) /
+                              (nAlphaBeta*nAlphaBeta*(nAlphaBeta+Scalar(1.)) * (nAlphaBeta-Scalar(1.)));
             }
         }
 
@@ -92,8 +92,11 @@ namespace Eigen {
          * \param[in,out] alphaOut N alpha-coefficients
          * \param[in,out] betaOut N beta-coefficients
          */
-        static void r_jacobi_01(const IndexType N,const Scalar alpha,const Scalar beta,
-            VectorType& alphaOut, VectorType& betaOut)
+        static void r_jacobi_01(const Index N,
+                                const Scalar alpha,
+                                const Scalar beta,
+                                Eigen::Array<Scalar, Eigen::Dynamic, 1>& alphaOut,
+                                Eigen::Array<Scalar, Eigen::Dynamic, 1>& betaOut)
         {
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
@@ -104,19 +107,17 @@ namespace Eigen {
 
             r_jacobi(N, alpha, beta, alphaOut, betaOut);
 
-            for(IndexType n=0; n<N; ++n)
+            for (Index n = 0; n < N; ++n)
             {
-                alphaOut(n) = (Scalar(1.)+alphaOut(n))/Scalar(2.);
+                alphaOut(n) = (Scalar(1.)+alphaOut(n)) / Scalar(2.);
             }
 
-            using std::pow;
-            betaOut(0) = betaOut(0)/pow(Scalar(2),alpha+beta+Scalar(1.));
+            betaOut(0) = betaOut(0) / pow(Scalar(2), alpha + beta + Scalar(1.));
 
-            for(IndexType n=1; n<N; ++n)
+            for (Index n = 1; n < N; ++n)
             {
-                betaOut(n) = betaOut(n)/Scalar(4.);
+                betaOut(n) = betaOut(n) / Scalar(4.);
             }
-
         }
 
         /**
@@ -142,70 +143,77 @@ namespace Eigen {
          * \param[in,out] beta Beta-elements in the Jacobi-Kronrod matrix of order 2N+1
          *
          */
-        static void r_kronrod(const IndexType N,VectorType const& alphaIn, VectorType const& betaIn,
-            VectorType& alpha, VectorType& beta)
+        static void r_kronrod(const Index N,
+                              const Eigen::Array<Scalar, Eigen::Dynamic, 1>& alphaIn,
+                              const Eigen::Array<Scalar, Eigen::Dynamic, 1>& betaIn,
+                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& alpha,
+                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& beta)
         {
+            using std::ceil;
+            using std::floor;
+
             //TODO : make use the eigen assert facilities
             assert(alphaIn.rows() == betaIn.rows());
+            assert(alphaIn.rows() >= ceil(3*N/2) + 1 );
             assert(alphaIn.rows() > 0);
-            assert(alphaIn.rows() >= std::ceil(3*N/2)+1 );
             assert(alpha.rows() == 2*N+1);
             assert(beta.rows() == 2*N+1);
 
-            alpha = VectorType::Zero(2*N+1);
-            beta = VectorType::Zero(2*N+1);
+            alpha = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N+1);
+            beta = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N+1);
 
-            for(IndexType k=0; k<=std::floor(3*N/2)+1; ++k)
+            for (Index k = 0; k <= (Index)floor(3*N/2) + 1; ++k)
             {
                 alpha(k) = alphaIn(k);
             }
 
-            for(IndexType k=0; k<=std::ceil(3*N/2)+1; ++k)
+            for (Index k=0; k <= (Index)ceil(3*N/2) + 1; ++k)
             {
                 beta(k) = betaIn(k);
             }
 
-            VectorType sigma = VectorType::Zero(std::floor(N/2)+2);
-            VectorType tempVector = VectorType::Zero(std::floor(N/2)+2);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> sigma = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero((Index)floor(N/2) + 2);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> tempVector = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero((Index)floor(N/2) + 2);
 
             tempVector(1) = beta(N+1);
 
-            for(IndexType m=0; m<N-2+1; ++m)
+            for (Index m = 0; m < N-2+1; ++m)
             {
                 Scalar u = 0;
-                for(IndexType k=std::floor((m+1)/2); k>=0;--k)
+                for(Index k = (Index)floor((m+1) / 2); k >= 0;--k)
                 {
-                    IndexType l = m-k;
-                    u = u + ( alpha(k+N+1)-alpha(l) )*tempVector(k+1) + beta(k+N+1)*sigma(k) - beta(l)*sigma(k+1);
+                    Index l = m-k;
+                    u = u + (alpha(k+N+1)-alpha(l)) * tempVector(k+1) + beta(k+N+1)*sigma(k) - beta(l)*sigma(k+1);
                     sigma(k+1) = u;
                 }
 
-                VectorType swap = sigma;
+                Eigen::Array<Scalar, Eigen::Dynamic, 1> swap = sigma;
                 sigma = tempVector;
                 tempVector = swap;
             }
 
-            for(IndexType j=std::floor(N/2); j>=0; --j)
+            for (Index j = (Index)floor(N/2); j>=0; --j)
             {
                 sigma(j+1) = sigma(j);
             }
 
-            for(IndexType m = N-1; m<2*N-3+1; ++m)
+            for (Index m = N-1; m < 2*N-3+1; ++m)
             {
-                IndexType k = m+1-N;
-                IndexType j = 0;
+                Index k = m+1-N;
+                Index j = 0;
                 Scalar u = 0;
-                for(k=m+1-N; k<std::floor((m-1)/2)+1; ++k)
+
+                for (k = m+1-N; k < (Index)floor((m-1) / 2) + 1; ++k)
                 {
-                    IndexType l = m-k;
+                    Index l = m-k;
                     j = N-1-l;
                     u = u - (alpha(k+N+1)-alpha(l))*tempVector(j+1) - beta(k+N+1)*sigma(j+1) + beta(l)*sigma(j+2);
                     sigma(j+1) = u;
                 }
 
-                k=std::floor((m+1)/2);
+                k = (Index)floor((m+1) / 2);
 
-                if(m % 2 == 0)
+                if (m % 2 == 0)
                 {
                     alpha(k+N+1) = alpha(k) + (sigma(j+1)-beta(k+N+1)*sigma(j+2)) / tempVector(j+2);
                 }
@@ -214,12 +222,12 @@ namespace Eigen {
                     beta(k+N+1) = sigma(j+1) / sigma(j+2);
                 }
 
-                VectorType swap = sigma;
+                Eigen::Array<Scalar, Eigen::Dynamic, 1> swap = sigma;
                 sigma = tempVector;
                 tempVector = swap;
             }
 
-            alpha(2*N) = alpha(N-1)-beta(2*N)*sigma(1)/tempVector(1);
+            alpha(2*N) = alpha(N-1)-beta(2*N)*sigma(1) / tempVector(1);
         }
 
         /**
@@ -244,8 +252,11 @@ namespace Eigen {
          * \param[in,out] nodes 2N+1 nodes
          * \param[in,out] weights 2N+1 weights corresponding to \a nodes
          */
-        static void kronrod(const IndexType N,VectorType const& alpha, VectorType const& beta,
-            VectorType& nodes, VectorType& weights)
+        static void kronrod(const Index N,
+                            const Eigen::Array<Scalar, Eigen::Dynamic, 1>& alpha,
+                            const Eigen::Array<Scalar, Eigen::Dynamic, 1>& beta,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(N>0);
@@ -254,19 +265,18 @@ namespace Eigen {
             assert(nodes.rows() == 2*N+1);
             assert(nodes.rows() == weights.rows());
 
-            VectorType alpha0 = VectorType::Zero(2*N+1);
-            VectorType beta0 = VectorType::Zero(2*N+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> alpha0 = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> beta0 = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N+1);
 
             r_kronrod(N, alpha, beta, alpha0, beta0);
 
             // \TODO : CHECK NEEDED LIKE THE ONE ON LINE 21 IN KRONROD.M
             // Do we have an approximately equal function in Eigen?
-            assert(std::abs(beta0.sum() - (Scalar) (2*N+1)) > 1e-5);
+            assert(abs(beta0.sum() - (Scalar) (2*N+1)) > 1e-5);
 
-            MatrixType J = MatrixType::Zero(2*N+1,2*N+1);
+            Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> J = Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic>::Zero(2*N+1, 2*N+1);
 
-            using std::sqrt;
-            for(IndexType k=0; k<2*N; ++k)
+            for (Index k = 0; k < 2*N; ++k)
             {
                 J(k,k) = alpha0(k);
                 J(k,k+1) = sqrt(beta0(k+1));
@@ -276,15 +286,15 @@ namespace Eigen {
             J(2*N,2*N) = alpha0(2*N);
 
             //TODO : Is this assumption of positive definiteness correct?
-            SelfAdjointEigenSolverType es(J);
+            SelfAdjointEigenSolver< Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> > es(J);
 
             //TODO : make use the eigen assert facilities
             assert(es.info() == Eigen::Success);
 
             nodes = es.eigenvalues();
-            MatrixType V = es.eigenvectors();
+            Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> V = es.eigenvectors();
 
-            weights = beta0(0)*(V.row(0).array()*V.row(0).array()).matrix();
+            weights = beta0(0) * (V.row(0).array() * V.row(0).array()).matrix();
 
         }
 
@@ -306,8 +316,11 @@ namespace Eigen {
          * \param[in,out] nodes 2N+1 nodes
          * \param[in,out] weights 2N+1 weights corresponding to \a nodes
          */
-        static void gauss(const IndexType N,VectorType const& alpha, VectorType const& beta,
-            VectorType& nodes, VectorType& weights)
+        static void gauss(const Index N,
+                          const Eigen::Array<Scalar, Eigen::Dynamic, 1>& alpha,
+                          const Eigen::Array<Scalar, Eigen::Dynamic, 1>& beta,
+                          Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
+                          Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(N > 0);
@@ -316,11 +329,11 @@ namespace Eigen {
             assert(nodes.rows() == N);
             assert(nodes.rows() == weights.rows());
 
-            MatrixType J = MatrixType::Zero(N,N);
+            Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> J = Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic>::Zero(N,N);
 
             J(0,0) = alpha(0);
-            using std::sqrt;
-            for(IndexType n=1; n<N; ++n)
+
+            for (Index n=1; n<N; ++n)
             {
                 J(n,n) = alpha(n);
                 J(n,n-1) = sqrt(beta(n));
@@ -328,16 +341,15 @@ namespace Eigen {
             }
 
             //TODO : Is this assumption of positive definiteness correct?
-            SelfAdjointEigenSolverType es(J);
+            SelfAdjointEigenSolver< Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> > es(J);
 
             //TODO : make use the eigen assert facilities
             assert(es.info() == Eigen::Success);
 
             nodes = es.eigenvalues();
-            MatrixType V = es.eigenvectors();
+            Eigen::Matrix<Scalar,Eigen::Dynamic, Eigen::Dynamic> V = es.eigenvectors();
 
             weights = beta(0)*(V.row(0).array()*V.row(0).array()).matrix();
-
         }
 
         /**
@@ -351,21 +363,23 @@ namespace Eigen {
          * \param[in,out] nodes Returns a vector of 2N+1 nodes
          * \param[in,out] w Returns a vector of weights corresponding to \a nodes
          */
-        static void mpkronrod(const IndexType N,VectorType& nodes, VectorType& weights)
+        static void mpkronrod(const Index N,
+                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
+                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(nodes.rows() ==  2*N+1);
             assert(weights.rows() ==  2*N+1);
             assert(N>0);
 
-            VectorType alpha = VectorType::Zero(2*N);
-            VectorType beta = VectorType::Zero(2*N);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> alpha = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> beta = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N);
 
             r_jacobi_01( 2*N, Scalar(0), Scalar(0), alpha, beta);
 
             kronrod(N,alpha,beta,nodes,weights);
 
-            for(IndexType i=0; i<nodes.rows(); ++i)
+            for (Index i=0; i<nodes.rows(); ++i)
             {
                 nodes(i) = Scalar(2.)*nodes(i) - Scalar(1.);
                 weights(i) = Scalar(2.)*weights(i);
@@ -382,21 +396,23 @@ namespace Eigen {
          * \param[in,out] nodes Returns a vector of 2N+1 nodes
          * \param[in,out] weights Returns a vector of weights corresponding to \a nodes
          */
-        static void mpgauss(const IndexType N,VectorType& nodes, VectorType& weights)
+        static void mpgauss(const Index N,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
             //TODO : make use the eigen assert facilities
             assert(nodes.rows() == N);
             assert(weights.rows() == N);
             assert(N > 0);
 
-            VectorType alpha = VectorType::Zero(2*N);
-            VectorType beta = VectorType::Zero(2*N);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> alpha = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> beta = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*N);
 
             r_jacobi_01(2*N, Scalar(0), Scalar(0), alpha, beta);
 
             gauss(N, alpha, beta, nodes, weights);
 
-            for(IndexType i = 0;i<nodes.rows();++i)
+            for (Index i = 0;i<nodes.rows();++i)
             {
                 nodes(i) = Scalar(2.)*nodes(i) - Scalar(1.);
                 weights(i) = Scalar(2.)*weights(i);
@@ -417,10 +433,10 @@ namespace Eigen {
             Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGauss,
             Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
-            VectorType xGK = VectorType::Zero(2*nNodes+1);
-            VectorType wGK = VectorType::Zero(2*nNodes+1);
-            VectorType xG = VectorType::Zero(nNodes);
-            VectorType wG = VectorType::Zero(nNodes);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> xGK = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*nNodes+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> wGK = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*nNodes+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> xG  = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(nNodes);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> wG  = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(nNodes);
 
             LaurieGautschi::mpkronrod(nNodes,xGK,wGK);
             LaurieGautschi::mpgauss(nNodes,xG,wG);
@@ -432,8 +448,7 @@ namespace Eigen {
             abscGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
             weightGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize/2);
 
-            using std::abs;
-            for(unsigned int i=0;i<arraySize;++i)
+            for (unsigned int i=0; i<arraySize; ++i)
             {
                 abscGaussKronrod(i) = abs(xGK(i));
                 weightGaussKronrod(i) = wGK(i);
@@ -441,7 +456,7 @@ namespace Eigen {
 
             abscGaussKronrod(arraySize-1) = Scalar(0);
 
-            for(unsigned int i=0;i<arraySize/2;++i)
+            for (unsigned int i=0; i<arraySize/2; ++i)
             {
                 abscGauss(i) = abs(xG(i));
                 weightGauss(i) = wG(i);
