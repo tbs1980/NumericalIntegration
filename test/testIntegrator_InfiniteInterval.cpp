@@ -38,7 +38,7 @@ public:
     {
         using std::exp;
         using std::pow;
-        return (exp(Scalar(40.)) - Scalar(841.)) * pow(2., Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
+        return (exp(Scalar(40.)) - Scalar(841.)) * pow(Scalar(2.), Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
     }
 
 private:
