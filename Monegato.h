@@ -25,7 +25,6 @@ namespace Eigen
     class Monegato
     {
     public:
-        typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> ScalarArrayType;
 
         /**
          * \brief Compute the absolute value of a scalar

@@ -23,6 +23,7 @@ class IntegrandInfiniteFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::exp;
         using std::pow;
         return pow(param, Scalar(2.)) * exp(-param * pow(Scalar(2.), -m_alpha));
     }
@@ -35,8 +36,8 @@ public:
 
     static Scalar integrateInfinite(const Scalar& alpha)
     {
-        using std::pow;
         using std::exp;
+        using std::pow;
         return (exp(Scalar(40.)) - Scalar(841.)) * pow(2., Scalar(3.) * alpha + Scalar(1.)) / exp(Scalar(40.));
     }
 
@@ -79,6 +80,7 @@ int test_pow(void)
 {
     using std::abs;
     using std::isnan;
+    using std::pow;
 
     std::ofstream fout;
     fout.open("test/testOutput/Infinite_Interval_integration_test_output.txt");
@@ -89,13 +91,13 @@ int test_pow(void)
     typedef double Scalar;
     // typedef long double Scalar;
     // typedef mpfr::mpreal Scalar;
-    // Scalar::set_default_prec(500);
-    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
+    // Scalar::set_default_prec(500);   // \detail This sets the number of bits of precision; each signficant figure desired will require 4 bits.
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing precision beyond double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
     
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandInfiniteFunctor<Scalar> IntegrandInfiniteFunctorType;
 
-    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(1000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandInfiniteFunctorType integrandInfiniteFunctor;
 
     bool success = true;

@@ -52,6 +52,9 @@ namespace Eigen
                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& alphaOut,
                              Eigen::Array<Scalar, Eigen::Dynamic, 1>& betaOut)
         {
+            using std::pow;
+            using std::tgamma;
+
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
             assert(beta > Scalar(-1));
@@ -98,6 +101,8 @@ namespace Eigen
                                 Eigen::Array<Scalar, Eigen::Dynamic, 1>& alphaOut,
                                 Eigen::Array<Scalar, Eigen::Dynamic, 1>& betaOut)
         {
+            using std::pow;
+
             //TODO : make use the eigen assert facilities
             assert(alpha > Scalar(-1));
             assert(beta > Scalar(-1));
@@ -258,6 +263,9 @@ namespace Eigen
                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
+            using std::abs;
+            using std::sqrt;
+
             //TODO : make use the eigen assert facilities
             assert(N>0);
             assert(alpha.rows() == 2*N);
@@ -322,6 +330,8 @@ namespace Eigen
                           Eigen::Array<Scalar, Eigen::Dynamic, 1>& nodes,
                           Eigen::Array<Scalar, Eigen::Dynamic, 1>& weights)
         {
+            using std::sqrt;
+
             //TODO : make use the eigen assert facilities
             assert(N > 0);
             assert(alpha.rows() == 2*N);
@@ -433,6 +443,8 @@ namespace Eigen
             Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGauss,
             Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
+            using std::abs;
+
             Eigen::Array<Scalar, Eigen::Dynamic, 1> xGK = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*nNodes+1);
             Eigen::Array<Scalar, Eigen::Dynamic, 1> wGK = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(2*nNodes+1);
             Eigen::Array<Scalar, Eigen::Dynamic, 1> xG  = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(nNodes);

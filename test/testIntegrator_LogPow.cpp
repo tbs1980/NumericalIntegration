@@ -23,7 +23,9 @@ class IntegrandLogPowFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::log;
         using std::pow;
+
         return pow(param, m_alpha) * log(1/param);
     }
 
@@ -90,13 +92,13 @@ int test_logpow(void)
     typedef double Scalar;
     // typedef long double Scalar;
     // typedef mpfr::mpreal Scalar;
-    // Scalar::set_default_prec(500);
-    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
+    // Scalar::set_default_prec(500);   // \detail This sets the number of bits of precision; each signficant figure desired will require 4 bits.
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing precision beyond double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandLogPowFunctor<Scalar> IntegrandLogPowFunctorType;
 
-    IntegratorType eigenIntegrator(50000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(10000);  // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandLogPowFunctorType integrandLogPowFunctor;
 
     bool success = true;
