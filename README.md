@@ -88,6 +88,12 @@ For example,
 	$ cmake ../ -DEIGEN3_INCLUDE_DIR=/arxiv/libraries/ubuntu/gcc/eigen-3.2.1/include/eigen3 -DGMP_ROOT=/arxiv/libraries/ubuntu/gcc/gmp-6.0.0 -DMPFR_ROOT=/arxiv/libraries/ubuntu/gcc/mpfr-3.1.2 -DMPFRCPP_ROOT=/arxiv/libraries/ubuntu/gcc/mpfrc++-3.5.9
 	$ make
 
+## Multiprecision Usage Note:
+
+When utilizing this library for precision higher than 53 bits, (double precision), the Gauss-Kronrod nodes must be computed at run-time by calling the QuadratureKronrod<Scalar>::computeNodesAndWeights() method.  This is due to the default precision value of long double and mpreal types at the initialization of the static arrays used to store the Gauss-Kronrod nodes and weights. Two details are at play, 1) using long doubles requires the array initialization values to be appended with an "L" for the compiler to invoke higher than double precision during initialization, and 2) when initialized, the default precision of mpreal types is 53 bits, therefore the tabulated values are truncated to double precision and values at the arbitrary desired level of precision should be recomputed at the beginning of the runtime integration.
+
+The way to work around this is to call the computeNodesAndWeights() method once at the beginning of your program.
+
 ## Contributing to NumericalIntegration project
 
 Contributions are most welcome  :smile: . Please submit a pull request or use the [issues](https://github.com/tbs1980/NumericalIntegration/issues) facility to raise any comments  :+1: .

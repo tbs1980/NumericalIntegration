@@ -19,7 +19,6 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-        using std::sin;
         return sin(param);
     }
 };
@@ -69,13 +68,13 @@ int test_sine(void)
     typedef double Scalar;
     // typedef long double Scalar;
     // typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    // Scalar::set_default_prec(500);
-    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing multiprecision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
+    // Scalar::set_default_prec(500);  // \detail This sets the number of bits of precision; each signficant figure desired will require 4 bits.
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing precision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(50000); // \detail The number of subintervals must be increased by more than 100X the precision requested.
+    IntegratorType eigenIntegrator(1000); // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
@@ -88,7 +87,7 @@ int test_sine(void)
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-        // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
+        // \detail The usage of NumTraits<Scalar>::Pi() is required for multiprecision
         // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar expected = Scalar(2.);
 

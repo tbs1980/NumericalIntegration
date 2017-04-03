@@ -131,10 +131,6 @@ namespace Eigen
         static Array<Scalar, 50, 1> abscissaeGauss201;
         static Array<Scalar, 50, 1> weightsGauss201;
 
-        typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
-        typedef Eigen::Monegato<Scalar> MonegatoPolicy;
-        typedef Eigen::Piessens<Scalar> PiessensPolicy;
-
         static void computeNodesAndWeights()
         {
             QuadratureKronrod::computeForRule<7>(abscissaeGaussKronrod15, weightsGaussKronrod15, abscissaeGauss15, weightsGauss15);
@@ -160,9 +156,9 @@ namespace Eigen
             Eigen::Array<Scalar, Eigen::Dynamic, 1> xG;
             Eigen::Array<Scalar, Eigen::Dynamic, 1> wG;
 
-            LaurieGautschiPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
-            //PiessensPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
-            //MonegatoPolicy::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
+            Eigen::LaurieGautschi<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
+            //Eigen::Piessens<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
+            //Eigen::Monegato<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);
 
             for(size_t i=0; i<N+1; ++i)
             {

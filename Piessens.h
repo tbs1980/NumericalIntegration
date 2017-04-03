@@ -66,11 +66,10 @@ namespace Eigen
                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
                             Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
-            typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
             unsigned int arraySize = nNodes + 1;
-            abscGaussKronrod = ArrayXdType::Zero(arraySize);
-            weightGaussKronrod = ArrayXdType::Zero(arraySize);
-            weightGauss = ArrayXdType::Zero(arraySize / 2);
+            abscGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize / 2);
 
             Scalar aN(0.0);
             Scalar d(2.0);
@@ -88,10 +87,10 @@ namespace Eigen
             Scalar aK = aN;
 
             // Calculation of the Chebyshev coefficients of the orthogonal polynomial.
-            ArrayXdType tau(m);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> tau(m);
             tau(0) = (aN + Scalar(2.0)) / (Scalar(2) * aN + Scalar(3.0));
 
-            ArrayXdType betaCoeffs(m + 1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs(m + 1);
             betaCoeffs(m - 1) = tau(0) - Scalar(1.0);
 
             for (size_t k = 1; k < m; ++k)
