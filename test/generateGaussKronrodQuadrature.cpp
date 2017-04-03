@@ -25,7 +25,8 @@ int test_values()
     int solverPolicy = 0;
 
     typedef mpfr::mpreal Scalar;
-    // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
+
+    // IMPORTANT: ~4X of the output digits must be used for calculations to calculate nodes/weights accurately.
     Scalar::set_default_prec(outputDigits*4);
     
     typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
