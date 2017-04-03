@@ -19,6 +19,7 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
+        using std::sin;
         return sin(param);
     }
 };
