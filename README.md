@@ -50,13 +50,13 @@ The capabilities of this library have been greatly expanded through multiprecisi
 
 ## Requirements
 
-	* [Eigen library] (http://eigen.tuxfamily.org/index.php?title=Main_Page )
+* [Eigen library](http://eigen.tuxfamily.org/index.php?title=Main_Page)
     
-	(If extended precision is needed, as will be the case for computing the Gauss-Kronrod nodes/weights or if desired for integration computations, MPFR C++ will also be required.) 
+(If extended precision is needed, as will be the case for computing the Gauss-Kronrod nodes/weights or if desired for integration computations, MPFR C++ will also be required.) 
     
-	* [The GNU Multiple Precision Arithmetic Library] (https://gmplib.org/ )
-	* [The GNU MPFR Library] (http://www.mpfr.org/ )
-	* [MPFR C++] (http://www.holoborodko.com/pavel/mpfr/ )
+* [The GNU Multiple Precision Arithmetic Library](https://gmplib.org/)
+* [The GNU MPFR Library](http://www.mpfr.org/)
+* [MPFR C++](http://www.holoborodko.com/pavel/mpfr/)
 
 Debian-based linux users can install dependencies with aptitude package manager:
 
