@@ -18,9 +18,9 @@ int test_nodes_weights_difference(const unsigned int N)
 {
     //typedef float Scalar;
     //typedef double Scalar;
-    typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;
-    //Scalar::set_default_prec(50);
+    // typedef long double Scalar;
+    typedef mpfr::mpreal Scalar;
+    Scalar::set_default_prec(50);
 
     typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef Eigen::Piessens<Scalar> PiessensPolicy;
@@ -47,8 +47,7 @@ int test_nodes_weights_difference(const unsigned int N)
 
     double epsilon = 1e-16;
 
-    using std::abs;
-    for(DenseIndex i = 0; i < xGKLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)
            || (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon)
@@ -59,7 +58,7 @@ int test_nodes_weights_difference(const unsigned int N)
         }
     }
 
-    for(DenseIndex i = 0; i < wGKLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon)
            || (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon)
@@ -74,7 +73,7 @@ int test_nodes_weights_difference(const unsigned int N)
     //       Piessens and Monegato gauss nodes are taken directly from GaussKronrod nodes,
     //       and agreement in the GaussKronrod node test implies agreement for Gauss nodes.
 
-    for(DenseIndex i = 0; i < wGLaurieGautschi.rows(); ++i)
+    for(Index i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
         if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
            || (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon)
@@ -91,9 +90,10 @@ int test_nodes_weights_difference(const unsigned int N)
 
 int main(int argc, char** argv)
 {
-    size_t m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
+    int m = (argc > 1) ? atoi(argv[1]) : 10;	// Legendre degree
 
     int ret = EXIT_SUCCESS;
+    
     ret += test_nodes_weights_difference(m);
     return ret;
 }

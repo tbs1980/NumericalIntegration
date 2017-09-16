@@ -1,7 +1,8 @@
 #ifndef EIGEN_MONEGATO_H
 #define EIGEN_MONEGATO_H
 
-namespace Eigen{
+namespace Eigen
+{
 
     /**
      * \ingroup NumericalIntegration_Module
@@ -10,7 +11,7 @@ namespace Eigen{
      *
      * \brief A class for computing the Gauss/Kronrod weights.
      *
-     * \tparam _Scalar floating point type
+     * \tparam Scalar floating point type
      *
      * This class is based on "Some remarks on the construction of
      * extended Gaussian quadrature rules", Giovanni Monegato,
@@ -19,15 +20,11 @@ namespace Eigen{
      * The code is based on quadpackcpp (http://quadpackpp.sourceforge.net/)
      * library written by Jerry Gagelman <jerry@os-scientific.org> which is distributed under
      * GNU General Public License
-     *
      */
-    template<typename _Scalar>
+    template <typename Scalar>
     class Monegato
     {
     public:
-        typedef _Scalar Scalar;
-        typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> ScalarArrayType;
-        typedef typename ScalarArrayType::Index Index;
 
         /**
          * \brief Compute the absolute value of a scalar
@@ -51,7 +48,6 @@ namespace Eigen{
          */
         static Scalar legendre_err(const int n, const Scalar x, Scalar& err)
         {
-            //using std::abs;
             if (n == 0)
             {
                 err = Scalar(0);
@@ -65,8 +61,8 @@ namespace Eigen{
 
             // below Sree modified this to avoid -Wmaybe-uninitialized
             Scalar P0 = Scalar(1), P1 = x, P2=x;
-            Scalar E0 = Eigen::NumTraits<Scalar>::epsilon();
-            Scalar E1 = abs(x) * Eigen::NumTraits<Scalar>::epsilon();
+            Scalar E0 = NumTraits<Scalar>::epsilon();
+            Scalar E1 = abs(x) * NumTraits<Scalar>::epsilon();
             for (int k = 1; k < n; ++k)
             {
                 P2 = ((2*k + 1) * x * P1 - k * P0) / (k + 1);
@@ -94,9 +90,13 @@ namespace Eigen{
                 return Scalar(1);
             }
 
-            Scalar P0 = Scalar(1), P1 = x, P2;
-            // below Sree modified this to avoid -Wmaybe-uninitialized
-            Scalar dP0 = Scalar(0), dP1 = Scalar(1), dP2=P1;
+            Scalar P0 = Scalar(1);
+            Scalar P1 = x;
+            Scalar P2 = P1;
+            Scalar dP0 = Scalar(0);
+            Scalar dP1 = Scalar(1);
+            Scalar dP2 = P1;
+
             for (int k = 1; k < n; ++k)
             {
                 P2 = ((2*k + 1) * x * P1 - k * P0) / (k + Scalar(1));
@@ -116,8 +116,10 @@ namespace Eigen{
          * \param[in] coefs Chebyshev coefficients
          * \return Derivative of Chebyshev polynomials
          */
-        static Scalar chebyshev_series_deriv(const Scalar x,const int n_,
-            const ScalarArrayType& coefs)
+        static Scalar chebyshev_series_deriv(const Scalar x,
+                                             const int n_,
+                                             const Eigen::Array<Scalar,
+                                             Eigen::Dynamic, 1>& coefs)
         {
             Scalar d1(0), d2(0);
             Scalar y2 = 2 * x; // linear term for Clenshaw recursion
@@ -140,10 +142,11 @@ namespace Eigen{
          * \param[out] err error to be returned
          * \return value of Chebyshev polynomial
          */
-        static Scalar chebyshev_series(const Scalar x, const int n_,
-            const ScalarArrayType& coefs, Scalar& err)
+        static Scalar chebyshev_series(const Scalar x,
+                                       const int n_,
+                                       const Eigen::Array<Scalar, Eigen::Dynamic, 1>& coefs,
+                                       Scalar& err)
         {
-            //using std::abs;
             Scalar d1(0), d2(0);
             Scalar absc = abs(coefs(0)); // final term for truncation error
             Scalar y2 = 2 * x; // linear term for Clenshaw recursion
@@ -156,7 +159,7 @@ namespace Eigen{
                 absc += abs(coefs(k));
             }
 
-            err = absc * Eigen::NumTraits<Scalar>::epsilon();
+            err = absc * NumTraits<Scalar>::epsilon();
             return x * d1 - d2 + coefs(0)/2.;
         }
 
@@ -165,17 +168,17 @@ namespace Eigen{
          * \param[in] m_ degree
          * \param[out] zeros the zeros of the Legendre polynomial
          */
-        static void legendre_zeros(const int m_,ScalarArrayType& zeros)
+        static void legendre_zeros(const int m_,
+                                   Eigen::Array<Scalar, Eigen::Dynamic, 1>& zeros)
         {
-            //using std::abs;
-            ScalarArrayType temp = ScalarArrayType::Zero(m_+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> temp = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(m_+1);
             zeros(0) = Scalar(-1);
             zeros(1) = Scalar(1);
             Scalar delta, epsilon;
 
             for (int k = 1; k <= m_; ++k)
             {
-                // loop to locate zeros of P_k interlacing z_0,...,z_k
+                // Loop to locate zeros of P_k interlacing z_0,...,z_k
                 for (int j = 0; j < k; ++j)
                 {
                     // Newton's method for P_k :
@@ -183,8 +186,9 @@ namespace Eigen{
                     delta = 1;
                     Scalar x_j = (zeros(j) + zeros(j+1)) / 2.;
                     Scalar P_k = legendre_err(k, x_j, epsilon);
+                    
                     while (abs(P_k) > epsilon &&
-                        abs(delta) > Eigen::NumTraits<Scalar>::epsilon())
+                        abs(delta) > NumTraits<Scalar>::epsilon())
                     {
                         delta = P_k / legendre_deriv(k, x_j);
                         x_j -= delta;
@@ -193,32 +197,33 @@ namespace Eigen{
                     temp(j) = x_j;
                 }
 
-                // copy roots tmp_0,...,tmp_{k-1} to z_1,...z_k:
+                // Copy roots tmp_0,...,tmp_{k-1} to z_1,...z_k:
                 zeros(k+1) = zeros(k);
+                
                 for (int j = 0; j < k; ++j)
                 {
                     zeros(j+1) = temp(j);
                 }
             }
-
         }
 
         /**
-         * \brief Computes coefficients of Chebyshev polynomial
-         * \param[in] m_ degree
-         * \param[out] coefs coefficients of Chebyshev polynomial
+         * \brief Computes coefficients of the Chebyshev polynomial.
+         * \param[in] m_ degree of the Chebyshev polynomial.
+         * \param[out] coefs coefficients of the Chebyshev polynomial.
          */
-        static void chebyshev_coefs(const int m_, ScalarArrayType& coefs)
+        static void chebyshev_coefs(const int m_,
+                                    Eigen::Array<Scalar, Eigen::Dynamic, 1>& coefs)
         {
             int ell = (m_ + 1)/2;
-            ScalarArrayType alpha = ScalarArrayType::Zero(ell+1);
-            ScalarArrayType f = ScalarArrayType::Zero(ell+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> alpha = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(ell+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> f = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(ell+1);
 
             // Care must be exercised in initalizing the constants in the definitions.
             // Compilers interpret expressions like "(2*k + 1.0)/(k + 2.0)" as floating
             // point precision, before casting to Real.
 
-            f(1) = Scalar(m_+1)/Scalar(2*m_ + 3);
+            f(1) = Scalar(m_+1) / Scalar(2*m_ + 3);
             alpha(0) = Scalar(1); // coefficient of T_{m+1}
             alpha(1) = -f(1);
 
@@ -226,6 +231,7 @@ namespace Eigen{
             {
                 f(k) = f(k-1) * (2*k - 1) * (m_ + k) / (k * (2*m_ + 2*k + 1));
                 alpha(k) = -f(k);
+                
                 for (int i = 1; i < k; ++i)
                 {
                     alpha(k) -= f(i) * alpha(k-i);
@@ -235,6 +241,7 @@ namespace Eigen{
             for (int k = 0; k <= ell; ++k)
             {
                 coefs(m_ + 1 - 2*k) = alpha(k);
+                
                 if (m_  >= 2*k)
                 {
                     coefs(m_ - 2*k) = Scalar(0);
@@ -249,31 +256,34 @@ namespace Eigen{
          * \param[in] coefs Chebyshev coefficients
          * \param[out] xgk_ Gauss/Kronrod abscissae
          */
-        static void gauss_kronrod_abscissae(const int n_,const int m_,
-            const ScalarArrayType& zeros, const ScalarArrayType& coefs,
-            ScalarArrayType& xgk_)
+        static void gauss_kronrod_abscissae(const int n_,
+                                            const int m_,
+                                            const Eigen::Array<Scalar, Eigen::Dynamic, 1>& zeros,
+                                            const Eigen::Array<Scalar, Eigen::Dynamic, 1>& coefs,
+                                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& xgk_)
         {
-            //
-            // now from the function gauss_kronrod_abscissae
-            //
-
+            // Now from the function gauss_kronrod_abscissae
             Scalar delta, epsilon;
 
             for (int k = 0; k < n_ / 2; ++k)
             {
                 delta = 1;
+                
                 // Newton's method for E_{n+1} :
                 Scalar x_k = (zeros(m_-k) + zeros(m_+1-k))/Scalar(2);
                 Scalar E = chebyshev_series(x_k,n_,coefs, epsilon);
+                
                 while (abs(E) > epsilon &&
-                    abs(delta) > Eigen::NumTraits<Scalar>::epsilon() )
+                    abs(delta) > NumTraits<Scalar>::epsilon() )
                 {
                     delta = E / chebyshev_series_deriv(x_k,n_,coefs);
                     x_k -= delta;
                     E = chebyshev_series(x_k,n_,coefs, epsilon);
                 }
+                
                 xgk_(2*k) = x_k;
-                // copy adjacent Legendre-zero into the array:
+                
+                // Copy adjacent Legendre-zero into the array:
                 if (2*k+1 < n_)
                 {
                     xgk_(2*k+1) = zeros(m_-k);
@@ -289,41 +299,43 @@ namespace Eigen{
          * \param[out] wg_ Gauss weights
          * \param[out] wgk_ Kronrod weights
          */
-        static void gauss_kronrod_weights(const int& n_,const int m_,
-            const ScalarArrayType& coefs, const ScalarArrayType& xgk_,
-            ScalarArrayType& wg_, ScalarArrayType& wgk_ )
+        static void gauss_kronrod_weights(const int& n_,
+                                          const int m_,
+                                          const Eigen::Array<Scalar, Eigen::Dynamic, 1>& coefs,
+                                          const Eigen::Array<Scalar, Eigen::Dynamic, 1>& xgk_,
+                                          Eigen::Array<Scalar, Eigen::Dynamic, 1>& wg_,
+                                          Eigen::Array<Scalar, Eigen::Dynamic, 1>& wgk_)
         {
             Scalar err;
 
             // Gauss-Legendre weights:
-            for(int k=0; k < n_ /2; ++k)
+            for(int k = 0; k < n_ / 2; ++k)
             {
                 Scalar x = xgk_(2*k + 1);
-                wg_(k) = ( Scalar(-2)
-                    / ((m_ + 1) * legendre_deriv(m_, x) * legendre_err(m_+1, x, err)) );
+                wg_(k) = (Scalar(-2) / ((m_ + 1) * legendre_deriv(m_, x) * legendre_err(m_+1, x, err)));
             }
 
             // The ratio of leading coefficients of P_n and T_{n+1} is computed
             // from the recursive formulae for the respective polynomials.
             Scalar F_m = Scalar(2) / Scalar(2*m_ + 1);
+            
             for (int k = 1; k <= m_; ++k)
             {
                 F_m *= (Scalar(2*k) / Scalar(2*k - 1));
             }
 
             // Gauss-Kronrod weights:
-
             for (int k = 0; k < n_; ++k)
             {
                 Scalar x = xgk_(k);
+                
                 if (k % 2 == 0)
                 {
                     wgk_(k) = F_m / (legendre_err(m_, x, err) * chebyshev_series_deriv(x,n_,coefs));
                 }
                 else
                 {
-                    wgk_(k) = (wg_(k/2) +
-                        F_m / (legendre_deriv(m_, x) * chebyshev_series(x,n_,coefs, err)));
+                    wgk_(k) = (wg_(k/2) + F_m / (legendre_deriv(m_, x) * chebyshev_series(x,n_,coefs, err)));
                 }
             }
 
@@ -340,20 +352,21 @@ namespace Eigen{
          * Note that Gauss abscissae is not calculated here.
          */
         static void computeAbscissaeAndWeights(unsigned int m_,
-            ScalarArrayType& xgk_,ScalarArrayType& wgk_,
-            ScalarArrayType& xk_,ScalarArrayType& wg_)
+                                               Eigen::Array<Scalar, Eigen::Dynamic, 1>& xgk_,
+                                               Eigen::Array<Scalar, Eigen::Dynamic, 1>& wgk_,
+                                               Eigen::Array<Scalar, Eigen::Dynamic, 1>& xk_,
+                                               Eigen::Array<Scalar, Eigen::Dynamic, 1>& wg_)
         {
-            //const Index m_ = 2*nNodes;
             const unsigned int n_ = m_ + 1;
 
-            xgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
-            wgk_ = ScalarArrayType::Zero(n_);//2*nNodes+1
-            xk_ = ScalarArrayType::Zero(n_/2);//2*nNodes
-            wg_ = ScalarArrayType::Zero(n_/2);//2*nNodes
+            xgk_ = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(n_);   //2*nNodes+1
+            wgk_ = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(n_);   //2*nNodes+1
+            xk_ = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(n_/2);  //2*nNodes
+            wg_ = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(n_/2);  //2*nNodes
 
             // initialise the coefficients to zero
-            ScalarArrayType coefs = ScalarArrayType::Zero(n_+1);
-            ScalarArrayType zeros = ScalarArrayType::Zero(m_+2);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> coefs = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(n_+1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> zeros = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(m_+2);
 
             legendre_zeros(m_, zeros);
             chebyshev_coefs(m_, coefs);
@@ -362,6 +375,6 @@ namespace Eigen{
         }
     };
 
-}//namespace Eigen
+} // namespace Eigen
 
-#endif //EIGEN_MONEGATO_H
+#endif // EIGEN_MONEGATO_H

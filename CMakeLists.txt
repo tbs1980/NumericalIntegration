@@ -57,21 +57,42 @@ SET(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
 ADD_DEFINITIONS(
   -O3
-  -g
-  -pedantic
-  -Wall
-  -Wextra
-  -Wfatal-errors
-  -fvisibility=hidden
-  -DXPLM200
-  -DXPLM210
   -DAPL=0
   -DIBM=0
   -DLIN=1
-  -fPIC
   -DNDEBUG
+  -DCOMPUTE_NI_WEIGHTS_ON_THE_FLY
+
+  -Wall
+  -Wcast-align
+  -Wchar-subscripts
+  -Wconversion
+  -Wdouble-promotion
+  -Wextra
+  -Wfatal-errors
+  -Wformat-security
+  -Wlogical-op
+  -Wno-long-long  
+  -Wno-psabi
+  -Wno-variadic-macros
+  #-Wnon-virtual-dtor
+  -Wpointer-arith
+  #-Wundef
+  -Wuninitialized
+  -Wunused-local-typedefs
+  -Wwrite-strings
+
+  -fstrict-aliasing
+  -fno-check-new
+  -fno-common
+  -fvisibility=hidden
+  -fPIC
+
+  -c
+  -g
   -march=native
-  -DEIGEN_HAS_MPREAL_CXX11_TGAMMA
+  -pedantic
+  -pthread
   )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")

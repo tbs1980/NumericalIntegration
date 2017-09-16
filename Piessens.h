@@ -1,7 +1,8 @@
 #ifndef EIGEN_PIESSENS_H
 #define EIGEN_PIESSENS_H
 
-namespace Eigen{
+namespace Eigen
+{
 
     /**
     * \ingroup NumericalIntegration_Module
@@ -10,17 +11,15 @@ namespace Eigen{
     *
     * \brief This class computes Kronrod abscissae & weights for arbitrary precision
     *
-    * \tparam _Scalar floating point type
+    * \tparam Scalar floating point type
     *
     * This class is based on the work by R. Piessens, et.al,published in the
     * journal Mathematics of Computation, Volume 28, Number 125, January, 1974.
-    *
     */
-    template<typename _Scalar>
+    template <typename Scalar>
     class Piessens
     {
     public:
-        typedef _Scalar Scalar;
 
         /**
         * \brief kronrod adds n+1 points to an n-point Gaussian rule.
@@ -62,17 +61,15 @@ namespace Eigen{
         * \param[in,out] weightGaussKronrod[n+1] The weights for the Gauss-Kronrod rule.
         * \param[in,out] weightGauss[n+1] The weights for the Gauss rule.
         */
-        static void kronrod(
-            unsigned int nNodes,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
+        static void kronrod(unsigned int nNodes,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& abscGaussKronrod,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGaussKronrod,
+                            Eigen::Array<Scalar, Eigen::Dynamic, 1>& weightGauss)
         {
-            typedef Eigen::Array<Scalar,Eigen::Dynamic,1> ArrayXdType;
             unsigned int arraySize = nNodes + 1;
-            abscGaussKronrod = ArrayXdType::Zero(arraySize);
-            weightGaussKronrod = ArrayXdType::Zero(arraySize);
-            weightGauss = ArrayXdType::Zero(arraySize / 2);
+            abscGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGaussKronrod = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize);
+            weightGauss = Eigen::Array<Scalar, Eigen::Dynamic, 1>::Zero(arraySize / 2);
 
             Scalar aN(0.0);
             Scalar d(2.0);
@@ -90,10 +87,10 @@ namespace Eigen{
             Scalar aK = aN;
 
             // Calculation of the Chebyshev coefficients of the orthogonal polynomial.
-            ArrayXdType tau(m);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> tau(m);
             tau(0) = (aN + Scalar(2.0)) / (Scalar(2) * aN + Scalar(3.0));
 
-            ArrayXdType betaCoeffs(m + 1);
+            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs(m + 1);
             betaCoeffs(m - 1) = tau(0) - Scalar(1.0);
 
             for (size_t k = 1; k < m; ++k)
@@ -122,8 +119,6 @@ namespace Eigen{
             // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
             //RealScalar pi = NumTraits<RealScalar>::Pi();
 
-            using std::sin;
-            using std::cos;
             Scalar s1 = sin((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
             Scalar c1 = cos((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
 
@@ -191,10 +186,14 @@ namespace Eigen{
         * \param[in,out] abscGaussKronrod An estimate for the abscissa on input and the computed abscissa on output.
         * \param[in,out] weightGaussKronrod The Gauss-Kronrod weight.
         */
-        static void abscWeightKronrod(
-            unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
-            Scalar& weightGaussKronrod)
+        static void abscWeightKronrod(unsigned int nNodes,
+                                      unsigned int m,
+                                      bool even,
+                                      Scalar chebCoeff,
+                                      Eigen::Array<Scalar,
+                                      Eigen::Dynamic, 1> betaCoeffs,
+                                      Scalar& abscGaussKronrod,
+                                      Scalar& weightGaussKronrod)
         {
             Scalar ai;
 
@@ -220,7 +219,6 @@ namespace Eigen{
             size_t iterationLimit = 50;
 
             // Iterative process for the computation of a Kronrod abscissa.
-            using std::abs;
             while (abs(delta) > machineEpsilon())
             {
                 ++iter;
@@ -322,10 +320,14 @@ namespace Eigen{
         * \param[in,out] weightGaussKronrod The Gauss-Kronrod weight.
         * \param[in,out] weightGauss The Gauss weight.
         */
-        static void abscWeightGauss(
-            unsigned int nNodes, unsigned int m, bool even, Scalar chebCoeff,
-            Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs, Scalar& abscGaussKronrod,
-            Scalar& weightGaussKronrod, Scalar& weightGauss)
+        static void abscWeightGauss(unsigned int nNodes,
+                                    unsigned int m,
+                                    bool even,
+                                    const Scalar& chebCoeff,
+                                    Eigen::Array<Scalar, Eigen::Dynamic, 1> betaCoeffs,
+                                    Scalar& abscGaussKronrod,
+                                    Scalar& weightGaussKronrod,
+                                    Scalar& weightGauss)
         {
             Scalar ai(0.);
             Scalar delta(1.);
@@ -344,7 +346,6 @@ namespace Eigen{
             size_t iterationLimit = 50;
 
             //  Iterative process for the computation of a Gaussian abscissa.
-            using std::abs;
             while (abs(delta) > machineEpsilon())
             {
                 ++iter;
@@ -356,7 +357,6 @@ namespace Eigen{
                 // If nNodes <= 1, initialize p2 and pd2 to avoid problems calculating delta.
                 if (nNodes <= 1)
                 {
-                    using std::abs;
                     if (machineEpsilon() < abs(abscGaussKronrod))
                     {
                         p2 = (Scalar(3.0) * (abscGaussKronrod) * (abscGaussKronrod) - Scalar(1.0)) / Scalar(2.0);
@@ -444,7 +444,7 @@ namespace Eigen{
             // extended precision:  2^-63   (1.08420217248550443e-19)
             // quad precision:      2^-112  (1.9259299e-34)
 
-            return Eigen::NumTraits<Scalar>::epsilon();
+            return NumTraits<Scalar>::epsilon();
         }
 
         /**

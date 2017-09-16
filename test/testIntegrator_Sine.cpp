@@ -19,8 +19,8 @@ class IntegrandSineFunctor
 public:
     Scalar operator()(const Scalar& param) const
     {
-      using std::sin;
-      return sin(param);
+        using std::sin;
+        return sin(param);
     }
 };
 
@@ -30,11 +30,11 @@ public:
 template <typename Scalar>
 Scalar desiredRelativeError()
 {
-  return Eigen::NumTraits<Scalar>::epsilon() * 50.;
+  return NumTraits<Scalar>::epsilon() * Scalar(50.);
 }
 
 template <typename Scalar>
-typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t& i)
+typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const Index& i)
 {
     static const typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules[12] =
     {
@@ -57,42 +57,45 @@ typename Eigen::Integrator<Scalar>::QuadratureRule quadratureRules(const size_t&
 
 int test_sine(void)
 {
+    using std::abs;
+    using std::isnan;
+    
     std::ofstream fout;
     fout.open("test/testOutput/Sine_integration_test_output.txt");
 
     std::cout<<"\nTesting Int [0->Pi] sin(x) = 2\n";
-     
-    //typedef float Scalar;
+
+    // typedef float Scalar;
     typedef double Scalar;
-    //typedef long double Scalar;
-    //typedef mpfr::mpreal Scalar;  // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
-    //Scalar::set_default_prec(500);
+    // typedef long double Scalar;
+    // typedef mpfr::mpreal Scalar;    // \detail Performing this test using multiprecision requires changing from M-PI to NumTraits<Scalar>::PI();
+    // Scalar::set_default_prec(500);  // \detail This sets the number of bits of precision; each signficant figure desired will require 4 bits.
+    // QuadratureKronrod<Scalar>::computeNodesAndWeights(); // \detail Utilizing precision beyond long double requires nodes to be computed at runtime, because of the manner that the static values are truncated when they are assigned at compile time.
 
     typedef Eigen::Integrator<Scalar> IntegratorType;
     typedef IntegrandSineFunctor<Scalar> IntegrandSineFunctorType;
 
-    IntegratorType eigenIntegrator(1000);
+    IntegratorType eigenIntegrator(1000); // \detail The number of subintervals must be increased by more than 100X the precision requested.
     IntegrandSineFunctorType integrandSineFunctor;
 
     bool success = true;
-    const size_t numRules = 12;
+    const Index numRules = 12;
 
-    for (size_t i = 0; i < numRules; ++i)
+    for (Index i = 0; i < numRules; ++i)
     {
         success = true;
 
         Eigen::Integrator<Scalar>::QuadratureRule quadratureRule = quadratureRules<Scalar>(i);
 
-        // \TODO The usage of NumTraits<Scalar>::Pi() is required for multiprecision
-        //Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
         Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), Scalar(M_PI), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
-        Scalar expected = Scalar(2);
+        // \detail The usage of NumTraits<Scalar>::Pi() is required for multiprecision
+        // Scalar actual = eigenIntegrator.quadratureAdaptive(integrandSineFunctor, Scalar(0.), NumTraits<Scalar>::Pi(), Scalar(0.), desiredRelativeError<Scalar>(), quadratureRule);
+        Scalar expected = Scalar(2.);
 
-        using std::abs;
-        if(abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) 
-                || isnan(abs((Scalar)(expected - actual))))
+        if (abs((Scalar)(expected - actual)) > desiredRelativeError<Scalar>() * abs(expected) ||
+            isnan((Scalar)(expected - actual)))
         {
-            fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+            fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 
@@ -101,7 +104,7 @@ int test_sine(void)
         }
         else
         {
-            fout << "\nrule " << i << "\n abs(expected - actual) = " << abs(expected - actual)
+            fout << "\nrule " << i+1 << "\n abs(expected - actual) = " << abs(expected - actual)
                  << "\n desiredRelativeError<Scalar>() * abs(expected) = "
                  << desiredRelativeError<Scalar>() * abs(expected) << std::endl;
 

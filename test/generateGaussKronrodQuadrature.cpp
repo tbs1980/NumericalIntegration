@@ -11,42 +11,43 @@
 #include <iomanip>
 #include <sys/time.h>
 
+using namespace Eigen;
+
 int test_values()
 {
+    typedef mpfr::mpreal Scalar;
+
     /** 
      * \details The level of precision in the calculations requires greater precision
      *          than the number of the digits written to file to avoid roundoff errors.
      */
 
-    // Set the number of output digits
+    // Set the desired number of digits to be output to file.
     int outputDigits = 50;
     
     // Set this flag to 0 for LaurieGautschi Polity, 1 for PiessensPolicy, or 2 for Monegato Policy;
     int solverPolicy = 0;
 
-    typedef mpfr::mpreal Scalar;
-    // IMPORTANT - 4X of the output digits must be used for calculations to calculate nodes/weights accurately.
+    // IMPORTANT: 4 bits of precision are required for each output digit.
     Scalar::set_default_prec(outputDigits*4);
-    
-    typedef Eigen::QuadratureKronrod<Scalar> QuadratureKronrodValuesType;
-    
+
     // Track the time required to complete the calculations.
     struct timeval timeStruct;
     gettimeofday(&timeStruct, NULL);
     long unsigned int startTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
 
-    QuadratureKronrodValuesType::computeNodesAndWeights();
+    QuadratureKronrod<Scalar>::computeNodesAndWeights();
 
     gettimeofday(&timeStruct, NULL);
     long unsigned int finishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
-    double timeElapsed = (finishTime - startTime) / 1000000.;
+    double timeElapsed = (double)(finishTime - startTime) / 1000000.;
     
     std::cout << "\n\tNode/Weight Computation Time: " << timeElapsed << std::endl;
 
     std::ofstream fout;
     std::string fileNameAndLocation = "test/testOutput/GaussKronrodNodesWeights.h";
     fout.open(fileNameAndLocation);
-    fout<<std::fixed<<std::setprecision(outputDigits);
+    fout << std::fixed << std::setprecision(outputDigits);
 
     int gaussRule[12] = {7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 100};
     int kronrodRule[12] = {15, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 201};
@@ -75,58 +76,53 @@ int test_values()
 
 //----------------------------------Begin File Header Information--------------------------------//
 
-    fout << "/**\n * \\file QuadratureKronrod.h\n"
+    fout << "/**\n * \\file GaussKronrodNodesWeights.h\n"
          << " * \\sa R Piessens, E de Doncker-Kapenger, C Ueberhuber, D Kahaner, QUADPACK, A Subroutine Package\n"
          << " *     for Automatic Integration, Springer Verlag, 1983.\n"
          << " */\n\n#ifndef EIGEN_QUADRATURE_KRONROD_H\n#define EIGEN_QUADRATURE_KRONROD_H\n\n"
-         << "namespace Eigen\n{\n\n/**\n * \\brief The abscissae and weights are given for the interval (-1,1).\n"
-         << " *        Because of symmetry, only the positive abscissae and their\n"
-         << " *        corresponding weights are given.\n *\n";
+         << "namespace Eigen\n{\n\t/**\n\t * \\brief The abscissae and weights are given for the interval (-1,1).\n"
+         << "\t *        Because of symmetry, only the positive abscissae and their\n"
+         << "\t *        corresponding weights are given.\n\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param abscissaeGaussKronrodXX  The abscissae of the X point kronrod rule."
-        fout << " * \\param abscissaeGaussKronrod" << kronrodRule[i] << "  The abscissae of the " << kronrodRule[i] << " point kronrod rule.\n";
+        fout << "\t * \\param abscissaeGaussKronrod" << kronrodRule[i] << "  The abscissae of the " << kronrodRule[i] << " point kronrod rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param weightsGaussKronrodXX  The weights of the X point kronrod rule."
-        fout << " * \\param weightsGaussKronrod" << kronrodRule[i] << "  The weights of the " << kronrodRule[i] << " point kronrod rule.\n";
+        fout << "\t * \\param weightsGaussKronrod" << kronrodRule[i] << "  The weights of the " << kronrodRule[i] << " point kronrod rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param abscissaeGaussXX  The abscissae of the X point gauss rule."
-        fout << " * \\param abscissaeGauss" << kronrodRule[i] << "  The abscissae of the " << gaussRule[i] << " point gauss rule.\n";
+        fout << "\t * \\param abscissaeGauss" << kronrodRule[i] << "  The abscissae of the " << gaussRule[i] << " point gauss rule.\n";
     }
-    fout << " *\n";
+    fout << "\t *\n";
 
     for (size_t i=0; i<12; ++i)
     {
         // " * \\param weightsGaussXX  The weights of the X point gauss rule."
-        fout << " * \\param weightsGauss" << kronrodRule[i] << "  The weights of the " << gaussRule[i] << " point gauss rule.\n";
+        fout << "\t * \\param weightsGauss" << kronrodRule[i] << "  The weights of the " << gaussRule[i] << " point gauss rule.\n";
     }
 
-    fout << " */\n\ntemplate <typename Scalar>\nclass QuadratureKronrod\n{\npublic:\n";
+    fout << "\t */\n\n\ttemplate <typename Scalar>\n\tclass QuadratureKronrod\n\t{\n\tpublic:\n";
     
     for (size_t i=0; i<12; ++i)
     {
-        fout << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussAbscissaeNames[i] << ";\n"
-             << "\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
+        fout << "\t\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodAbscissaeNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << kronrodRule[i]/2 + 1 << ", 1> " << gaussKronrodWeightsNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussAbscissaeNames[i] << ";\n"
+             << "\t\tstatic Array<Scalar, " << (gaussRule[i]+1)/2 << ", 1> " << gaussWeightsNames[i] << ";\n\n";
     }
 
-    fout << "\ttypedef Kronrod::LaurieGautschi<Scalar> LaurieGautschiPolicy;\n"
-         << "\ttypedef Kronrod::Monegato<Scalar> MonegatoPolicy;\n"
-         << "\ttypedef Kronrod::Piessens<Scalar> PiessensPolicy;\n\n"
-         << "\ttypedef typename LaurieGautschiPolicy::VectorType VectorType;\n\n"
-         << "\tstatic bool compute;\n\n";
-
-    fout << "\tstatic void computeNodesAndWeights()\n\t{\n\t\tif(compute)\n\t\t{\n";
+    fout << "\t\tstatic void computeNodesAndWeights()\n\t\t{\n";
+    
     for (size_t i=0; i<12; ++i)
     {
         fout << "\t\t\tQuadratureKronrod::computeForRule<" << gaussRule[i] << ">(" 
@@ -134,35 +130,35 @@ int test_values()
              << gaussAbscissaeNames[i] << ", " << gaussWeightsNames[i] << ");\n";
     }
 
-    fout << "\n\t\t\tcompute = false;\n\t\t}\n\t}\n\n"
-         << "\ttemplate <int N>\n"
-         << "\tstatic void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,\n"
-         << "\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t{\n"
-         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
-         << "\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
+    fout << "\t\t}\n\n"
+         << "\t\ttemplate <Index N>\n"
+         << "\t\tstatic void computeForRule(Array<Scalar, N+1, 1>& kronrodAbscissae, Array<Scalar, N+1, 1>& kronrodWeights,\n"
+         << "\t\t\t\t\t\t\t\t   Array<Scalar, (N+1)/2, 1>& gaussAbscissae, Array<Scalar, (N+1)/2, 1>& gaussWeights)\n\t\t{\n"
+         << "\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xGK;\n\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wGK;\n"
+         << "\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> xG;\n\t\t\tEigen::Array<Scalar, Eigen::Dynamic, 1> wG;\n\n";
     
     if(solverPolicy == 0)
     {
-        fout << "\t\tLaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\tEigen::LaurieGautschi<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//Eigen::Piessens<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//Eigen::Monegato<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     else if(solverPolicy == 1)
     {
-        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tPiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//MonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\t//Eigen::LaurieGautschi<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\tEigen::Piessens<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//Eigen::Monegato<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     else if(solverPolicy == 2)
     {
-        fout << "\t\t//LaurieGautschiPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\t//PiessensPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n"
-             << "\t\tMonegatoPolicy::computeAbscissaeAndWeights((unsigned int)N,xGK,wGK,xG,wG);\n\n";
+        fout << "\t\t\t//Eigen::LaurieGautschi<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\t//Eigen::Piessens<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n"
+             << "\t\t\tEigen::Monegato<Scalar>::computeAbscissaeAndWeights(N,xGK,wGK,xG,wG);\n\n";
     }
     
-    fout << "\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t{\n\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t}\n\n"
-         << "\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t{\n\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\tgaussWeights(i) = wG(i);\n\t\t}\n\t}\n};\n\n"
-         << "template <typename Scalar>\nbool QuadratureKronrod<Scalar>::compute = true;\n\n";
+    fout << "\t\t\tfor(size_t i=0; i<N+1; ++i)\n\t\t\t{\n\t\t\t\tkronrodAbscissae(i) = xGK(i);\n\t\t\t\tkronrodWeights(i) =  wGK(i);\n\t\t\t}\n\n"
+         << "\t\t\tfor(size_t i=0; i<(N+1)/2; ++i)\n\t\t\t{\n\t\t\t\tgaussAbscissae(i) = xG(i);\n\t\t\t\tgaussWeights(i) = wG(i);\n\t\t\t}\n\t\t}\n\t};\n\n";
+
 
 //-----------------------------------End File Header Information---------------------------------//
 
@@ -179,156 +175,156 @@ int test_values()
         switch(kronrodRule)
         {
             case 15:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod15;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod15;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss15;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss15;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod15;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod15;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss15;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss15;
                 break;
             case 21:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod21;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod21;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss21;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss21;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod21;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod21;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss21;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss21;
                 break;
             case 31:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod31;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod31;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss31;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss31;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod31;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod31;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss31;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss31;
                 break;
             case 41:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod41;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod41;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss41;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss41;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod41;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod41;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss41;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss41;
                 break;
             case 51:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod51;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod51;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss51;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss51;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod51;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod51;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss51;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss51;
                 break;
             case 61:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod61;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod61;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss61;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss61;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod61;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod61;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss61;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss61;
                 break;
             case 71:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod71;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod71;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss71;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss71;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod71;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod71;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss71;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss71;
                 break;
             case 81:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod81;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod81;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss81;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss81;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod81;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod81;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss81;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss81;
                 break;
             case 91:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod91;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod91;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss91;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss91;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod91;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod91;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss91;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss91;
                 break;
             case 101:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod101;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod101;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss101;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss101;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod101;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod101;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss101;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss101;
                 break;
             case 121:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod121;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod121;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss121;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss121;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod121;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod121;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss121;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss121;
                 break;
             case 201:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod201;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod201;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss201;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss201;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod201;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod201;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss201;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss201;
                 break;
             default:
-                gaussKronrodAbscissae = QuadratureKronrodValuesType::abscissaeGaussKronrod15;
-                kronrodWeights = QuadratureKronrodValuesType::weightsGaussKronrod15;
-                gaussAbscissae = QuadratureKronrodValuesType::abscissaeGauss15;
-                gaussWeights = QuadratureKronrodValuesType::weightsGauss15;
+                gaussKronrodAbscissae = QuadratureKronrod<Scalar>::abscissaeGaussKronrod15;
+                kronrodWeights = QuadratureKronrod<Scalar>::weightsGaussKronrod15;
+                gaussAbscissae = QuadratureKronrod<Scalar>::abscissaeGauss15;
+                gaussWeights = QuadratureKronrod<Scalar>::weightsGauss15;
                 break;
         }
         size_t kronrodSize = gaussKronrodAbscissae.rows();
         size_t gaussSize = gaussAbscissae.rows();
 
-        fout << "\n//Nodes and Weights - Rule " << kronrodRule << "\n";
+        fout << "\n// Nodes and Weights - Rule " << kronrodRule << "\n";
 
         //Abscissae Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussKronrodAbscissaeNames[i]<< " =\n"
-             << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "    " << gaussKronrodAbscissae(j);
+            fout << "\t\t" << gaussKronrodAbscissae(j);
             if(j !=kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Weights Gauss Kronrod
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << kronrodSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussKronrodWeightsNames[i] << " =\n"
-             << "  (Array<Scalar, " << kronrodSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << kronrodSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < kronrodSize ; j++)
         {
-            fout << "    " << kronrodWeights(j);
+            fout << "\t\t" << kronrodWeights(j);
             if(j != kronrodSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussAbscissaeNames[i] << " =\n"
-             << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "    " << gaussAbscissae(j);
+            fout << "\t\t" << gaussAbscissae(j);
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n\n";
 
         // Abscissae Gauss
         fout << "template <typename Scalar>\n"
              << "Array<Scalar, " << gaussSize << ", 1> QuadratureKronrod<Scalar>::" 
                 << gaussWeightsNames[i] << " =\n"
-             << "  (Array<Scalar, " << gaussSize << ", 1>() <<\n";
+             << "\t(Array<Scalar, " << gaussSize << ", 1>() <<\n";
 
         for(size_t j = 0; j < gaussSize ; j++)
         {
-            fout << "    " << gaussWeights(j);
+            fout << "\t\t" << gaussWeights(j);
             if(j != gaussSize - 1)
                 fout << ",";
             fout << "\n";
         }
 
-        fout << "    ).finished();\n\n";
+        fout << "\t).finished();\n";
 
     }
 
-    fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H\n";
+    fout << "}\n#endif // EIGEN_QUADRATURE_KRONROD_H";
 
     fout.close();
     std::cout << "\n  Kronrod Nodes and Weights written to file " << fileNameAndLocation << "\"\n";
@@ -348,7 +344,7 @@ int main(void)
 
     gettimeofday(&timeStruct, NULL);
     long unsigned int processFinishTime = timeStruct.tv_sec*1000000 + timeStruct.tv_usec;
-    double totalTimeElapsed = (processFinishTime - processStartTime) / 1000000.;
+    double totalTimeElapsed = (double)(processFinishTime - processStartTime) / 1000000.;
     
     std::cout << "\n\tTotal Elapsed Time: " << totalTimeElapsed << std::endl;
     return ret;
