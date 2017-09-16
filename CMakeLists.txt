@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(NumericalIntegration CXX)
+SET(LibSerial_VERSION_MAJOR 1)
+SET(LibSerial_VERSION_MINOR 0)
 
 # Guard against in-source builds (got this from Eigen)
 IF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
@@ -49,21 +51,18 @@ INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GMP_INCLUDES})
 INCLUDE_DIRECTORIES(${MPFR_INCLUDES})
 INCLUDE_DIRECTORIES(${MPFRCPP_INCLUDES})
-
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/source)
 
 # libraries
 SET(ALL_LIBS ${MPFR_LIBRARIES} ${GMP_LIBRARIES})
 
 ADD_DEFINITIONS(
   -O3
-  -DAPL=0
-  -DIBM=0
-  -DLIN=1
   -DNDEBUG
   -DCOMPUTE_NI_WEIGHTS_ON_THE_FLY
 
   -Wall
+  -Warray-bounds
   -Wcast-align
   -Wchar-subscripts
   -Wconversion
@@ -73,11 +72,10 @@ ADD_DEFINITIONS(
   -Wformat-security
   -Wlogical-op
   -Wno-long-long  
+  -Wno-parentheses
   -Wno-psabi
   -Wno-variadic-macros
-  #-Wnon-virtual-dtor
   -Wpointer-arith
-  #-Wundef
   -Wuninitialized
   -Wunused-local-typedefs
   -Wwrite-strings
@@ -95,7 +93,9 @@ ADD_DEFINITIONS(
   -pthread
   )
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -fms-extensions")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -fms-extensions")
+
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -103,6 +103,8 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LD_VERSION_SCRIPT_FLAG}")
 
 ENABLE_TESTING()
-ADD_SUBDIRECTORY(doc)
+
+ADD_SUBDIRECTORY(docs)
 ADD_SUBDIRECTORY(examples)
+ADD_SUBDIRECTORY(source)
 ADD_SUBDIRECTORY(test)

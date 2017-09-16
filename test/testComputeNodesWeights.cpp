@@ -49,9 +49,9 @@ int test_nodes_weights_difference(const unsigned int N)
 
     for(Index i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
-        if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon)
-           || (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon)
-           || (abs(xGKPiessens(i) - xGKMonegato(i)) > epsilon))
+        if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon) ||
+            (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon) ||
+            (abs(xGKPiessens(i) - xGKMonegato(i)) > epsilon))
         {
             std::cout << "Failed xGK " << i << std::endl;
             return EXIT_FAILURE;
@@ -60,9 +60,9 @@ int test_nodes_weights_difference(const unsigned int N)
 
     for(Index i = 0; i < wGKLaurieGautschi.rows(); ++i)
     {
-        if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon)
-           || (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon)
-           || (abs(wGKPiessens(i) - wGKMonegato(i)) > epsilon))
+        if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon) ||
+            (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon) ||
+            (abs(wGKPiessens(i) - wGKMonegato(i)) > epsilon))
         {
             std::cout << "Failed wGK " << i << std::endl;
             return EXIT_FAILURE;
@@ -75,9 +75,9 @@ int test_nodes_weights_difference(const unsigned int N)
 
     for(Index i = 0; i < wGLaurieGautschi.rows(); ++i)
     {
-        if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon)
-           || (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon)
-           || (abs(wGPiessens(i) - wGMonegato(i)) > epsilon))
+        if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon) ||
+            (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon) ||
+            (abs(wGPiessens(i) - wGMonegato(i)) > epsilon))
         {
             std::cout << "Failed wG " << i << std::endl;
             return EXIT_FAILURE;
