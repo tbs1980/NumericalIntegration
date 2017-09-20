@@ -35,7 +35,10 @@ namespace Eigen
  */
 }
 
-#include <iomanip>
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+
 #include <Eigen/Eigenvalues>
 #include <unsupported/Eigen/MPRealSupport>
 
