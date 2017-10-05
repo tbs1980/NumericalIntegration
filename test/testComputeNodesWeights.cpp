@@ -17,10 +17,10 @@ using namespace Eigen;
 int test_nodes_weights_difference(const unsigned int N)
 {
     //typedef float Scalar;
-    //typedef double Scalar;
+    typedef double Scalar;
     // typedef long double Scalar;
-    typedef mpfr::mpreal Scalar;
-    Scalar::set_default_prec(50);
+    // typedef mpfr::mpreal Scalar;
+    // Scalar::set_default_prec(50);
 
     typedef Eigen::LaurieGautschi<Scalar> LaurieGautschiPolicy;
     typedef Eigen::Piessens<Scalar> PiessensPolicy;
@@ -45,13 +45,13 @@ int test_nodes_weights_difference(const unsigned int N)
     PiessensPolicy::computeAbscissaeAndWeights(N,xGKPiessens,wGKPiessens,xGPiessens,wGPiessens);
     MonegatoPolicy::computeAbscissaeAndWeights(N,xGKMonegato,wGKMonegato,xGMonegato,wGMonegato);
 
-    double epsilon = 1e-16;
+    double epsilon = 1e-15;
 
     for(Index i = 0; i < xGKLaurieGautschi.rows(); ++i)
     {
         if ((abs(xGKLaurieGautschi(i) - xGKPiessens(i)) > epsilon) ||
             (abs(xGKLaurieGautschi(i) - xGKMonegato(i)) > epsilon) ||
-            (abs(xGKPiessens(i) - xGKMonegato(i)) > epsilon))
+            (abs(xGKPiessens(i)       - xGKMonegato(i)) > epsilon))
         {
             std::cout << "Failed xGK " << i << std::endl;
             return EXIT_FAILURE;
@@ -62,7 +62,7 @@ int test_nodes_weights_difference(const unsigned int N)
     {
         if ((abs(wGKLaurieGautschi(i) - wGKPiessens(i)) > epsilon) ||
             (abs(wGKLaurieGautschi(i) - wGKMonegato(i)) > epsilon) ||
-            (abs(wGKPiessens(i) - wGKMonegato(i)) > epsilon))
+            (abs(wGKPiessens(i)       - wGKMonegato(i)) > epsilon))
         {
             std::cout << "Failed wGK " << i << std::endl;
             return EXIT_FAILURE;
@@ -77,7 +77,7 @@ int test_nodes_weights_difference(const unsigned int N)
     {
         if ((abs(wGLaurieGautschi(i) - wGPiessens(i)) > epsilon) ||
             (abs(wGLaurieGautschi(i) - wGMonegato(i)) > epsilon) ||
-            (abs(wGPiessens(i) - wGMonegato(i)) > epsilon))
+            (abs(wGPiessens(i)       - wGMonegato(i)) > epsilon))
         {
             std::cout << "Failed wG " << i << std::endl;
             return EXIT_FAILURE;

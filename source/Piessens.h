@@ -119,6 +119,9 @@ namespace Eigen
             // @TODO The usage of constant Pi with fixed precision needs to be changed to the following for multiprecision
             //RealScalar pi = NumTraits<RealScalar>::Pi();
 
+            using std::sin;
+            using std::cos;
+
             Scalar s1 = sin((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
             Scalar c1 = cos((M_PI / Scalar(2) ) / (Scalar(2.) * aN + Scalar(1.0) ));
 
@@ -131,7 +134,7 @@ namespace Eigen
 
             for (size_t i = 1; i <= nNodes; ++i)
             {
-                chebCoeff2 =  Scalar(4.0) * chebCoeff2 * i / (nNodes + i);
+                chebCoeff2 =  Scalar(4.0) * chebCoeff2 * Scalar(i) / (nNodes + Scalar(i));
             }
 
             Scalar abscK = chebCoeff1 * c1;
@@ -217,6 +220,8 @@ namespace Eigen
 
             size_t iter = 0;
             size_t iterationLimit = 50;
+
+            using std::abs;
 
             // Iterative process for the computation of a Kronrod abscissa.
             while (abs(delta) > machineEpsilon())
@@ -344,6 +349,8 @@ namespace Eigen
 
             size_t iter = 0;
             size_t iterationLimit = 50;
+
+            using std::abs;
 
             //  Iterative process for the computation of a Gaussian abscissa.
             while (abs(delta) > machineEpsilon())

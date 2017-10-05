@@ -68,10 +68,10 @@ namespace Eigen
 
             for (Index n = 1; n < N; ++n)
             {
-                Scalar nAlphaBeta = Scalar(2.) * n + alpha + beta;
+                Scalar nAlphaBeta = Scalar(2.) * Scalar(n) + alpha + beta;
                 alphaOut(n) = (beta*beta - alpha*alpha) / (nAlphaBeta * (nAlphaBeta+Scalar(2.)));
-                betaOut(n) =  Scalar(4.) * (n+alpha)*(n+beta)*n*(n+alpha+beta) /
-                              (nAlphaBeta*nAlphaBeta*(nAlphaBeta+Scalar(1.)) * (nAlphaBeta-Scalar(1.)));
+                betaOut(n) =  Scalar(4.) * (Scalar(n) + alpha) * (Scalar(n) + beta) * Scalar(n) * (Scalar(n) + alpha + beta) /
+                              (nAlphaBeta * nAlphaBeta * (nAlphaBeta + Scalar(1.)) * (nAlphaBeta - Scalar(1.)));
             }
         }
 
